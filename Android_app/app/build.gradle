@@ -19,7 +19,7 @@ android {
         ndk {
             // Specifies the ABI configurations of your native
             // libraries Gradle should build and package with your APK.
-            abiFilters 'armeabi-v7a'
+            //abiFilters 'arm64-v8a'
         }
     }
     buildTypes {
@@ -46,7 +46,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    debugCompile project(':dlibwrapper')
+    debugCompile project(path: ':dlibwrapper', configuration: 'debug')
+    releaseCompile project(path: ':dlibwrapper', configuration: 'release')
     compile 'com.android.support:support-v4:26.0.0-alpha1'
     compile 'com.android.support:support-v13:26.0.0-alpha1'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'

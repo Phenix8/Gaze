@@ -14,7 +14,7 @@
 extern "C" {
 
 jint    loadDetectors(JNIEnv *, jobject, jobject, jstring);
-jobject checkForObjects(JNIEnv *, jobject, jobject, jobject, jobject, jint, jint, jint, jint);
+jint    checkForObjects(JNIEnv *, jobject, jobject, jint, jint);
 jstring getMessage(JNIEnv *env, jobject obj);
 
 };

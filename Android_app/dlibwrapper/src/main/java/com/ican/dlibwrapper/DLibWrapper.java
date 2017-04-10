@@ -11,6 +11,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.ByteChannel;
 import java.util.Random;
 
@@ -27,49 +28,23 @@ public class DLibWrapper {
     }
 
     private DLibWrapper() {
-        System.loadLibrary("c++_shared");
         System.loadLibrary("dlib");
         System.loadLibrary("dlib-wrapper");
     }
 
-    private native Bitmap checkForObjects(ByteBuffer r, ByteBuffer g, ByteBuffer b, int width, int height, int pixelStride, int rowStride);
+    private native int checkForObjects(ByteBuffer y, int width, int height);
 
     public native int loadDetectors(AssetManager mgr, String detectorsDirectory);
     public native String getMessage();
 
     public int checkForObjects(Image image, Activity activity) {
-        Image.Plane[] planes = image.getPlanes();
-        Image.Plane plane0 = planes[0];
+        TestActivity act = (TestActivity) activity;
 
-        Bitmap bitmap = this.checkForObjects(
-            plane0.getBuffer(),
-            image.getPlanes()[1].getBuffer(),
-            image.getPlanes()[2].getBuffer(),
-            image.getWidth(),
-            image.getHeight(),
-            plane0.getPixelStride(),
-            plane0.getRowStride()
+        return this.checkForObjects(
+                image.getPlanes()[0].getBuffer(),
+                image.getWidth(),
+                image.getHeight()
         );
-
-        File myDir = new File(activity.getExternalFilesDir(null), "pic.jpg");
-        myDir.mkdirs();
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
-        File file = new File(myDir, fname);
-        if (file.exists())
-            file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return 0;
     }
 
     public static String getProcessorABI() {

@@ -1,8 +1,5 @@
 #include "wrapper.h"
 
-#include <EGL/egl.h>
-#include <GLES/gl.h>
-
 #include <string>
 #include <stdexcept>
 #include <iostream>
@@ -11,12 +8,14 @@
 #include <vector>
 #include <cstring>
 
+#include <android/native_activity.h>
 #include <android/asset_manager_jni.h>
 #include <android/log.h>
 
 #include <dlib/svm_threaded.h>
 #include <dlib/image_processing.h>
 #include <dlib/data_io.h>
+#include <dlib/image_io.h>
 
 #define DEBUG 1
 
@@ -49,53 +48,28 @@ void setMessage(const char *newMessage) {
     strncpy(message, newMessage, 1000);
 }
 
-inline jobject array2dToBitmap(JNIEnv *env, dlib::array2d<unsigned char> &image) {
-    jclass bitmapConfig = env->FindClass("android/graphics/Bitmap$Config");
-    jfieldID rgba8888FieldID = env->GetStaticFieldID(bitmapConfig, "ARGB_8888", "Landroid/graphics/Bitmap$Config;");
-    jobject rgba8888Obj = env->GetStaticObjectField(bitmapConfig, rgba8888FieldID);
+inline dlib::array2d<unsigned char> byteBufferToArray2d(
+        JNIEnv *env, jobject yBuffer, jint w, jint h) {
 
-    jclass bitmapClass = env->FindClass("android/graphics/Bitmap");
-    jmethodID createBitmapMethodID = env->GetStaticMethodID(bitmapClass,"createBitmap", "(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;");
-    jobject bitmapObj = env->CallStaticObjectMethod(bitmapClass, createBitmapMethodID, image.nc(), image.nr(), rgba8888Obj);
+    //Get a pointer to the Java ByteBuffer's data.
+    //We can do that because ByteBuffer returned by
+    //android.media.Image.getPlanes()[x].getBuffer()
+    //are guaranted to store data contiguously.
+    jbyte *yData = (jbyte *) env->GetDirectBufferAddress(yBuffer);
 
-    jintArray pixels = env->NewIntArray(image.nc() * image.nr());
-    int i = 0;
-    do
-    {
-        unsigned char red = image.element();
-        unsigned char green = image.element();
-        unsigned char blue = image.element();
-        unsigned char alpha = image.element();
-        int currentPixel = (alpha << 24) | (red << 16) | (green << 8) | (blue);
-        env->SetIntArrayRegion(pixels, i, 1, &currentPixel);
-        i++;
-    } while (image.move_next());
-
-    jmethodID setPixelsMid = env->GetMethodID(bitmapClass, "setPixels", "([IIIIIII)V");
-    env->CallVoidMethod(bitmapObj, setPixelsMid, pixels, 0, image.nc(), 0, 0, image.nc(), image.nr());
-}
-
-inline dlib::array2d<unsigned char> rgb2Array2d(
-        JNIEnv *env,
-        jobject rBuffer, jobject gBuffer, jobject bBuffer,
-        jint w, jint h, jint ps, jint rs) {
-
-    LOGI("test2");
-    unsigned char *rData = (unsigned char *) env->GetDirectBufferAddress(rBuffer);
-    unsigned char *gData = (unsigned char *) env->GetDirectBufferAddress(gBuffer);
-    unsigned char *bData = (unsigned char *) env->GetDirectBufferAddress(bBuffer);
-    LOGI("test3");
+    //We need to rotate image of -PI/2 because dlib and android
+    //don't store image the same way.
+    //So result will be an array of w rows and h columns
     dlib::array2d<unsigned char> result((int)h, (int)w);
-
-    size_t index;
-
-    for (size_t i=0; i<h; i++) {
-        for (size_t j=0; j<w; j++) {
-            index = (i * rs) * (w * ps) + (j * ps);
-            result[i][j] = R_COEF * rData[index] + G_COEF * gData[index] + B_COEF * bData[index];
+    //And to finish we fill the result column by column
+    //starting by the last.
+    /*for (int i=h-1; i>-1; i--) {
+        for (int j=0; j<w; j++) {
+            result[j][i] = *(yData++);
         }
-    }
-    LOGI("test4");
+    }*/
+
+    memcpy(&(result[0][0]), yData, w * h);
 
     return result;
 }
@@ -178,21 +152,19 @@ jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detec
     return detectors.size();
 }
 
-jobject checkForObjects(JNIEnv *env, jobject obj,
-                     jobject rBuffer, jobject gBuffer, jobject bBuffer,
-                     jint width, jint height,
-                     jint pixelStride, jint rowStride) {
-
-    LOGI("test");
+jint checkForObjects(JNIEnv *env, jobject obj,
+                     jobject yBuffer, jint width, jint height) {
 
     dlib::array2d<unsigned char> image =
-            rgb2Array2d(env, rBuffer, gBuffer, bBuffer, width, height, pixelStride, rowStride);
+            byteBufferToArray2d(env, yBuffer, width, height);
 
-    std::vector<dlib::rectangle> dets = detectors[0](image);
+    const std::vector<dlib::rectangle> dets = detectors[0](image, 0);
 
-    return array2dToBitmap(env, image);
+    //dlib::save_jpeg(image, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/test.jpg");
 
-    //return (jint) dets.size() > 0 ? 1 : 0;
+    ///storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn.debug/files/
+
+    return (dets.size() > 0 ? (jint) 1 : (jint) 0);
 }
 
 jstring getMessage(JNIEnv *env, jobject obj) {

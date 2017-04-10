@@ -38,7 +38,7 @@ public class TestActivity extends Activity {
         }
     }
 
-    private void showMessage(String title, String message) {
+    public void showMessage(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)

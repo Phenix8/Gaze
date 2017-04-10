@@ -115,6 +115,19 @@ public class CameraFragment extends Fragment
      */
     private static final int MAX_PREVIEW_HEIGHT = 1080;
 
+    private void showMessage(String title, String message) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
      * {@link TextureView}.
@@ -513,7 +526,7 @@ public class CameraFragment extends Fragment
                 Size largest = Collections.max(Arrays.asList(sizes),
                         new CameraFragment.CompareSizesByArea());
 
-                mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
+                mImageReader = ImageReader.newInstance(640, 480,
                         ImageFormat.YUV_420_888, /*maxImages*/2);
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
@@ -951,9 +964,11 @@ public class CameraFragment extends Fragment
                         .show();
             } catch (Exception e) {
                 StringBuffer buff = new StringBuffer();
-                for (StackTraceElement elem : e.getStackTrace()) {
-                    buff.append(elem.toString()).append("\n");
-                }
+                buff.append(e.getLocalizedMessage())
+                        .append(":")
+                        .append(e.getStackTrace()[0].getFileName())
+                        .append(":")
+                        .append(e.getStackTrace()[0].getLineNumber());
 
                 new AlertDialog.Builder(mActivity)
                         .setTitle("Error processing image.")
