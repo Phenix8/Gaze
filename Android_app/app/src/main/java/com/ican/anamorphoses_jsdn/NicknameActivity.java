@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.app.AlertDialog.Builder;
 import android.app.AlertDialog;
 
+import com.ican.dlibwrapper.TestActivity;
+
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class NicknameActivity extends AppCompatActivity {
@@ -64,9 +66,10 @@ public class NicknameActivity extends AppCompatActivity {
                     if (hasFocus) {
                         nicknamesList.clearChoices();
                         nicknamesList.requestLayout();
-
-                        Log.i("Test", "ListView a de selectionné : " + (String.valueOf(nicknamesList.getSelectedItemPosition())));
+                        selectedNickname = enteredEditText.getText().toString();
                     }
+                    else
+                        selectedNickname = enteredEditText.getText().toString();
              }
          });
 
@@ -74,17 +77,13 @@ public class NicknameActivity extends AppCompatActivity {
         // BUTTON "Ok" //
         /////////////////
 
-                // Evénement de click sur le boutton "Ok"
-                okButtonTouchAndClick = (Button) findViewById(R.id.OkButton);
+        // Evénement de click sur le boutton "Ok"
+        okButtonTouchAndClick = (Button) findViewById(R.id.OkButton);
         okButtonTouchAndClick.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
                 // Récupération du nickname choisi dans la liste
-
-                Log.i("Test", "nicknamesList.getSelectedItem() = " + nicknamesList.getSelectedItem());
-                if (nicknamesList.getSelectedItem() == null)
-                    selectedNickname = enteredEditText.getText().toString();
 
                 // Confirmation du nickname choisi
                 Builder builder = new AlertDialog.Builder(v.getContext());
@@ -93,14 +92,12 @@ public class NicknameActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id)
                     {
                         // Redirection
-                        Intent nicknameActivity = new Intent(getApplicationContext(), CameraScanActivity.class);
+                        Intent nicknameActivity = new Intent(getApplicationContext(), TestActivity.class);
                         startActivity(nicknameActivity);
                     }
                 });
                 builder.setNegativeButton("Non", null);
                 builder.show();
-
-
             }
         });
     }
