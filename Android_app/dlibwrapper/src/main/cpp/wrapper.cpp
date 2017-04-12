@@ -5,7 +5,7 @@
 #include <iostream>
 #include <istream>
 #include <streambuf>
-#include <vector>
+#include <map>
 #include <cstring>
 
 #include <android/native_activity.h>
@@ -39,9 +39,9 @@ struct membuf : std::streambuf
 };
 
 typedef dlib::scan_fhog_pyramid<dlib::pyramid_down<6> > image_scanner_type;
-typedef dlib::object_detector<image_scanner_type> detector;
+typedef dlib::object_detector<image_scanner_type> Detector;
 
-static std::vector<detector> detectors;
+static std::map<const std::string, Detector> detectors;
 static char message[1000];
 
 void setMessage(const char *newMessage) {
@@ -76,7 +76,7 @@ inline dlib::array2d<unsigned char> byteBufferToArray2d(
 
 jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detectorsDirectory) {
 
-    detector d;
+    Detector d;
     char completeFileName[100];
     const char *currentFileName = NULL;
 
@@ -141,7 +141,7 @@ jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detec
             return -5;
         }
 #endif
-        detectors.push_back(d);
+        detectors.insert(std::pair<const std::string, Detector>(std::string(currentFileName), d));
 
         AAsset_close(detectorAsset);
     }
@@ -153,12 +153,17 @@ jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detec
 }
 
 jint checkForObjects(JNIEnv *env, jobject obj,
-                     jobject yBuffer, jint width, jint height) {
+                     jobject yBuffer, jint width, jint height, jstring detectorName) {
 
     dlib::array2d<unsigned char> image =
             byteBufferToArray2d(env, yBuffer, width, height);
 
-    const std::vector<dlib::rectangle> dets = detectors[0](image, 0);
+    const char *cDetectorName = env->GetStringUTFChars(detectorName, NULL);
+    std::string cppDetectorName = std::string(cDetectorName);
+
+    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](image, 0);
+
+    env->ReleaseStringUTFChars(detectorName, cDetectorName);
 
     //dlib::save_jpeg(image, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/test.jpg");
 

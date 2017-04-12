@@ -2,12 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     signingConfigs {
-        JSDN_Key {
-            keyAlias 'JSDN_Key'
-            keyPassword '123456'
-            storeFile file('D:/Utilisateur/clement/Programmes/Android/Anamorphoses_JsDN/APK_Key.jks')
-            storePassword '123456'
-        }
+
     }
     defaultPublishConfig "debug"
     publishNonDefault true
@@ -43,7 +38,6 @@ android {
                     arguments "-DCMAKE_BUILD_TYPE=RELEASE"
                 }
             }
-            signingConfig signingConfigs.JSDN_Key
         }
         debug {
             debuggable true

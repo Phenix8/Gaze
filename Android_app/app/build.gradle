@@ -2,12 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        JSDN_Key {
-            keyAlias 'JSDN_Key'
-            keyPassword '123456'
-            storeFile file('D:/Utilisateur/clement/Programmes/Android/Anamorphoses_JsDN/APK_Key.jks')
-            storePassword '123456'
-        }
+
     }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -34,7 +29,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.JSDN_Key
         }
         debug {
             applicationIdSuffix ".debug"

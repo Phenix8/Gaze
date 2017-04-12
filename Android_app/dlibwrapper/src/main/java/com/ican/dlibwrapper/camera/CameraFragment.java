@@ -951,9 +951,9 @@ public class CameraFragment extends Fragment
         @Override
         public void run() {
             try {
-                int result = DLibWrapper.getInstance().checkForObjects(mImage, mActivity);
+                int result = DLibWrapper.getInstance().checkForObjects(mImage, "clef.svm");
                 new AlertDialog.Builder(mActivity)
-                        .setTitle("Error processing image.")
+                        .setTitle("Result :")
                         .setMessage(result == 1 ? "detected!" : "Nothing!")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
