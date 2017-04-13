@@ -26,7 +26,7 @@ public class GameClient extends Thread {
     private BufferedWriter out;
     private BufferedReader in;
 
-    private boolean connected = true;
+    private boolean connected = false;
 
     private String winner = null;
 
@@ -44,23 +44,20 @@ public class GameClient extends Thread {
         void onGameEvent(GameEventType type, Object data);
     }
 
-    public static GameClient ConnectDistantServer(String playerName, InetAddress serverAddress)
+    public void connectDistantServer(String playerName, InetAddress serverAddress)
         throws IOException {
-        Socket socketServer = new Socket(serverAddress, Common.TCP_PORT);;
-        return new GameClient(playerName, socketServer);
-    }
-
-    public static GameClient ConnectLocalServer(String playerName)
-        throws IOException {
-        InetAddress address = InetAddress.getLoopbackAddress();
-        Socket socketServer = new Socket(address, Common.TCP_PORT);
-        return new GameClient(playerName, socketServer);
-    }
-
-    private GameClient(String playerName, Socket socketServer)
-        throws IOException {
-        this.configureStreams(socketServer);
         this.playerName = playerName;
+        this.socketServer = new Socket(serverAddress, Common.TCP_PORT);
+        this.connected = true;
+        this.start();
+    }
+
+    public void ConnectLocalServer(String playerName)
+        throws IOException {
+        this.playerName = playerName;
+        this.socketServer = new Socket(InetAddress.getLoopbackAddress(), Common.TCP_PORT);
+        this.connected = true;
+        this.start();
     }
 
     private void configureStreams(Socket socket)
@@ -106,9 +103,14 @@ public class GameClient extends Thread {
         listeners.remove(listener);
     }
 
+    public boolean isConnected() {
+        return connected;
+    }
+
     @Override
     public void run() {
         try {
+            configureStreams(this.socketServer);
             sendPlayerName();
 
             while (connected) {
@@ -125,9 +127,12 @@ public class GameClient extends Thread {
                     break;
                 }
             }
-            socketServer.close();
         } catch (IOException e) {
 
+        } finally {
+            try {
+                socketServer.close();
+            } catch (IOException e) {}
         }
     }
 }

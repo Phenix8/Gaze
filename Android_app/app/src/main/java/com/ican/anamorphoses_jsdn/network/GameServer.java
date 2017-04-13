@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
 /**
@@ -32,6 +33,10 @@ public class GameServer extends Thread {
         this.tcpPort = tcpPort;
         this.roomNotifier = roomNotifier;
         this.maxPlayer = maxPlayer;
+    }
+
+    public void stopListening() {
+        this.listening = false;
     }
 
     private void sendPlayerList() {
@@ -70,26 +75,35 @@ public class GameServer extends Thread {
 
         try {
             listeningSocket = new ServerSocket(tcpPort);
-            roomNotifier.start();
+            listeningSocket.setSoTimeout(1000);
+            roomNotifier.startNotifying();
 
             while (listening && players.size() < maxPlayer) {
-                Socket socketClient = listeningSocket.accept();
-                Log.d(TAG, "Client connected (" + socketClient.getInetAddress() + ")");
+                try {
+                    Socket socketClient = listeningSocket.accept();
+                    Log.d(TAG, "Client connected (" + socketClient.getInetAddress() + ")");
 
-                BufferedReader reader =
-                        new BufferedReader(
-                            new InputStreamReader(
-                                socketClient.getInputStream()));
+                    BufferedReader reader =
+                            new BufferedReader(
+                                    new InputStreamReader(
+                                            socketClient.getInputStream()));
 
-                String playerName = reader.readLine();
-                players.put(playerName, socketClient);
-                sendPlayerList();
+                    String playerName = reader.readLine();
+                    players.put(playerName, socketClient);
+                    sendPlayerList();
+                } catch (SocketTimeoutException e) {
+
+                }
             }
-
-            roomNotifier.stopNotifying();
-
         } catch (IOException e) {
-
+            e.printStackTrace();
+        } finally {
+            roomNotifier.stopNotifying();
+            for (Socket socket : players.values()) {
+                try {
+                    socket.close();
+                } catch (IOException e){}
+            }
         }
     }
 

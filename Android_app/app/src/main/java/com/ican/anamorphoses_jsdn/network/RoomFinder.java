@@ -28,6 +28,11 @@ public class RoomFinder extends Thread {
         void onRoomListChanged(HashMap<String, InetAddress> roomList);
     }
 
+    public RoomFinder(String broadcastMessage, int udpPort) {
+        this.broadcastMessage = broadcastMessage;
+        this.udpPort = udpPort;
+    }
+
     private void notifyListeners() {
         for (RoomListChangeListener listener : listeners) {
             listener.onRoomListChanged(rooms);
@@ -60,11 +65,12 @@ public class RoomFinder extends Thread {
 
     @Override
     public void run() {
+        DatagramSocket socket = null;
         try {
             byte[] buffer = new byte[1000];
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
-            DatagramSocket socket = new DatagramSocket(udpPort);
+            socket = new DatagramSocket(udpPort);
             socket.setSoTimeout(100);
 
             while (listening) {
@@ -78,15 +84,16 @@ public class RoomFinder extends Thread {
                         }
                     }
                 } catch (SocketTimeoutException e) {
-                } catch (IOException e) {
-
                 }
             }
-            socket.close();
         } catch (SocketException e) {
 
         } catch (IOException e) {
 
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
         }
     }
 }

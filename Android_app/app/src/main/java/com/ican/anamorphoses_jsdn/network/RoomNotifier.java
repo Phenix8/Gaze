@@ -46,8 +46,9 @@ public class RoomNotifier extends Thread {
 
     @Override
     public void run() {
+        DatagramSocket socket = null;
         try {
-            DatagramSocket socket = new DatagramSocket(udpPort);
+            socket = new DatagramSocket(udpPort);
             socket.setBroadcast(true);
             DatagramPacket packet =
                     new DatagramPacket(
@@ -63,11 +64,14 @@ public class RoomNotifier extends Thread {
                     Thread.sleep(notifyingInterval);
                 } catch (InterruptedException e) {}
             }
-            socket.close();
         } catch (SocketException e) {
 
         } catch (IOException e) {
 
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
         }
     }
 
