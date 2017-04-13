@@ -1,1 +1,1 @@
-include ':app', ':dlibwrapper'
+include ':app'

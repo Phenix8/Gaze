@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_nickname"
     android:layout_width="match_parent"
@@ -38,22 +39,33 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="180dp"
             android:textAlignment="center"
             android:id="@+id/nicknames_listView"/>
+
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="100dp"
-        android:layout_height="1800dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginLeft="450dp"
-        android:id="@+id/frameLayout2">
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:text="Ok"
-            android:id="@+id/OkButton"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="270dp"
+        android:id="@+id/frameLayout">
+
+        <ImageButton
+            android:layout_width="65dp"
+            android:layout_height="55dp"
+            app:srcCompat="@drawable/return_button"
+            android:background="@android:color/transparent"
+            android:id="@+id/returnImgButton" />
+
+        <ImageButton
+            android:layout_width="65dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="450dp"
+            app:srcCompat="@drawable/go_button"
+            android:background="@android:color/transparent"
+            android:id="@+id/OkButton" />
+
     </FrameLayout>
 
 </RelativeLayout>
