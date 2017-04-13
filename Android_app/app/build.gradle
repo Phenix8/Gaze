@@ -35,7 +35,6 @@ android {
                     arguments "-DCMAKE_BUILD_TYPE=RELEASE"
                 }
             }
-			signingConfig signingConfigs.JSDN_Key
         }
         debug {
             applicationIdSuffix ".debug"

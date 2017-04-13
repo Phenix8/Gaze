@@ -2,20 +2,13 @@ package com.ican.anamorphoses_jsdn.network;
 
 import android.util.Log;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by root on 12/04/2017.
@@ -25,28 +18,75 @@ public class GameServer extends Thread {
 
     private static String TAG = "GameServer";
 
+    private RoomNotifier roomNotifier;
+
+    private int tcpPort;
+
     private boolean listening = true;
+
+    private int maxPlayer;
+
+    private HashMap<String, Socket> players = new HashMap<>();
+
+    public GameServer(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+        this.tcpPort = tcpPort;
+        this.roomNotifier = roomNotifier;
+        this.maxPlayer = maxPlayer;
+    }
+
+    private void sendPlayerList() {
+        StringBuffer str = new StringBuffer();
+
+        for (String player : players.keySet()) {
+            if (str.length() > 0) {
+                str.append(":");
+            }
+            str.append(player);
+        }
+        str.append("\n");
+        str.insert(0, "PLAYERS ");
+        sendMessageToAllPlayers(str.toString());
+    }
+
+    public void sendMessageToAllPlayers(String message) {
+        for (Socket sockClient : players.values()) {
+            try {
+                OutputStreamWriter out =
+                        new OutputStreamWriter(
+                                sockClient.getOutputStream());
+
+                out.write(message);
+                out.flush();
+
+            } catch (IOException e) {
+                Log.d(TAG, "Error sending to " + sockClient.getInetAddress());
+            }
+        }
+    }
 
     @Override
     public void run() {
-        RoomNotifier notifier = new RoomNotifier();
         ServerSocket listeningSocket;
 
         try {
-            listeningSocket = new ServerSocket(Common.TCP_PORT);
-            notifier.start();
+            listeningSocket = new ServerSocket(tcpPort);
+            roomNotifier.start();
 
-            while (listening) {
+            while (listening && players.size() < maxPlayer) {
                 Socket socketClient = listeningSocket.accept();
                 Log.d(TAG, "Client connected (" + socketClient.getInetAddress() + ")");
 
-                BufferedWriter out =
-                        new BufferedWriter(
-                                new OutputStreamWriter(
-                                        socketClient.getOutputStream()));
+                BufferedReader reader =
+                        new BufferedReader(
+                            new InputStreamReader(
+                                socketClient.getInputStream()));
 
-                out.write("HELLO");
+                String playerName = reader.readLine();
+                players.put(playerName, socketClient);
+                sendPlayerList();
             }
+
+            roomNotifier.stopNotifying();
 
         } catch (IOException e) {
 
