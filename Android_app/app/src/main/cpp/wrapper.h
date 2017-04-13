@@ -1,7 +1,3 @@
-//
-// Created by T0179626 on 03/04/2017.
-//
-
 #ifndef ANDROID_APP_WRAPPER_H
 #define ANDROID_APP_WRAPPER_H
 
@@ -14,7 +10,7 @@
 extern "C" {
 
 jint    loadDetectors(JNIEnv *, jobject, jobject, jstring);
-jint    checkForObjects(JNIEnv *, jobject, jobject, jint, jint);
+jint    checkForObjects(JNIEnv *, jobject, jobject, jint, jint, jstring);
 jstring getMessage(JNIEnv *env, jobject obj);
 
 };
