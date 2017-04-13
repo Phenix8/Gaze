@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/anamorphose_easy"
                     android:background="@android:color/transparent"
-                    android:id="@+id/imageButton"
+                    android:id="@+id/easyImgButton"
                     android:layout_weight="1" />
 
                 <EditText
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/anamorphose_medium"
                     android:background="@android:color/transparent"
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/mediumImgButton"
                     android:layout_weight="1" />
 
                 <EditText
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/anamorphose_hard"
                     android:background="@android:color/transparent"
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/hardImgButton"
                     android:layout_weight="1" />
 
                 <EditText
@@ -128,7 +128,7 @@
             android:paddingLeft="460dp"
             app:srcCompat="@drawable/ok_button"
             android:background="@android:color/transparent"
-            android:id="@+id/imageButton4"
+            android:id="@+id/okImgButton"
             android:layout_weight="1" />
 
     </LinearLayout>

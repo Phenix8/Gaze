@@ -29,12 +29,12 @@ public class GameServer extends Thread {
 
     @Override
     public void run() {
-        RoomNotifier notifier = new RoomNotifier();
+        //RoomNotifier notifier = new RoomNotifier();
         ServerSocket listeningSocket;
 
         try {
             listeningSocket = new ServerSocket(Common.TCP_PORT);
-            notifier.start();
+            //notifier.start();
 
             while (listening) {
                 Socket socketClient = listeningSocket.accept();
