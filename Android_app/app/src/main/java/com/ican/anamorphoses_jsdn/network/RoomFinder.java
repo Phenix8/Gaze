@@ -20,12 +20,12 @@ public class RoomFinder extends Thread {
     private int udpPort;
     private boolean listening;
 
-    private HashMap<String, InetAddress> rooms = new HashMap<>();
+    private HashMap<InetAddress, String> rooms = new HashMap<>();
 
     private ArrayList<RoomListChangeListener> listeners = new ArrayList<>();
 
     public interface RoomListChangeListener {
-        void onRoomListChanged(HashMap<String, InetAddress> roomList);
+        void onRoomListChanged(HashMap<InetAddress, String> roomList);
     }
 
     public RoomFinder(String broadcastMessage, int udpPort) {
@@ -79,7 +79,7 @@ public class RoomFinder extends Thread {
                     String[] messages = new String(buffer, 0, packet.getLength(), "UTF-8").split(":");
                     if (messages.length == 2) {
                         if (messages[0].equals(broadcastMessage)) {
-                            rooms.put(messages[1], packet.getAddress());
+                            rooms.put(packet.getAddress(), messages[1]);
                             notifyListeners();
                         }
                     }

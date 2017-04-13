@@ -1,11 +1,22 @@
 package com.ican.anamorphoses_jsdn;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Button;
+
+import com.ican.anamorphoses_jsdn.network.Common;
+import com.ican.anamorphoses_jsdn.network.GameClient;
+import com.ican.anamorphoses_jsdn.network.GameServer;
+import com.ican.anamorphoses_jsdn.network.RoomFinder;
+import com.ican.anamorphoses_jsdn.network.RoomNotifier;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
