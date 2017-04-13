@@ -19,8 +19,8 @@ public class RoomNotifier extends Thread {
 
     private long notifyingInterval = 1000;
 
-    public RoomNotifier(String broadcastMessage, int udpPort) {
-        this.broadcastMessage = broadcastMessage;
+    public RoomNotifier(String broadcastMessage, String roomName, int udpPort) {
+        this.broadcastMessage = String.format("%s:%s\n", broadcastMessage, roomName);
         this.udpPort = udpPort;
     }
 
@@ -46,8 +46,9 @@ public class RoomNotifier extends Thread {
 
     @Override
     public void run() {
+        DatagramSocket socket = null;
         try {
-            DatagramSocket socket = new DatagramSocket(udpPort);
+            socket = new DatagramSocket(udpPort);
             socket.setBroadcast(true);
             DatagramPacket packet =
                     new DatagramPacket(
@@ -63,11 +64,14 @@ public class RoomNotifier extends Thread {
                     Thread.sleep(notifyingInterval);
                 } catch (InterruptedException e) {}
             }
-
         } catch (SocketException e) {
 
         } catch (IOException e) {
 
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
         }
     }
 

@@ -20,20 +20,22 @@
         android:id="@+id/linearLayout">
 
         <TextView
-            android:text="Create a game"
+            android:id="@+id/createGameTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
+            android:text="New game"
             android:textAlignment="center"
-            android:id="@+id/createGameTitle" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
-        android:id="@+id/frameLayout">
+        android:layout_marginTop="220dp"
+        android:id="@+id/frameLayout"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true">
 
         <ImageButton
             android:layout_width="60dp"
