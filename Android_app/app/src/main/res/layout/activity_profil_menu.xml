@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ican.anamorphoses_jsdn.HighscoresMenuActivity">
+    tools:context="com.ican.anamorphoses_jsdn.ProfilMenuActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,34 +20,51 @@
         android:id="@+id/linearLayout">
 
         <TextView
-            android:text="Highscores"
+            android:text="Profils"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:textAlignment="center"
-            android:id="@+id/highscoresTitle" />
+            android:id="@+id/profilTitle" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Player_1"
+            android:lines="1"
+            android:ems="10"
+            android:id="@+id/nickname_editText"
+            android:textAlignment="center"/>
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="150dp"
             android:textAlignment="center"
-            android:id="@+id/scores_listView">
-        </ListView>
+            android:id="@+id/nicknames_listView"/>
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="235dp"
         android:id="@+id/frameLayout">
 
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="55dp"
-        app:srcCompat="@drawable/return_button"
-        android:background="@android:color/transparent"
-        android:id="@+id/returnImgButton" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/return_button"
+            android:background="@android:color/transparent"
+            android:id="@+id/returnImgButton" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="450dp"
+            app:srcCompat="@drawable/go_button"
+            android:background="@android:color/transparent"
+            android:id="@+id/OkButton" />
 
     </FrameLayout>
 

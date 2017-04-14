@@ -75,6 +75,7 @@ public class GameServer extends Thread {
 
     @Override
     public void run() {
+
         ServerSocket listeningSocket;
 
         try {
