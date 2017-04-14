@@ -1,5 +1,12 @@
 package com.ican.anamorphoses_jsdn;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,12 +18,12 @@ import java.util.List;
 public class AnamorphGameManager {
 
 		// Liste de toutes les anamorphoses
-	static private List<Anamorphosis> anamorphosisDict;
+	static private ArrayList<Anamorphosis> anamorphosisDict;
 
-	static public List<Anamorphosis> getAnamorphosisDict() {
-		return anamorphosisDict;
+	static public ArrayList<Anamorphosis> getAnamorphosisDict() {
+        return anamorphosisDict;
 	}
-	static public void setAnamorphosisDict(List<Anamorphosis> anamorphosisDict) {
+	static public void setAnamorphosisDict(ArrayList<Anamorphosis> anamorphosisDict) {
 		AnamorphGameManager.anamorphosisDict = anamorphosisDict;
 	}
 
@@ -41,13 +48,26 @@ public class AnamorphGameManager {
 	}
 
 		// Anamorphoses qui ont été précédemment validées
-	static private List<Anamorphosis> validatedAnamorphosis;
+	static private ArrayList<Anamorphosis> validatedAnamorphosis;
 
-	static public List<Anamorphosis> getValidatedAnamorphosis() {
+	static public ArrayList<Anamorphosis> getValidatedAnamorphosis() {
 		return validatedAnamorphosis;
 	}
-	static public void setValidatedAnamorphosis(List<Anamorphosis> validatedAnamorphosis) {
+	static public void setValidatedAnamorphosis(ArrayList<Anamorphosis> validatedAnamorphosis) {
 		AnamorphGameManager.validatedAnamorphosis = validatedAnamorphosis;
 	}
+
+
+	// Initalisation du dictionnaire d'anamorphose
+	static public void InitAnamorphosisDict(Context context)
+    {
+        AnamorphGameManager.anamorphosisDict = new ArrayList<Anamorphosis>();
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1, AnamorphosisDifficulty.EASY));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2, AnamorphosisDifficulty.EASY));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5, AnamorphosisDifficulty.HARD));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6, AnamorphosisDifficulty.HARD));
+    }
 
 }

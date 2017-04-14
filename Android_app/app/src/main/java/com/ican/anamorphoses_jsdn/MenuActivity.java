@@ -48,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
         rulesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), RulesMenuActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
                 startActivity(menuOptionActivity);
             }
         });
