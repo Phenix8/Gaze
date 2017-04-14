@@ -53,7 +53,7 @@ public class LobbyActivity extends AppCompatActivity
         GameClient client = new GameClient();
         try {
             client.addGameEventListener(this);
-            client.connectServer("Machin", (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
+            client.connectServer(AnamorphGameManager.getplayerNickname(), (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
