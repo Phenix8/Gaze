@@ -28,7 +28,7 @@ public class MenuActivity extends AppCompatActivity {
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), CameraActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), CreateGameActivity.class);
                 startActivity(menuOptionActivity);
             }
         });
@@ -38,7 +38,7 @@ public class MenuActivity extends AppCompatActivity {
         joinGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), ClientMenuActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), JoinGameActivity.class);
                 startActivity(menuOptionActivity);
             }
         });

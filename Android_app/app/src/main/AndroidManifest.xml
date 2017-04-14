@@ -32,7 +32,7 @@
             android:name=".MenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".HostMenuActivity"
+            android:name=".LobbyActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ClientMenuActivity"
@@ -48,8 +48,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".CameraActivity"
-            android:screenOrientation="landscape"></activity>
-        <activity android:name=".JoinGameActivity"></activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".JoinGameActivity" />
+        <activity android:name=".CreateGameActivity"></activity>
     </application>
 
 </manifest>

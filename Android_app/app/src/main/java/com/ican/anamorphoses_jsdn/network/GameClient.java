@@ -25,6 +25,7 @@ public class GameClient extends Thread {
     private String playerName;
     private BufferedWriter out;
     private BufferedReader in;
+    private InetAddress serverAddress;
 
     private boolean connected = false;
 
@@ -44,18 +45,10 @@ public class GameClient extends Thread {
         void onGameEvent(GameEventType type, Object data);
     }
 
-    public void connectDistantServer(String playerName, InetAddress serverAddress)
+    public void connectServer(String playerName, InetAddress serverAddress)
         throws IOException {
         this.playerName = playerName;
-        this.socketServer = new Socket(serverAddress, Common.TCP_PORT);
-        this.connected = true;
-        this.start();
-    }
-
-    public void ConnectLocalServer(String playerName)
-        throws IOException {
-        this.playerName = playerName;
-        this.socketServer = new Socket(InetAddress.getLoopbackAddress(), Common.TCP_PORT);
+        this.serverAddress = serverAddress;
         this.connected = true;
         this.start();
     }
@@ -110,6 +103,7 @@ public class GameClient extends Thread {
     @Override
     public void run() {
         try {
+            this.socketServer = new Socket(this.serverAddress, Common.TCP_PORT);
             configureStreams(this.socketServer);
             sendPlayerName();
 
@@ -128,10 +122,14 @@ public class GameClient extends Thread {
                 }
             }
         } catch (IOException e) {
-
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             try {
-                socketServer.close();
+                if (socketServer != null) {
+                    socketServer.close();
+                }
             } catch (IOException e) {}
         }
     }

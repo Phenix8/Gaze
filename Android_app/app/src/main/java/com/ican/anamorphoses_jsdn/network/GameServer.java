@@ -27,12 +27,16 @@ public class GameServer extends Thread {
 
     private int maxPlayer;
 
-    private HashMap<String, Socket> players = new HashMap<>();
+    private HashMap<Socket, String> players = new HashMap<>();
 
-    public GameServer(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+    private GameServer(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
         this.tcpPort = tcpPort;
         this.roomNotifier = roomNotifier;
         this.maxPlayer = maxPlayer;
+    }
+
+    public static GameServer create(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+        return new GameServer(roomNotifier, tcpPort, maxPlayer);
     }
 
     public void stopListening() {
@@ -42,7 +46,7 @@ public class GameServer extends Thread {
     private void sendPlayerList() {
         StringBuffer str = new StringBuffer();
 
-        for (String player : players.keySet()) {
+        for (String player : players.values()) {
             if (str.length() > 0) {
                 str.append(":");
             }
@@ -54,7 +58,7 @@ public class GameServer extends Thread {
     }
 
     public void sendMessageToAllPlayers(String message) {
-        for (Socket sockClient : players.values()) {
+        for (Socket sockClient : players.keySet()) {
             try {
                 OutputStreamWriter out =
                         new OutputStreamWriter(
@@ -89,7 +93,7 @@ public class GameServer extends Thread {
                                             socketClient.getInputStream()));
 
                     String playerName = reader.readLine();
-                    players.put(playerName, socketClient);
+                    players.put(socketClient, playerName);
                     sendPlayerList();
                 } catch (SocketTimeoutException e) {
 
@@ -99,7 +103,7 @@ public class GameServer extends Thread {
             e.printStackTrace();
         } finally {
             roomNotifier.stopNotifying();
-            for (Socket socket : players.values()) {
+            for (Socket socket : players.keySet()) {
                 try {
                     socket.close();
                 } catch (IOException e){}

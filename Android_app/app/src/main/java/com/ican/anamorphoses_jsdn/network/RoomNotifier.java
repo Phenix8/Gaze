@@ -33,7 +33,7 @@ public class RoomNotifier extends Thread {
         notifying = false;
         while (!threadJoined){
             try {
-                this.wait();
+                this.join();
                 threadJoined = true;
             } catch (InterruptedException e) {}
         }
