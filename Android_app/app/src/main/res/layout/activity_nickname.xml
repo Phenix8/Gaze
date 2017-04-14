@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:textAlignment="center"
-        android:verticalScrollbarPosition="left"
         android:id="@+id/linearLayout">
 
         <TextView
@@ -32,35 +31,31 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:text="Player_1"
+            android:textAlignment="center"
+            android:paddingTop="110dp"
             android:lines="1"
             android:ems="10"
-            android:id="@+id/nickname_editText"
-            android:textAlignment="center"/>
+            android:id="@+id/nickname_editText"/>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:textAlignment="center"
-            android:id="@+id/nicknames_listView"/>
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="270dp"
+        android:layout_marginTop="235dp"
         android:id="@+id/frameLayout">
 
         <ImageButton
-            android:layout_width="65dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:srcCompat="@drawable/return_button"
             android:background="@android:color/transparent"
             android:id="@+id/returnImgButton" />
 
         <ImageButton
-            android:layout_width="65dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="450dp"
             app:srcCompat="@drawable/go_button"
             android:background="@android:color/transparent"

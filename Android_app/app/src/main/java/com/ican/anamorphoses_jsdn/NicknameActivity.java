@@ -26,8 +26,6 @@ public class NicknameActivity extends AppCompatActivity {
 
     private ImageButton okButton = null;
     private ImageButton returnButton = null;
-    private ListView nicknamesList = null;
-    private String selectedNickname = null;
     private EditText enteredEditText = null;
 
 
@@ -37,52 +35,9 @@ public class NicknameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nickname);
 
-        //////////////
-        // LISTVIEW //
-        //////////////
-
-        // Remplissage de la liste de noms déjà entrés
-        nicknamesList = (ListView) findViewById(R.id.nicknames_listView);
-
-        final String[] names = {"player_2", "player_3", "player_4", "player_5"};
-        //final String[] names = LoadNicknames();
-
-        ArrayAdapter<String> nicknamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, names);
-        nicknamesList.setAdapter(nicknamesAdapter);
-        nicknamesList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        // Fonction de clic sur un item de la liste
-        nicknamesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedNickname = names[position];
-                nicknamesList.setItemChecked(position, true);
-            }
-        });
-
-        //////////////
-        // EDITTEXT //
-        //////////////
-
-        enteredEditText = (EditText) findViewById(R.id.nickname_editText);
-        enteredEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-             @Override
-             public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    nicknamesList.clearChoices();
-                    nicknamesList.requestLayout();
-                    nicknamesList.refreshDrawableState();
-                    selectedNickname = enteredEditText.getText().toString();
-                }
-                else
-                    selectedNickname = enteredEditText.getText().toString();
-             }
-         });
-
-        /////////////////
+        ///////////////////////
         // IMAGE BUTTON "Ok" //
-        /////////////////
+        ///////////////////////
 
         // Evénement de click sur le boutton "Ok"
         okButton = (ImageButton) findViewById(R.id.OkButton);
@@ -94,13 +49,14 @@ public class NicknameActivity extends AppCompatActivity {
 
                 // Confirmation du nickname choisi
                 Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Do you choose : " + selectedNickname + " ?");
+                enteredEditText = (EditText) findViewById(R.id.nickname_editText);
+                builder.setMessage("Do you choose : " + enteredEditText.getText().toString() + " ?");
                 builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id)
                     {
-                    // Redirection
-                    Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(nicknameActivity);
+                        AnamorphGameManager.setplayerNickname(enteredEditText.getText().toString());
+                        Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
+                        startActivity(nicknameActivity);
                     }
                 });
                 builder.setNegativeButton("Non", null);
@@ -118,37 +74,9 @@ public class NicknameActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-            // retour
-                Log.i("Finish", "Finish nickname activity");
                 finish();
             }
         });
     }
 
-    // Fonction de chargement du fichier de scores
-    public String[] LoadNicknames()
-    {
-        FileInputStream input = null;
-        String[] resultList = null;
-
-        try {
-            input = openFileInput("NickNames");
-
-            while ((input.read()) != -1) {
-                input.read();
-            }
-            if(input != null)
-                input.close();
-
-            return resultList;
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

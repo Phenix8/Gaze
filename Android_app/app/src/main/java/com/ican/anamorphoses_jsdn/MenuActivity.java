@@ -28,7 +28,7 @@ public class MenuActivity extends AppCompatActivity {
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), CameraActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
                 startActivity(menuOptionActivity);
             }
         });
@@ -58,7 +58,7 @@ public class MenuActivity extends AppCompatActivity {
         highscoresButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), HighscoresMenuActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), ProfilMenuActivity.class);
                 startActivity(menuOptionActivity);
             }
         });
@@ -73,8 +73,6 @@ public class MenuActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                // retour
-                Log.i("Finish", "Finish nickname activity");
                 finish();
             }
         });

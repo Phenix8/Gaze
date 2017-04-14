@@ -16,42 +16,38 @@ public class AnamorphGameManager {
 	static public List<Anamorphosis> getAnamorphosisDict() {
 		return anamorphosisDict;
 	}
-
 	static public void setAnamorphosisDict(List<Anamorphosis> anamorphosisDict) {
 		AnamorphGameManager.anamorphosisDict = anamorphosisDict;
 	}
 
 		// Surnom du joueur utilisant l'application
-	private String playerNickname;
+	static private String playerNickname;
 
-	public String getplayerNickname() {
+	static public String getplayerNickname() {
 		return playerNickname;
 	}
-
-	public void setplayerNickname(String playerNickname) {
-		this.playerNickname = playerNickname;
+	static public void setplayerNickname(String playerNickname) {
+		AnamorphGameManager.playerNickname = playerNickname;
 	}
 
 		// Anamorphose en objectif courant
-	private Anamorphosis targetAnamorphosis;
+	static private Anamorphosis targetAnamorphosis;
 
-	public Anamorphosis getTargetAnamorphosis() {
+	static public Anamorphosis getTargetAnamorphosis() {
 		return targetAnamorphosis;
 	}
-
-	public void setTargetAnamorphosis(Anamorphosis targetAnamorphosis) {
-		this.targetAnamorphosis = targetAnamorphosis;
+	static public void setTargetAnamorphosis(Anamorphosis targetAnamorphosis) {
+		AnamorphGameManager.targetAnamorphosis = targetAnamorphosis;
 	}
 
 		// Anamorphoses qui ont été précédemment validées
-	private List<Anamorphosis> validatedAnamorphosis;
+	static private List<Anamorphosis> validatedAnamorphosis;
 
-	public List<Anamorphosis> getValidatedAnamorphosis() {
+	static public List<Anamorphosis> getValidatedAnamorphosis() {
 		return validatedAnamorphosis;
 	}
-
-	public void setValidatedAnamorphosis(List<Anamorphosis> validatedAnamorphosis) {
-		this.validatedAnamorphosis = validatedAnamorphosis;
+	static public void setValidatedAnamorphosis(List<Anamorphosis> validatedAnamorphosis) {
+		AnamorphGameManager.validatedAnamorphosis = validatedAnamorphosis;
 	}
 
 }

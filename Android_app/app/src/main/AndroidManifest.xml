@@ -41,15 +41,17 @@
             android:name=".RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".HighscoresMenuActivity"
+            android:name=".ProfilMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AnamorphoseChoiceActivity"
+            android:name=".AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".CameraActivity"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".JoinGameActivity"></activity>
+        <activity
+            android:name=".JoinGameActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

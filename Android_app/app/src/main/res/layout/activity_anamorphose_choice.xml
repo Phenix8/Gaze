@@ -31,13 +31,9 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="440dp"
-            android:text="Score : "/>
 
-        <EditText
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -53,7 +49,6 @@
             android:layout_centerHorizontal="true"
             android:gravity="center">
 
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
@@ -68,7 +63,7 @@
                     android:id="@+id/easyImgButton"
                     android:layout_weight="1" />
 
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Easy"
@@ -89,7 +84,7 @@
                     android:id="@+id/mediumImgButton"
                     android:layout_weight="1" />
 
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Medium"
@@ -111,7 +106,7 @@
                     android:id="@+id/hardImgButton"
                     android:layout_weight="1" />
 
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hard"
