@@ -50,19 +50,37 @@
             android:layout_centerHorizontal="true"
             android:gravity="center">
 
+            <!-- EASY -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="80dp">
 
-                <ImageButton
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/anamorphose_easy"
-                    android:background="@android:color/transparent"
-                    android:id="@+id/easyImgButton"
-                    android:layout_weight="1" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/anamorphosis_img_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="6dp"
+                        android:layout_weight="1"
+                        android:translationZ="2dp"
+                        app:srcCompat="@drawable/empty_anamorphosis" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/anamorphose_easy"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/easyImgButton"
+                        android:layout_weight="1" >
+                    </ImageButton>
+
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -72,18 +90,35 @@
 
             </LinearLayout>
 
+            <!-- MEDIUM -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageButton
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/anamorphose_medium"
-                    android:background="@android:color/transparent"
-                    android:id="@+id/mediumImgButton"
-                    android:layout_weight="1" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/anamorphosis_img_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="6dp"
+                        android:layout_weight="1"
+                        android:translationZ="2dp"
+                        app:srcCompat="@drawable/empty_anamorphosis" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/anamorphose_medium"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/mediumImgButton"
+                        android:layout_weight="1" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -93,19 +128,36 @@
 
             </LinearLayout>
 
+            <!-- HARD -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="80dp">
 
-                <ImageButton
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/anamorphose_hard"
-                    android:background="@android:color/transparent"
-                    android:id="@+id/hardImgButton"
-                    android:layout_weight="1" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/anamorphosis_img_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="6dp"
+                        android:translationZ="2dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/empty_anamorphosis" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/anamorphose_hard"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/hardImgButton"
+                        android:layout_weight="1" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -116,7 +168,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
 
         <ImageButton
             android:layout_width="wrap_content"
