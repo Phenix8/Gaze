@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.ican.anamorphoses_jsdn.network.Common;
-import com.ican.anamorphoses_jsdn.network.Game;
+import com.ican.anamorphoses_jsdn.network.Room;
 import com.ican.anamorphoses_jsdn.network.RoomFinder;
 
 import java.lang.reflect.Array;
@@ -23,14 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class JoinGameActivity extends AppCompatActivity
+public class JoinRoomActivity extends AppCompatActivity
         implements RoomFinder.RoomListChangeListener, AdapterView.OnItemClickListener {
 
     RoomFinder finder = new RoomFinder(Common.BROADCAST_MESSAGE, Common.UDP_PORT);
     ListView gameList;
     ArrayAdapter adapter;
     Button joinButton;
-    ArrayList<Game> games = new ArrayList<>();
+    ArrayList<Room> games = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +69,8 @@ public class JoinGameActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRoomListChanged(HashMap<InetAddress, Game> roomList) {
-        final Collection<Game> games = new ArrayList<>(roomList.values());
+    public void onRoomListChanged(HashMap<InetAddress, Room> roomList) {
+        final Collection<Room> games = new ArrayList<>(roomList.values());
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -85,7 +85,7 @@ public class JoinGameActivity extends AppCompatActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, LobbyActivity.class);
         Bundle b = new Bundle();
-        b.putSerializable("serverAddress", ((Game)adapter.getItem(position)).getAddress());
+        b.putSerializable("serverAddress", ((Room)adapter.getItem(position)).getAddress());
         intent.putExtras(b);
         startActivity(intent);
         finish();

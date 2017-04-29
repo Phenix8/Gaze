@@ -38,7 +38,7 @@ public class MenuActivity extends AppCompatActivity {
         joinGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), JoinGameActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), JoinRoomActivity.class);
                 startActivity(menuOptionActivity);
             }
         });
