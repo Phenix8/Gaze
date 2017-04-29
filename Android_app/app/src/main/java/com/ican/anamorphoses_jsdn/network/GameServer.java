@@ -2,10 +2,7 @@ package com.ican.anamorphoses_jsdn.network;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -15,7 +12,8 @@ import java.util.HashMap;
  * Created by root on 12/04/2017.
  */
 
-public class GameServer extends Thread {
+public class GameServer extends Thread
+    implements ClientHandler.ClientHandlerListener {
 
     private static String TAG = "GameServer";
 
@@ -27,7 +25,9 @@ public class GameServer extends Thread {
 
     private int maxPlayer;
 
-    private HashMap<Socket, String> players = new HashMap<>();
+    private HashMap<ClientHandler, String> players = new HashMap<>();
+
+    private int numberOfPlayerReady = 0;
 
     private GameServer(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
         this.tcpPort = tcpPort;
@@ -43,40 +43,19 @@ public class GameServer extends Thread {
         this.listening = false;
     }
 
-    private void sendPlayerList() {
-        StringBuffer str = new StringBuffer();
-
-        for (String player : players.values()) {
-            if (str.length() > 0) {
-                str.append(":");
-            }
-            str.append(player);
-        }
-        str.append("\n");
-        str.insert(0, "PLAYERS ");
-        sendMessageToAllPlayers(str.toString());
-    }
-
     public void sendMessageToAllPlayers(String message) {
-        for (Socket sockClient : players.keySet()) {
+        for (ClientHandler client : players.keySet()) {
             try {
-                OutputStreamWriter out =
-                        new OutputStreamWriter(
-                                sockClient.getOutputStream());
-
-                out.write(message);
-                out.flush();
-
+                client.sendMessage(message);
             } catch (IOException e) {
-                Log.d(TAG, "Error sending to " + sockClient.getInetAddress());
+                Log.d(TAG, "Error sending to " + players.get(client));
             }
         }
     }
 
     @Override
     public void run() {
-
-        ServerSocket listeningSocket;
+        ServerSocket listeningSocket = null;
 
         try {
             listeningSocket = new ServerSocket(tcpPort);
@@ -88,14 +67,9 @@ public class GameServer extends Thread {
                     Socket socketClient = listeningSocket.accept();
                     Log.d(TAG, "Client connected (" + socketClient.getInetAddress() + ")");
 
-                    BufferedReader reader =
-                            new BufferedReader(
-                                    new InputStreamReader(
-                                            socketClient.getInputStream()));
-
-                    String playerName = reader.readLine();
-                    players.put(socketClient, playerName);
-                    sendPlayerList();
+                    ClientHandler client = new ClientHandler(socketClient);
+                    client.addListener(this);
+                    client.start();
                 } catch (SocketTimeoutException e) {
 
                 }
@@ -104,12 +78,36 @@ public class GameServer extends Thread {
             e.printStackTrace();
         } finally {
             roomNotifier.stopNotifying();
-            for (Socket socket : players.keySet()) {
-                try {
-                    socket.close();
-                } catch (IOException e){}
+            try {
+                if (listeningSocket != null) {
+                    listeningSocket.close();
+                }
+            } catch (IOException e) {
+
             }
         }
     }
 
+    @Override
+    public void onMessageReceived(ClientHandler client, String message) {
+        switch (Protocol.parseInstructionType(message)) {
+            case Protocol.CONNECT_INSTRUCTION_TYPE:
+                players.put(client, message);
+                sendMessageToAllPlayers(
+                        Protocol.buildPlayerListInstruction(
+                                players.values()
+                        )
+                );
+            break;
+
+            case Protocol.READY_INSTRUCTION_TYPE:
+
+            break;
+        }
+    }
+
+    @Override
+    public void onClientDisconnected(ClientHandler client) {
+
+    }
 }

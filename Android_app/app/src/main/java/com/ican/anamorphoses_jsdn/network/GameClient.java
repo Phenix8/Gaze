@@ -10,12 +10,6 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-/**
- * Created by root on 12/04/2017.
- */
 
 public class GameClient extends Thread {
 
@@ -36,6 +30,7 @@ public class GameClient extends Thread {
     public interface GameEventListener {
         enum GameEventType {
             PLAYER_LIST_CHANGED,
+            PLAYER_STATE_CHANGED,
             GAME_STARTED,
             GAME_ENDED,
             DEATH_MATCH,
@@ -62,18 +57,24 @@ public class GameClient extends Thread {
                 new InputStreamReader(socket.getInputStream()));
     }
 
-    private void sendPlayerName()
+    private void sendInstruction(String instruction)
         throws IOException {
-        out.write(String.format("%s\n", playerName));
+        out.write(String.format("%s\n", instruction));
         out.flush();
     }
 
-    private List<String> parsePlayerList(String data) {
-        return Arrays.asList(data.split(":"));
+    private void sendPlayerName()
+        throws IOException {
+        sendInstruction(
+                Protocol.buildConnectInstruction(playerName)
+        );
     }
 
     public void disconnect() {
         boolean threadJoined = false;
+        try {
+            sendInstruction(Protocol.buildQuitInstruction());
+        } catch (IOException e) {};
         connected = false;
         while (!threadJoined)
         try {
@@ -111,13 +112,13 @@ public class GameClient extends Thread {
                 String message = in.readLine();
                 Log.d(TAG, String.format("received : %s", message));
 
-                String[] parts = message.split(" ");
+                String instructionType = Protocol.parseInstructionType(message);
 
-                switch (parts[0]) {
+                switch (instructionType) {
                     case "PLAYERS":
                         notifyListener(
                                 GameEventListener.GameEventType.PLAYER_LIST_CHANGED,
-                                parsePlayerList(parts[1]));
+                                Protocol.parseInstructionData(message));
                     break;
                 }
             }

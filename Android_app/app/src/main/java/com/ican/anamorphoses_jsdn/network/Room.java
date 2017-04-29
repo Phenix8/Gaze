@@ -6,12 +6,12 @@ import java.net.InetAddress;
  * Created by root on 14/04/2017.
  */
 
-public class Game {
+public class Room {
 
     private InetAddress address;
     private String name;
 
-    public Game(InetAddress address, String name) {
+    public Room(InetAddress address, String name) {
         this.address = address;
         this.name = name;
     }
