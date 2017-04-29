@@ -62,12 +62,12 @@ public class AnamorphGameManager {
 	static public void InitAnamorphosisDict(Context context)
     {
         AnamorphGameManager.anamorphosisDict = new ArrayList<Anamorphosis>();
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3, AnamorphosisDifficulty.MEDIUM));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4, AnamorphosisDifficulty.MEDIUM));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5, AnamorphosisDifficulty.HARD));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6, AnamorphosisDifficulty.HARD));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, AnamorphosisDifficulty.EASY));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, AnamorphosisDifficulty.EASY));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, AnamorphosisDifficulty.HARD));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, AnamorphosisDifficulty.HARD));
     }
 
 }

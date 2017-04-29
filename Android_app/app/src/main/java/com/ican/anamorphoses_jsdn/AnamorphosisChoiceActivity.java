@@ -115,9 +115,9 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
         });
 			
 
-		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, easyButton);
-		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, mediumButton);
-		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, hardButton);
+		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, (ImageView) findViewById(R.id.anamorphosis_img_1) );
+		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));
+		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, (ImageView) findViewById(R.id.anamorphosis_img_3));
     }
 
 	
@@ -129,7 +129,8 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 
     // Fonction de positionnemnt de l'encadré de sélection
     // en fonction de la position de l'ImageButton en paramètres
-    private void SetSelectorPosition(ImageButton button) {
+    private void SetSelectorPosition(ImageButton button)
+    {
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.selectorLayout);
         int[] location = new int[2];
 
@@ -142,7 +143,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 
 	// Fonction d'initialisation de l'affichage et de l'objet
 	// "Anamorphose" d'après la difficulté et le buttonImage envoyés
-	private void InitializeAnamorphosisImages(AnamorphosisDifficulty difficulty, ImageButton button)
+	private void InitializeAnamorphosisImages(AnamorphosisDifficulty difficulty, ImageView button)
 	{
         if (AnamorphGameManager.getAnamorphosisDict() == null)
             AnamorphGameManager.InitAnamorphosisDict(getApplicationContext());
@@ -153,9 +154,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 		// ASSIGNATION DE L'IMAGE AU BUTTON EN FONCTION DU PATH
 		button.setImageDrawable(ResourcesCompat.getDrawable(getResources(),currentAnamorphosis.getDrawableImage(), null));
 
-	            // ERREUR ICI, soulevée par le GETDRAWABLE      //
 	}
-
 
 
 	// Fonction de génération d'un object "Anamorphose"

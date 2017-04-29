@@ -37,6 +37,7 @@ public class ProfilMenuActivity extends AppCompatActivity {
         //////////////
 
         enteredEditText = (EditText) findViewById(R.id.nickname_editText);
+        enteredEditText.setText(AnamorphGameManager.getplayerNickname());
         enteredEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -107,7 +108,7 @@ public class ProfilMenuActivity extends AppCompatActivity {
                 builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        AnamorphGameManager.setplayerNickname(enteredEditText.getText().toString());
+                        AnamorphGameManager.setplayerNickname(selectedProfil);
                         Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(nicknameActivity);
                     }
