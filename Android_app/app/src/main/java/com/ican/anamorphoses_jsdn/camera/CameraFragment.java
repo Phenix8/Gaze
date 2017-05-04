@@ -426,7 +426,7 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
+        // view.findViewById(R.id.photo_icon).setOnClickListener(this);                 BUG QUAND ACTIF
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -905,7 +905,7 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.picture) {
+        if (view.getId() == R.id.photo_icon) {
             takePicture();
         }
     }

@@ -19,7 +19,6 @@ public class AnamorphGameManager {
 
 		// Liste de toutes les anamorphoses
 	static private ArrayList<Anamorphosis> anamorphosisDict;
-
 	static public ArrayList<Anamorphosis> getAnamorphosisDict() {
         return anamorphosisDict;
 	}
@@ -27,9 +26,9 @@ public class AnamorphGameManager {
 		AnamorphGameManager.anamorphosisDict = anamorphosisDict;
 	}
 
+
 		// Surnom du joueur utilisant l'application
 	static private String playerNickname;
-
 	static public String getplayerNickname() {
 		return playerNickname;
 	}
@@ -37,9 +36,9 @@ public class AnamorphGameManager {
 		AnamorphGameManager.playerNickname = playerNickname;
 	}
 
+
 		// Anamorphose en objectif courant
 	static private Anamorphosis targetAnamorphosis;
-
 	static public Anamorphosis getTargetAnamorphosis() {
 		return targetAnamorphosis;
 	}
@@ -47,9 +46,9 @@ public class AnamorphGameManager {
 		AnamorphGameManager.targetAnamorphosis = targetAnamorphosis;
 	}
 
+
 		// Anamorphoses qui ont été précédemment validées
 	static private ArrayList<Anamorphosis> validatedAnamorphosis;
-
 	static public ArrayList<Anamorphosis> getValidatedAnamorphosis() {
 		return validatedAnamorphosis;
 	}
@@ -58,16 +57,40 @@ public class AnamorphGameManager {
 	}
 
 
+		// Score du joueur pour la manche en cours
+	static private int currentPlayerScore;
+	static public int getCurrentPlayerScore() { return currentPlayerScore;}
+	static public void setCurrentPlayerScore (int currentPLayerScore) {
+		AnamorphGameManager.currentPlayerScore = currentPLayerScore;
+	}
+
+
+		// Score du joueur pour toute la partie en cours
+	static private int gamePlayerScore;
+	static public int getGamePlayerScore() { return gamePlayerScore;}
+	static public void setGamePlayerScore (int gamePlayerScore) {
+		AnamorphGameManager.gamePlayerScore = gamePlayerScore;
+	}
+
+
+		// Score du nickname commun à toute les parties
+	static private int totalPlayerScore;
+	static public int getTotalPlayerScore() { return totalPlayerScore;}
+	static public void setTotalPlayerScore (int totalPlayerScore) {
+		AnamorphGameManager.totalPlayerScore = totalPlayerScore;
+	}
+
+
 	// Initalisation du dictionnaire d'anamorphose
 	static public void InitAnamorphosisDict(Context context)
     {
         AnamorphGameManager.anamorphosisDict = new ArrayList<Anamorphosis>();
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, AnamorphosisDifficulty.MEDIUM));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, AnamorphosisDifficulty.MEDIUM));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, AnamorphosisDifficulty.HARD));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, AnamorphosisDifficulty.HARD));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_s, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD));
     }
 
 }
