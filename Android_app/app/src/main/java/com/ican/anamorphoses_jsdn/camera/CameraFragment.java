@@ -44,6 +44,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import dlibwrapper.DLibWrapper;
+
+import com.ican.anamorphoses_jsdn.CameraActivity;
 import com.ican.anamorphoses_jsdn.R;
 
 import java.io.File;
@@ -426,7 +428,7 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        // view.findViewById(R.id.photo_icon).setOnClickListener(this);                 BUG QUAND ACTIF
+        //view.findViewById(R.id.photo_icon).setOnClickListener(this);                 BUG QUAND ACTIF
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -948,7 +950,7 @@ public class CameraFragment extends Fragment
                         .setMessage(result == 1 ? "detected!" : "Nothing!")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
+                                CameraActivity.CheckForGameEnd();
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)

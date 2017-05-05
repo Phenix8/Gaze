@@ -17,6 +17,8 @@ import java.util.List;
  
 public class AnamorphGameManager {
 
+	public static final int VICTORY_ANAMORPH_NB = 4;
+
 		// Liste de toutes les anamorphoses
 	static private ArrayList<Anamorphosis> anamorphosisDict;
 	static public ArrayList<Anamorphosis> getAnamorphosisDict() {
@@ -87,7 +89,7 @@ public class AnamorphGameManager {
         AnamorphGameManager.anamorphosisDict = new ArrayList<Anamorphosis>();
         AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY));
         AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_s, AnamorphosisDifficulty.MEDIUM));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, AnamorphosisDifficulty.MEDIUM));
         AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM));
         AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD));
         AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD));

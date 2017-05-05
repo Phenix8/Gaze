@@ -49,10 +49,15 @@
         <activity
             android:name=".CameraActivity"
             android:screenOrientation="landscape" />
-
-        <activity android:name=".JoinGameActivity" />
-        <activity android:name=".CreateGameActivity" />
-
+        <activity
+            android:name=".JoinRoomActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".CreateGameActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ResultActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

@@ -6,17 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import dlibwrapper.DLibWrapper;
-import com.ican.anamorphoses_jsdn.camera.Camera2BasicFragment;
+
 import com.ican.anamorphoses_jsdn.camera.CameraFragment;
 
 public class CameraActivity extends Activity
@@ -24,12 +21,11 @@ public class CameraActivity extends Activity
 
     private ImageView targetAnamorphImg = null;
     private ImageView targetAnamorphBg = null;
-    private ImageView zoom_anamorph_img = null;
+    private ImageView zoomAnamorphImg = null;
 
     private ImageButton abandonImg = null;
     private ImageButton cameraImg = null;
-    private ImageButton zoom_anamorph_bg = null;
-
+    private ImageButton zoomAnamorphBg = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +57,16 @@ public class CameraActivity extends Activity
         }
 
         TextView score = (TextView) findViewById(R.id.scoreTxt);
-        score.setText("Score: " + AnamorphGameManager.getCurrentPlayerScore());
+        score.setText(AnamorphGameManager.getplayerNickname()+ ": " + AnamorphGameManager.getCurrentPlayerScore());
 
-        // Evénement de click sur l'annulation d'anamorphose
+        // Evénement de clic sur l'annulation d'anamorphose
         abandonImg.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
+                if (HideTargetAnamorphZoom())
+                    return;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage("Do you want to abandon this anamorphosis ?");
                 builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
@@ -84,17 +83,26 @@ public class CameraActivity extends Activity
             }
         });
 
-        // Evénement de click sur l'anamorphose cible
-        abandonImg.setOnClickListener(new View.OnClickListener()
+        // Evénement de clic sur l'anamorphose cible
+        targetAnamorphBg.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
-                if (zoom_anamorph_bg.getVisibility() == View.INVISIBLE)
+                if (HideTargetAnamorphZoom())
+                    return;
+                else if (zoomAnamorphBg.getVisibility() == View.INVISIBLE)
                 {
-                    zoom_anamorph_bg.setVisibility(View.VISIBLE);
-                    zoom_anamorph_img.setVisibility(View.VISIBLE);
+                    zoomAnamorphBg.setVisibility(View.VISIBLE);
+                    zoomAnamorphImg.setVisibility(View.VISIBLE);
                 }
             }
+        });
+
+        // Evénement de clic sur l'anamorphose zoomée
+        zoomAnamorphBg.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) { HideTargetAnamorphZoom();  }
         });
 
     }
@@ -113,6 +121,12 @@ public class CameraActivity extends Activity
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        HideTargetAnamorphZoom();
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     public void onBackPressed() {
         return;
     }
@@ -127,29 +141,29 @@ public class CameraActivity extends Activity
         targetAnamorphBg = (ImageButton) findViewById(R.id.target_anamorph_bg);
 
         // anamorphose cible zommée
-        zoom_anamorph_img = (ImageView) findViewById(R.id.zoom_anamorph_img);
-        zoom_anamorph_bg = (ImageButton) findViewById(R.id.zoom_anamorph_bg);
+        zoomAnamorphImg = (ImageView) findViewById(R.id.zoom_anamorph_img);
+        zoomAnamorphBg = (ImageButton) findViewById(R.id.zoom_anamorph_bg);
 
         Anamorphosis currentAnamorphosis =  AnamorphGameManager.getTargetAnamorphosis();
 
         targetAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getDrawableImage(), null));
-        targetAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
+        zoomAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
 
         if (currentAnamorphosis.getDifficulty() == AnamorphosisDifficulty.HARD) {
             targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_hard, null));
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_hard_large, null));
+            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_hard_large, null));
         }
         else if (currentAnamorphosis.getDifficulty() == AnamorphosisDifficulty.MEDIUM) {
             targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_medium, null));
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_medium_large, null));
+            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_medium_large, null));
         }
         else {
             targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_easy, null));
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_easy_large, null));
+            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_easy_large, null));
         }
 
-        zoom_anamorph_bg.setVisibility(View.INVISIBLE);
-        zoom_anamorph_img.setVisibility(View.INVISIBLE);
+        zoomAnamorphBg.setVisibility(View.INVISIBLE);
+        zoomAnamorphImg.setVisibility(View.INVISIBLE);
     }
 
 
@@ -165,4 +179,30 @@ public class CameraActivity extends Activity
         abandonImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.abandon_button, null));
     }
 
+
+    // Dissimuler l'anamorphose zoomée
+    private boolean HideTargetAnamorphZoom()
+    {
+        if (zoomAnamorphBg.getVisibility() == View.VISIBLE)
+        {
+            zoomAnamorphBg.setVisibility(View.INVISIBLE);
+            zoomAnamorphImg.setVisibility(View.INVISIBLE);
+            return true;
+        }
+        return false;
+    }
+
+
+    // Vérifie si la partie en cours est terminée
+    public static void CheckForGameEnd()
+    {
+        AnamorphGameManager.setCurrentPlayerScore(AnamorphGameManager.getCurrentPlayerScore() + 1);
+        if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
+        {
+            //END OF THE GAME
+
+            //Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), ResultActivity.class);
+            //startActivity(anamorphosisChoiceActivity);
+        }
+    }
 }

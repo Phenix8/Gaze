@@ -19,7 +19,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ican.anamorphoses_jsdn.CameraActivity" >
+    tools:context="com.ican.anamorphoses_jsdn.CameraActivity">
 
     <!-- ANAMORPHOSIS TARGET + SCORE -->
     <FrameLayout
@@ -103,20 +103,24 @@
 
     <!-- ZOOM ANAMORPHOSIS TARGET -->
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:translationZ="3dp">
 
         <ImageButton
             android:id="@+id/zoom_anamorph_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:background="@android:color/transparent"/>
 
         <ImageView
             android:id="@+id/zoom_anamorph_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:background="@android:color/transparent"
+            android:padding="12dp"/>
 
     </FrameLayout>
 
