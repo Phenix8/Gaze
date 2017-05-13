@@ -428,7 +428,7 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        //view.findViewById(R.id.photo_icon).setOnClickListener(this);                 BUG QUAND ACTIF
+        //view.findViewById(R.id.photo_icon).setOnClickListener(this);                 // BUG QUAND ACTIF
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -787,7 +787,7 @@ public class CameraFragment extends Fragment
     /**
      * Initiate a still image capture.
      */
-    private void takePicture() {
+    public void takePicture() {
         lockFocus();
     }
 

@@ -27,6 +27,8 @@ public class CameraActivity extends Activity
     private ImageButton cameraImg = null;
     private ImageButton zoomAnamorphBg = null;
 
+    private CameraFragment cameraInstance = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +49,9 @@ public class CameraActivity extends Activity
             setToolImages();
 
             if (null == savedInstanceState) {
+                cameraInstance = CameraFragment.newInstance();
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, CameraFragment.newInstance())
+                        .replace(R.id.container, cameraInstance)
                         .commit();
 
             }
@@ -103,6 +106,17 @@ public class CameraActivity extends Activity
         {
             @Override
             public void onClick(View v) { HideTargetAnamorphZoom();  }
+        });
+
+        cameraImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (HideTargetAnamorphZoom())
+                    return;
+                if (v.getId() == R.id.photo_icon) {
+                    cameraInstance.takePicture();
+                }
+            }
         });
 
     }

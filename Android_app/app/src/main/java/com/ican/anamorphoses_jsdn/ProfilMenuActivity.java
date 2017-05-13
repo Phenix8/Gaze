@@ -1,8 +1,10 @@
 package com.ican.anamorphoses_jsdn;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 public class ProfilMenuActivity extends AppCompatActivity {
 
@@ -59,7 +63,7 @@ public class ProfilMenuActivity extends AppCompatActivity {
         // Remplissage de la liste de noms déjà entrés
         profilsList = (ListView) findViewById(R.id.nicknames_listView);
 
-        final String[] profils = {"player_2", "player_3", "player_4", "player_5"};
+        final String[] profils = LoadNickNameList();//{"player_2", "player_3", "player_4", "player_5"};
         //final String[] names = LoadNicknames();
 
         ArrayAdapter<String> nicknamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, profils);
@@ -110,6 +114,7 @@ public class ProfilMenuActivity extends AppCompatActivity {
                     {
                         AnamorphGameManager.setplayerNickname(selectedProfil);
                         Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
+                        SaveNickName();
                         startActivity(nicknameActivity);
                     }
                 });
@@ -119,6 +124,26 @@ public class ProfilMenuActivity extends AppCompatActivity {
         });
 
     }
+
+    // Save the added nickname to datas
+    private void SaveNickName()
+    {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
+        editor.commit();
+    }
+
+    // Read the nicknames list saved in datas
+    private String[] LoadNickNameList()
+    {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        Map<String, ?> scoreByNickname = sharedPref.getAll();
+        Set<String> nicknames =  scoreByNickname.keySet();
+        return nicknames.toArray(new String[0]);
+    }
+
+                /* TO DELETE
 
     // Fonction de chargement du fichier de scores
     public boolean AddProfilToFile(String newNickname)
@@ -168,4 +193,6 @@ public class ProfilMenuActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    */
 }

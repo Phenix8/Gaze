@@ -1,8 +1,10 @@
 package com.ican.anamorphoses_jsdn;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,6 +58,7 @@ public class NicknameActivity extends AppCompatActivity {
                     {
                         AnamorphGameManager.setplayerNickname(enteredEditText.getText().toString());
                         Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
+                        SaveNickName();
                         startActivity(nicknameActivity);
                     }
                 });
@@ -78,5 +81,16 @@ public class NicknameActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    // Save the added nickname to datas
+    private void SaveNickName()
+    {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
+        editor.commit();
+    }
+
 
 }
