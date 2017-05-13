@@ -128,71 +128,23 @@ public class ProfilMenuActivity extends AppCompatActivity {
     // Save the added nickname to datas
     private void SaveNickName()
     {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
         editor.commit();
     }
 
-    // Read the nicknames list saved in datas
+    // Lit les nicknames enregistrés et les convertit
+    // en tableau de String avec leur score
     private String[] LoadNickNameList()
     {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
         Map<String, ?> scoreByNickname = sharedPref.getAll();
-        Set<String> nicknames =  scoreByNickname.keySet();
-        return nicknames.toArray(new String[0]);
+        Set<String> nicknamesSet =  scoreByNickname.keySet();
+        String[] nicknamesArray = nicknamesSet.toArray(new String[0]);
+        //for(int i=0; i<nicknamesArray.length; i++)
+        //    nicknamesArray[i] += ("    " + (Integer.toString(sharedPref.getInt(nicknamesArray[i], -1))) );
+        return nicknamesArray;
     }
 
-                /* TO DELETE
-
-    // Fonction de chargement du fichier de scores
-    public boolean AddProfilToFile(String newNickname)
-    {
-        FileOutputStream output = null;
-        try {
-            output = openFileOutput("NickNames", MODE_PRIVATE);
-            output.write(newNickname.getBytes());
-            if(output != null)
-                output.close();
-
-            return true;
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Fonction de chargement du fichier de profils
-    public String[] LoadProfils()
-    {
-        FileInputStream input = null;
-        String[] resultList = null;
-
-        try {
-            input = openFileInput("NickNames");
-
-            while ((input.read()) != -1) {
-                input.read();
-            }
-            if(input != null)
-                input.close();
-
-            return resultList;
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    */
 }

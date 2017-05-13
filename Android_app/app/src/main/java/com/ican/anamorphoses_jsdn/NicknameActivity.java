@@ -86,7 +86,7 @@ public class NicknameActivity extends AppCompatActivity {
     // Save the added nickname to datas
     private void SaveNickName()
     {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile",  MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
         editor.commit();
