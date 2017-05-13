@@ -11,7 +11,7 @@
     tools:context="com.ican.anamorphoses_jsdn.HomeActivity">
 
     <TextView
-        android:text="Anamorphoses"
+        android:text="Anamorphosis"
         android:textSize="50sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

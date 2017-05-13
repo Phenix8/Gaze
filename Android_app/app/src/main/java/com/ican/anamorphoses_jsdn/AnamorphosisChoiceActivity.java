@@ -105,7 +105,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
                     {
                         if (difficulty != null && anamorphosisByDifficulty != null)
                             AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
-                        Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
+                        Intent nicknameActivity = new Intent(getApplicationContext(), CameraActivity.class);
                         startActivity(nicknameActivity);
                     }
                 });
@@ -113,7 +113,6 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
                 builder.show();
             }
         });
-			
 
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, (ImageView) findViewById(R.id.anamorphosis_img_1) );
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));

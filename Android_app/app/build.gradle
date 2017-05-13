@@ -40,7 +40,7 @@ android {
             applicationIdSuffix ".debug"
             debuggable true
             jniDebuggable true
-			externalNativeBuild {
+            externalNativeBuild {
                 cmake {
                     arguments "-DCMAKE_BUILD_TYPE=DEBUG"
                 }
@@ -59,8 +59,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:26.0.0-alpha1'
     compile 'com.android.support:support-v13:26.0.0-alpha1'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    testCompile 'junit:junit:4.12'
 }

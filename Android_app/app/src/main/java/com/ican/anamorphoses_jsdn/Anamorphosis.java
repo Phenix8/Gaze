@@ -27,6 +27,14 @@ public class Anamorphosis {
 	public int getDrawableImage()
 	{	return this.drawableImage;	}
 
+	// Nom de la ressource image de l'anamorphose en grand format
+	private int largeDrawableImage;
+
+	public void setLargeDrawableImage(int largeDrawableImage)
+	{	this.largeDrawableImage =  largeDrawableImage;	}
+	public int getLargeDrawableImage()
+	{	return this.largeDrawableImage;	}
+
 
 	// Niveau de difficulté (facile, moyen, difficile)
 	private AnamorphosisDifficulty difficulty;
@@ -38,10 +46,11 @@ public class Anamorphosis {
 
 
     // CONSTRUCTEUR
-	public Anamorphosis(int drawableImage, AnamorphosisDifficulty difficulty)
+	public Anamorphosis(int drawableImage, int largeDrawableImage, AnamorphosisDifficulty difficulty)
 	{
 		this.id = idCounter++;
         this.drawableImage = drawableImage;
+		this.largeDrawableImage = largeDrawableImage;
         this.difficulty = difficulty;
 	}
 }
