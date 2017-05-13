@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
@@ -21,10 +23,13 @@ public class LobbyActivity extends AppCompatActivity
         implements Client.GameEventListener {
 
     private ImageButton returnButton = null;
+    private ImageButton readyButton = null;
     private ListView playerList = null;
 
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayAdapter<Player> adapter;
+
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +52,39 @@ public class LobbyActivity extends AppCompatActivity
         }
         });
 
+        readyButton = (ImageButton) findViewById(R.id.readyImgButton);
+        readyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    client.toggleReady();
+                } catch (IOException e) {
+                    showError("A network error occured.");
+                }
+            }
+        });
+
         playerList = (ListView) findViewById(R.id.playerList);
         adapter = new ArrayAdapter<>(this, R.layout.list_item, players);
         playerList.setAdapter(adapter);
 
-        Client client = new Client();
+        client = new Client();
         try {
             client.addGameEventListener(this);
             client.connectServer(AnamorphGameManager.getplayerNickname(), (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            showError("Server address is invalid.");
         } catch (IOException e) {
-            e.printStackTrace();
+            showError("A network error occured");
         }
+    }
+
+    private void showError(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override

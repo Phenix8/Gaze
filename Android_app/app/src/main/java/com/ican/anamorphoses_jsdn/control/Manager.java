@@ -106,6 +106,7 @@ public class Manager extends Server {
             case Protocol.READY_INSTRUCTION_TYPE:
                 Player player = players.get(handler);
                 player.setReady(!player.isReady());
+                sendPlayerList();
             break;
 
             case Protocol.START_INSTRUCTION_TYPE:

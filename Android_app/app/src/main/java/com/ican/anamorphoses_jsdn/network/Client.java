@@ -70,6 +70,10 @@ public class Client extends Thread {
         );
     }
 
+    public void toggleReady()throws IOException {
+        sendInstruction(Protocol.buildReadyInstruction(playerId));
+    }
+
     public void disconnect() {
         boolean threadJoined = false;
         try {

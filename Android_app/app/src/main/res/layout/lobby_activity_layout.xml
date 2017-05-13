@@ -25,14 +25,14 @@
     <ListView
         android:id="@+id/playerList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="164dp"
+        android:layout_weight="0.9" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_marginTop="220dp">
+        android:layout_below="@+id/linearLayout">
 
         <ImageButton
             android:id="@+id/returnImgButton"
@@ -40,6 +40,14 @@
             android:layout_height="55dp"
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/return_button" />
+
+        <ImageButton
+            android:id="@+id/readyImgButton"
+            android:layout_width="60dp"
+            android:layout_height="55dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/go_button"
+            android:layout_marginLeft="150dp"/>
 
     </FrameLayout>
 

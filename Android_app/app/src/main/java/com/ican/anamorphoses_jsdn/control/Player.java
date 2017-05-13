@@ -49,6 +49,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return getName();
+        return String.format("%s : %s", getName(), isReady() ? "ready" : "not ready");
     }
 }
