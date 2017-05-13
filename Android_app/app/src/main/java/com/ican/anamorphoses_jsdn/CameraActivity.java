@@ -2,8 +2,10 @@ package com.ican.anamorphoses_jsdn;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.MotionEvent;
@@ -28,6 +30,8 @@ public class CameraActivity extends Activity
     private ImageButton zoomAnamorphBg = null;
 
     private CameraFragment cameraInstance = null;
+
+    public static boolean hasToCheckGameEnd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +118,8 @@ public class CameraActivity extends Activity
                 if (HideTargetAnamorphZoom())
                     return;
                 if (v.getId() == R.id.photo_icon) {
-                    cameraInstance.takePicture();
+                    //cameraInstance.takePicture();
+                    hasToCheckGameEnd = true;
                 }
             }
         });
@@ -143,6 +148,17 @@ public class CameraActivity extends Activity
     @Override
     public void onBackPressed() {
         return;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (hasToCheckGameEnd)
+        {
+            CheckForGameEnd();
+            hasToCheckGameEnd = false;
+        }
     }
 
 
@@ -208,9 +224,11 @@ public class CameraActivity extends Activity
 
 
     // Vérifie si la partie en cours est terminée
-    public static void CheckForGameEnd()
+    public void CheckForGameEnd()
     {
         AnamorphGameManager.setCurrentPlayerScore(AnamorphGameManager.getCurrentPlayerScore() + 1);
+        SaveScores();
+
         if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
         {
             //END OF THE GAME
@@ -218,5 +236,14 @@ public class CameraActivity extends Activity
             //Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), ResultActivity.class);
             //startActivity(anamorphosisChoiceActivity);
         }
+    }
+
+    // Save the added nickname to datas
+    private void SaveScores()
+    {
+        SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
+        editor.commit();
     }
 }

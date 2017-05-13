@@ -950,7 +950,7 @@ public class CameraFragment extends Fragment
                         .setMessage(result == 1 ? "detected!" : "Nothing!")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                CameraActivity.CheckForGameEnd();
+                                CameraActivity.hasToCheckGameEnd = true;
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
