@@ -23,9 +23,9 @@ public class Client extends Thread {
 
     private boolean connected = false;
 
-    private String winner = null;
-
     private ArrayList<GameEventListener> listeners = new ArrayList<>();
+
+    private String playerId = null;
 
     public interface GameEventListener {
         enum GameEventType {
@@ -118,7 +118,12 @@ public class Client extends Thread {
                     case "PLAYERS":
                         notifyListener(
                                 GameEventListener.GameEventType.PLAYER_LIST_CHANGED,
-                                Protocol.parseInstructionData(message));
+                                Protocol.parsePlayerListInstructionData(
+                                        Protocol.parseInstructionData(message)));
+                    break;
+
+                    case "ID":
+                        this.playerId = Protocol.parseInstructionData(message);
                     break;
                 }
             }

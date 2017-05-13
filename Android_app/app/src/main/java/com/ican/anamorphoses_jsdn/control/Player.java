@@ -46,4 +46,9 @@ public class Player {
     public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

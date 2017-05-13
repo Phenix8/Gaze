@@ -27,6 +27,12 @@ public abstract class Server extends Thread
 
     private ArrayList<ClientHandler> client = new ArrayList<>();
 
+    public Server(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+        this.roomNotifier = roomNotifier;
+        this.tcpPort = tcpPort;
+        this.maxPlayer = maxPlayer;
+    }
+
     public void stopListening() {
         this.listening = false;
     }

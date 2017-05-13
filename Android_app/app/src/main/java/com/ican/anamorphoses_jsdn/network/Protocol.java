@@ -1,8 +1,11 @@
 package com.ican.anamorphoses_jsdn.network;
 
+import com.ican.anamorphoses_jsdn.control.Player;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by root on 14/04/2017.
@@ -15,6 +18,7 @@ public class Protocol {
     public static final String INSTRUCTION_END = "\n";
 
     public static final String PLAYERS_INSTRUCTION_TYPE =           "PLAYERS";
+    public static final String PLAYERS_ID_INSTRUCTION_TYPE =        "ID";
     public static final String QUIT_INSTRUCTION_TYPE =              "QUIT";
     public static final String CONNECT_INSTRUCTION_TYPE =           "CONNECT";
     public static final String DISCONNECT_INSTRUCTION_TYPE =        "DISCONNECT";
@@ -40,13 +44,17 @@ public class Protocol {
         return "";
     }
 
-    public static String buildPlayerListInstruction(Collection<String> playerNames) {
+    public static String buildPlayerListInstruction(Collection<Player> players) {
         StringBuffer str = new StringBuffer();
-        for (String player : playerNames) {
+        for (Player player : players) {
             if (str.length() > 0) {
                 str.append(DATA_SEPARATOR);
             }
-            str.append(player);
+            str.append(player.getPlayerId())
+                    .append(",")
+                    .append(player.getName())
+                    .append(",")
+                    .append(player.isReady());
         }
         str.insert(0, INSTRUCTION_SEPARATOR);
         str.insert(0, PLAYERS_INSTRUCTION_TYPE);
@@ -54,8 +62,20 @@ public class Protocol {
         return str.toString();
     }
 
-    public static List<String> parsePlayerListInstructionData(String playerListData) {
-        return Arrays.asList(playerListData.split(":"));
+    public static List<Player> parsePlayerListInstructionData(String playerListData) {
+        ArrayList<Player> players = new ArrayList<>();
+        for(String playerInfos : playerListData.split(":")) {
+            String[] infos = playerInfos.split(",");
+            players.add(
+                new Player(
+                    infos[1],
+                    0,
+                    Boolean.parseBoolean(infos[2]),
+                    infos[0]
+                )
+            );
+        }
+        return players;
     }
 
     public static String buildConnectInstruction(String playerName) {
@@ -80,6 +100,26 @@ public class Protocol {
 
     public static String buildFinishedInstruction() {
         return String.format("%s%s", FINISHED_INSTRUCTION_TYPE, INSTRUCTION_END);
+    }
+
+    public static String buildReadyInstruction(String playerId) {
+        return String.format(
+                "%s%s%s%s",
+                READY_INSTRUCTION_TYPE,
+                INSTRUCTION_SEPARATOR,
+                playerId,
+                INSTRUCTION_END
+        );
+    }
+
+    public static String buildPlayerIDInstruction(String playerId) {
+        return String.format(
+                "%s%s%s%s",
+                PLAYERS_ID_INSTRUCTION_TYPE,
+                INSTRUCTION_SEPARATOR,
+                playerId,
+                INSTRUCTION_END
+        );
     }
 
     public static String buildScoreInstruction(int score) {

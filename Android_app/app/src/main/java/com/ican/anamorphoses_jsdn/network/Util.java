@@ -51,6 +51,11 @@ public class Util {
 
         NetworkInterface temp;
         InetAddress iAddr = null;
+
+        if (inetAddr == null) {
+            return null;
+        }
+
         try {
             temp = NetworkInterface.getByInetAddress(inetAddr);
             List<InterfaceAddress> addresses = temp.getInterfaceAddresses();

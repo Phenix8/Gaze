@@ -3,6 +3,7 @@ package com.ican.anamorphoses_jsdn.control;
 import com.ican.anamorphoses_jsdn.network.ClientHandler;
 import com.ican.anamorphoses_jsdn.network.Server;
 import com.ican.anamorphoses_jsdn.network.Protocol;
+import com.ican.anamorphoses_jsdn.network.RoomNotifier;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -85,11 +86,7 @@ public class Manager extends Server {
     }
 
     private void sendPlayerList() {
-        ArrayList<String> playersNames = new ArrayList<>();
-        for (Player player : players.values()) {
-            playersNames.add(player.getName());
-        }
-        sendMessageToAll(Protocol.buildPlayerListInstruction(playersNames));
+        sendMessageToAll(Protocol.buildPlayerListInstruction(players.values()));
     }
 
     @Override
@@ -101,7 +98,7 @@ public class Manager extends Server {
                 if (playerId == null) {
                     handler.sendMessage(Protocol.buildAlreadyStartedInstruction());
                 } else {
-                    handler.sendMessage(playerId);
+                    handler.sendMessage(Protocol.buildPlayerIDInstruction(playerId));
                     sendPlayerList();
                 }
             break;
@@ -155,5 +152,10 @@ public class Manager extends Server {
                 sendMessageToAll(Protocol.buildDisconnectInstruction(player.getName()));
             }
         }
+    }
+
+    public Manager(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+        super(roomNotifier, tcpPort, maxPlayer);
+        this.gameState = GameState.LOBBY;
     }
 }
