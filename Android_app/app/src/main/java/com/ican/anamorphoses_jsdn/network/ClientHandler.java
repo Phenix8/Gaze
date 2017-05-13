@@ -42,10 +42,13 @@ public class ClientHandler extends Thread {
         );
     }
 
-    public void sendMessage(String message)
-        throws IOException {
-        out.write(message);
-        out.flush();
+    public void sendMessage(String message) {
+        try {
+            out.write(message);
+            out.flush();
+        } catch (IOException e) {
+            this.close();
+        }
     }
 
     public void addListener(ClientHandlerListener listener) {
@@ -83,8 +86,17 @@ public class ClientHandler extends Thread {
 
         } finally {
             try {
+                for (ClientHandlerListener listener : listeners) {
+                    listener.onClientDisconnected(this);
+                }
+                listeners.clear();
                 sock.close();
             } catch (IOException e) {}
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.sock.getInetAddress().toString();
     }
 }

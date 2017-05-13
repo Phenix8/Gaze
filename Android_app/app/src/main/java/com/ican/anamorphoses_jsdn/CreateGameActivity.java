@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ican.anamorphoses_jsdn.network.Common;
-import com.ican.anamorphoses_jsdn.network.GameServer;
+import com.ican.anamorphoses_jsdn.network.Server;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;
 
 import java.net.InetAddress;
@@ -35,7 +35,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
         if (v == createButton) {
             String gameName = gameNameField.getText().toString().trim();
             if (gameNameField.getText().toString().trim().length() > 0) {
-                GameServer.create(
+                Server.create(
                     new RoomNotifier(Common.BROADCAST_MESSAGE, gameName, Common.UDP_PORT),
                     Common.TCP_PORT,
                     4

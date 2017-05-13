@@ -11,9 +11,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class GameClient extends Thread {
+public class Client extends Thread {
 
-    private static String TAG = "GameClient";
+    private static String TAG = "Client";
 
     private Socket socketServer;
     private String playerName;
