@@ -5,61 +5,65 @@
     android:id="@+id/activity_nickname"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ican.anamorphoses_jsdn.NicknameActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:textAlignment="center"
-        android:id="@+id/linearLayout">
-
-        <TextView
-            android:text="Select a nickname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textAlignment="center"
-            android:id="@+id/NicknameTitle_textView" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Player_1"
-            android:textAlignment="center"
-            android:paddingTop="110dp"
-            android:lines="1"
-            android:ems="10"
-            android:id="@+id/nickname_editText"/>
-
-
-    </LinearLayout>
+        app:srcCompat="@drawable/changenickname"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="235dp"
-        android:id="@+id/frameLayout">
+        android:orientation="vertical"
+        android:textAlignment="center"
+        android:id="@+id/textboxLayout">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="-1dp"
+            android:paddingTop="160dp"
+            android:layout_gravity="center"
+            android:id="@+id/textboxBackground"
+            app:srcCompat="@drawable/changenickname_textbox"/>
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Player_1"
+            android:textAlignment="center"
+            android:paddingTop="160dp"
+            android:lines="1"
+            android:ems="10"
+            android:layout_gravity="center"
+            android:id="@+id/nickname_editText"/>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeActivityLayout">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/return_button"
             android:background="@android:color/transparent"
-            android:id="@+id/returnImgButton" />
+            android:layout_margin="15dp"
+            android:id="@+id/returnImgButton"
+            app:srcCompat="@drawable/backyellow" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="450dp"
-            app:srcCompat="@drawable/go_button"
+            android:layout_marginLeft="@dimen/nextArrow_marginLeft"
+            android:layout_marginTop="@dimen/nextArrow_marginTop"
             android:background="@android:color/transparent"
-            android:id="@+id/OkButton" />
+            android:id="@+id/OkButton"
+            app:srcCompat="@drawable/backgreen" />
 
     </FrameLayout>
 

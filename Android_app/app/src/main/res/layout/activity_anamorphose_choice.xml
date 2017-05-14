@@ -55,7 +55,7 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="80dp">
+                android:layout_marginRight="20dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/anamorphose_easy"
+                        app:srcCompat="@drawable/choose_easy"
                         android:background="@android:color/transparent"
                         android:id="@+id/easyImgButton"
                         android:layout_weight="1" >
@@ -113,7 +113,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/anamorphose_medium"
+                        app:srcCompat="@drawable/choose_medium"
                         android:background="@android:color/transparent"
                         android:id="@+id/mediumImgButton"
                         android:layout_weight="1" />
@@ -133,7 +133,7 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp">
+                android:layout_marginLeft="20dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -152,7 +152,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/anamorphose_hard"
+                        app:srcCompat="@drawable/choos_hard"
                         android:background="@android:color/transparent"
                         android:id="@+id/hardImgButton"
                         android:layout_weight="1" />

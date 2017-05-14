@@ -11,10 +11,10 @@ import android.widget.ImageButton;
 public class MenuActivity extends AppCompatActivity {
 
 
-    private Button createGameButton = null;
-    private Button joinGameButton = null;
-    private Button rulesButton = null;
-    private Button highscoresButton = null;
+    private ImageButton createGameButton = null;
+    private ImageButton joinGameButton = null;
+    private ImageButton rulesButton = null;
+    private ImageButton highscoresButton = null;
     private ImageButton returnButton = null;
 
     @Override
@@ -24,7 +24,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         // Boutton "CREATE GAME"
-        createGameButton = (Button) findViewById(R.id.createGameButton);
+        createGameButton = (ImageButton) findViewById(R.id.createGameButton);
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +34,7 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         // Boutton "JOIN GAME"
-        joinGameButton = (Button) findViewById(R.id.joinGameButton);
+        joinGameButton = (ImageButton) findViewById(R.id.joinGameButton);
         joinGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +44,7 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         // Boutton "RULES"
-        rulesButton = (Button) findViewById(R.id.rulesButton);
+        rulesButton = (ImageButton) findViewById(R.id.rulesButton);
         rulesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         // Boutton "HIGHSCORES"
-        highscoresButton = (Button) findViewById(R.id.highscoresButton);
+        highscoresButton = (ImageButton) findViewById(R.id.highscoresButton);
         highscoresButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
