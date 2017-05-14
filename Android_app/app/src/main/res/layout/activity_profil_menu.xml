@@ -5,37 +5,49 @@
     android:id="@+id/activity_highscores_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ican.anamorphoses_jsdn.ProfilMenuActivity">
 
-    <LinearLayout
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/changenickname"/>
+
+    <!-- Nickname editText -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:textAlignment="center"
-        android:verticalScrollbarPosition="left"
-        android:id="@+id/linearLayout">
+        android:paddingTop="80dp"
+        android:id="@+id/textboxLayout">
 
-        <TextView
-            android:text="Profils"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textAlignment="center"
-            android:id="@+id/profilTitle" />
+            android:translationZ="-1dp"
+            android:layout_gravity="center"
+            android:id="@+id/textboxBackground"
+            app:srcCompat="@drawable/changenickname_textbox"/>
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:text="Player_1"
+            android:textAlignment="center"
+            android:translationZ="1dp"
             android:lines="1"
             android:ems="10"
-            android:id="@+id/nickname_editText"
-            android:textAlignment="center"/>
+            android:layout_gravity="center"
+            android:id="@+id/nickname_editText"/>
+
+    </FrameLayout>
+
+    <!-- Nicknames listview -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:id="@+id/listviewLayout">
 
         <ListView
             android:layout_width="match_parent"
@@ -43,26 +55,28 @@
             android:textAlignment="center"
             android:id="@+id/nicknames_listView"/>
 
-    </LinearLayout>
+    </FrameLayout>
 
+    <!-- Change activity buttons -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="235dp"
-        android:id="@+id/frameLayout">
+        android:id="@+id/changeActivityLayout">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/return_button"
             android:background="@android:color/transparent"
-            android:id="@+id/returnImgButton" />
+            android:layout_margin="15dp"
+            android:id="@+id/returnImgButton"
+            app:srcCompat="@drawable/backyellow" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="450dp"
-            app:srcCompat="@drawable/go_button"
+            android:layout_marginLeft="@dimen/nextArrow_marginLeft"
+            android:layout_marginTop="@dimen/nextArrow_marginTop"
+            app:srcCompat="@drawable/backgreen"
             android:background="@android:color/transparent"
             android:id="@+id/OkButton" />
 

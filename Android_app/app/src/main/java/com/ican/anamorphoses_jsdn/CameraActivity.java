@@ -180,16 +180,16 @@ public class CameraActivity extends Activity
         zoomAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
 
         if (currentAnamorphosis.getDifficulty() == AnamorphosisDifficulty.HARD) {
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_hard, null));
-            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_hard_large, null));
+            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_hardanam, null));
+            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choos_hard, null));
         }
         else if (currentAnamorphosis.getDifficulty() == AnamorphosisDifficulty.MEDIUM) {
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_medium, null));
-            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_medium_large, null));
+            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_mediumanam, null));
+            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choose_medium, null));
         }
         else {
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_easy, null));
-            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.anamorphose_easy_large, null));
+            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_easyanam, null));
+            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choose_easy, null));
         }
 
         zoomAnamorphBg.setVisibility(View.INVISIBLE);
