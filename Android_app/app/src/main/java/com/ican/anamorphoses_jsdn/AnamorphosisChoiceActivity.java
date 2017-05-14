@@ -158,9 +158,8 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 
 	// Fonction de génération d'un object "Anamorphose"
 	// en fonction de la difficulté en paramètre
-	private Anamorphosis GenerateAnamorphosisObj(AnamorphosisDifficulty difficulty)
-	{
-		ArrayList<Anamorphosis> anamorphSubDict = new ArrayList<Anamorphosis>();
+	private Anamorphosis GenerateAnamorphosisObj(AnamorphosisDifficulty difficulty) {
+		ArrayList<Anamorphosis> anamorphSubDict = new ArrayList<>();
 		int id = -1;
 		
 		for (Anamorphosis Anam : AnamorphGameManager.getAnamorphosisDict())
@@ -168,7 +167,8 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 			if (Anam.getDifficulty().equals(difficulty))
 				anamorphSubDict.add(Anam);
 		}
-		while (id == -1 || (AnamorphGameManager.getValidatedAnamorphosis() != null &&AnamorphGameManager.getValidatedAnamorphosis().contains(anamorphSubDict.get(id))))
+		while (id == -1 || (AnamorphGameManager.getValidatedAnamorphosis() != null &&
+                AnamorphGameManager.getValidatedAnamorphosis().contains(anamorphSubDict.get(id))))
 			id = randomGenerator.nextInt() % anamorphSubDict.size();
 		
 		return anamorphSubDict.get(id);

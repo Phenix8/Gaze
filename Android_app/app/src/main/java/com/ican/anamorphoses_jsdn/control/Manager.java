@@ -1,5 +1,6 @@
 package com.ican.anamorphoses_jsdn.control;
 
+import com.ican.anamorphoses_jsdn.AnamorphGameManager;
 import com.ican.anamorphoses_jsdn.network.ClientHandler;
 import com.ican.anamorphoses_jsdn.network.Server;
 import com.ican.anamorphoses_jsdn.network.Protocol;
@@ -9,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -28,7 +30,11 @@ public class Manager extends Server {
     private HashMap<ClientHandler, Player> players = new HashMap<>();
 
     private String chooseMediumAnamorph() {
-        return ""; //TODO IMPLEMENT THIS FUNCTION
+        return String.format(
+                Locale.ENGLISH,
+                "%d",
+                AnamorphGameManager.getRandomMediumAnamorphosis().getId()
+        );
     }
 
     private ClientHandler getHandler(Player player) {
@@ -111,12 +117,21 @@ public class Manager extends Server {
 
             case Protocol.START_INSTRUCTION_TYPE:
                 if (areAllPlayerReady()) {
+                    this.gameState = GameState.MAIN_GAME;
                     sendMessageToAll(Protocol.buildStartInstruction());
                 }
             break;
 
             case Protocol.FINISHED_INSTRUCTION_TYPE:
-                sendMessageToAll(Protocol.buildFinishedInstruction());
+                if (gameState == GameState.DEATH_MATCH) {
+                    Player p = players.get(handler);
+                    p.setScore(p.getScore()+1);
+                    sendMessageToAll(
+                            Protocol.buildPlayerListInstruction(
+                                    players.values()));
+                } else {
+                    sendMessageToAll(Protocol.buildFinishedInstruction());
+                }
             break;
 
             case Protocol.SCORE_INSTRUCTION_TYPE:
@@ -128,12 +143,13 @@ public class Manager extends Server {
                         return;
                     }
                     if (sortedPlayer.get(0) == sortedPlayer.get(1)) {
+                        gameState = GameState.DEATH_MATCH;
                         sendMessageToAll(
-                                Protocol.buildDeathMatchInstruction(
-                                        sortedPlayer.get(0).getPlayerId(),
-                                        sortedPlayer.get(1).getPlayerId(),
-                                        chooseMediumAnamorph()
-                                )
+                            Protocol.buildDeathMatchInstruction(
+                                sortedPlayer.get(0).getPlayerId(),
+                                sortedPlayer.get(1).getPlayerId(),
+                                chooseMediumAnamorph()
+                            )
                         );
                     }
                 } catch (NumberFormatException e) {

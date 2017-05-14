@@ -52,7 +52,9 @@ public class Protocol {
             }
             str.append(player.getPlayerId())
                     .append(",")
-                    .append(player.getName())
+                    .append(player.getName().replace(" ", "%"))
+                    .append(",")
+                    .append(player.getScore())
                     .append(",")
                     .append(player.isReady());
         }
@@ -69,13 +71,30 @@ public class Protocol {
             players.add(
                 new Player(
                     infos[1],
-                    0,
-                    Boolean.parseBoolean(infos[2]),
+                    Integer.parseInt(infos[2]),
+                    Boolean.parseBoolean(infos[3]),
                     infos[0]
                 )
             );
         }
         return players;
+    }
+
+    /**
+     * Parse the data part of the death match instruction.
+     * @param instructionData The data part of the DEATHMATCH instruction.
+     * @param playerId A player's id.
+     * @return An anamorphosis's id if player whose id has been submitted is concerned by
+     * the death match, null otherwise.
+     */
+    public static String parseDeathMatchInstruction(String instructionData, String playerId) {
+        String[] parts = instructionData.split(DATA_SEPARATOR);
+
+        if (playerId.equals(parts[0]) || playerId.equals(parts[1])) {
+            return parts[2];
+        } else {
+            return null;
+        }
     }
 
     public static String buildConnectInstruction(String playerName) {

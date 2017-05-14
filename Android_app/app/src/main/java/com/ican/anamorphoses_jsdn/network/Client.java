@@ -26,6 +26,8 @@ public class Client extends Thread {
     private ArrayList<GameEventListener> listeners = new ArrayList<>();
 
     private String playerId = null;
+    private int score = 0;
+    private boolean lobby = true;
 
     public interface GameEventListener {
         enum GameEventType {
@@ -74,6 +76,10 @@ public class Client extends Thread {
         sendInstruction(Protocol.buildReadyInstruction(playerId));
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public void disconnect() {
         boolean threadJoined = false;
         try {
@@ -119,15 +125,43 @@ public class Client extends Thread {
                 String instructionType = Protocol.parseInstructionType(message);
 
                 switch (instructionType) {
-                    case "PLAYERS":
+                    case Protocol.PLAYERS_INSTRUCTION_TYPE:
                         notifyListener(
-                                GameEventListener.GameEventType.PLAYER_LIST_CHANGED,
+                                lobby ?
+                                    GameEventListener.GameEventType.PLAYER_LIST_CHANGED
+                                :
+                                    GameEventListener.GameEventType.GAME_ENDED,
                                 Protocol.parsePlayerListInstructionData(
                                         Protocol.parseInstructionData(message)));
                     break;
 
-                    case "ID":
+                    case Protocol.PLAYERS_ID_INSTRUCTION_TYPE:
                         this.playerId = Protocol.parseInstructionData(message);
+                    break;
+
+                    case Protocol.ALREADY_STARTED_INSTRUCTION_TYPE:
+                        notifyListener(
+                                GameEventListener.GameEventType.ERROR_OCCURED,
+                                "Not all players are ready."
+                        );
+                    break;
+
+                    case Protocol.START_INSTRUCTION_TYPE:
+                        notifyListener(GameEventListener.GameEventType.GAME_STARTED, null);
+                        lobby = false;
+                    break;
+
+                    case Protocol.DEATHMATCH_INSTRUCTION_TYPE:
+                        String id =
+                                Protocol.parseDeathMatchInstruction(
+                                        Protocol.parseInstructionData(message),
+                                        this.playerId
+                                );
+                        notifyListener(GameEventListener.GameEventType.DEATH_MATCH, id);
+                    break;
+
+                    case Protocol.FINISHED_INSTRUCTION_TYPE:
+                        sendInstruction(Protocol.buildScoreInstruction(score));
                     break;
                 }
             }

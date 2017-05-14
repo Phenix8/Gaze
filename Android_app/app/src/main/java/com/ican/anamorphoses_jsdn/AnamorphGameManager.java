@@ -8,6 +8,8 @@ import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
+import java.util.Random;
 
 /**
  * Created by Clément on 12/04/2017.
@@ -87,12 +89,31 @@ public class AnamorphGameManager {
 	static public void InitAnamorphosisDict(Context context)
     {
         AnamorphGameManager.anamorphosisDict = new ArrayList<Anamorphosis>();
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, AnamorphosisDifficulty.MEDIUM));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY, ""));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY, ""));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, AnamorphosisDifficulty.MEDIUM, ""));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM, ""));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD, ""));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD, ""));
     }
+
+    public static Anamorphosis getRandomMediumAnamorphosis() {
+		/*
+		return anamorphosisDict
+				.stream()
+				.filter(a -> a.getDifficulty() == AnamorphosisDifficulty.MEDIUM)
+				.collect(Collectors.toCollection());
+		*/
+		// FUCKING API LEVEL 19 !! This require API level 24
+
+		ArrayList<Anamorphosis> mediums = new ArrayList<>();
+		for (Anamorphosis a : anamorphosisDict) {
+			if (a.getDifficulty() == AnamorphosisDifficulty.MEDIUM) {
+				mediums.add(a);
+			}
+		}
+		return mediums.get(new Random().nextInt(mediums.size()));
+	}
+
 
 }

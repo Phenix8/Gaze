@@ -44,13 +44,23 @@ public class Anamorphosis {
 	public AnamorphosisDifficulty getDifficulty()
 	{	return this.difficulty;	}
 
+	private String detectorName;
+
+	public String getDetectorName() {
+		return detectorName;
+	}
+
+	public void setDetectorName(String detectorName) {
+		this.detectorName = detectorName;
+	}
 
     // CONSTRUCTEUR
-	public Anamorphosis(int drawableImage, int largeDrawableImage, AnamorphosisDifficulty difficulty)
+	public Anamorphosis(int drawableImage, int largeDrawableImage, AnamorphosisDifficulty difficulty, String detectorName)
 	{
 		this.id = idCounter++;
         this.drawableImage = drawableImage;
 		this.largeDrawableImage = largeDrawableImage;
         this.difficulty = difficulty;
+		this.detectorName = detectorName;
 	}
 }
