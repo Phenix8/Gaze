@@ -26,6 +26,7 @@ public class Protocol {
     public static final String FINISHED_INSTRUCTION_TYPE =          "FINISHED";
     public static final String SCORE_INSTRUCTION_TYPE =             "SCORE";
     public static final String READY_INSTRUCTION_TYPE =             "READY";
+    public static final String NOT_READY_INSTRUCTION_TYPE =         "NOTREADY";
     public static final String ALREADY_STARTED_INSTRUCTION_TYPE =   "GAME-STARTED";
     public static final String DEATHMATCH_INSTRUCTION_TYPE =        "DEATHMATCH";
 
@@ -129,6 +130,10 @@ public class Protocol {
                 playerId,
                 INSTRUCTION_END
         );
+    }
+
+    public static String buildNotReadyInstruction() {
+        return String.format("%s%s", NOT_READY_INSTRUCTION_TYPE, INSTRUCTION_END);
     }
 
     public static String buildPlayerIDInstruction(String playerId) {

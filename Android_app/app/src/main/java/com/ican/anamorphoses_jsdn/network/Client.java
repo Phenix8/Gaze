@@ -10,8 +10,9 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Client extends Thread {
+public class Client extends Thread implements Serializable {
 
     private static String TAG = "Client";
 
@@ -32,7 +33,6 @@ public class Client extends Thread {
     public interface GameEventListener {
         enum GameEventType {
             PLAYER_LIST_CHANGED,
-            PLAYER_STATE_CHANGED,
             GAME_STARTED,
             GAME_ENDED,
             DEATH_MATCH,
@@ -142,7 +142,7 @@ public class Client extends Thread {
                     case Protocol.ALREADY_STARTED_INSTRUCTION_TYPE:
                         notifyListener(
                                 GameEventListener.GameEventType.ERROR_OCCURED,
-                                "Not all players are ready."
+                                "Game already stated"
                         );
                     break;
 
@@ -150,6 +150,12 @@ public class Client extends Thread {
                         notifyListener(GameEventListener.GameEventType.GAME_STARTED, null);
                         lobby = false;
                     break;
+
+                    case Protocol.NOT_READY_INSTRUCTION_TYPE:
+                        notifyListener(
+                                GameEventListener.GameEventType.ERROR_OCCURED,
+                                "Not all players are ready.");
+                        break;
 
                     case Protocol.DEATHMATCH_INSTRUCTION_TYPE:
                         String id =

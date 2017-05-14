@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 
 import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
@@ -71,7 +71,9 @@ public class LobbyActivity extends AppCompatActivity
         client = new Client();
         try {
             client.addGameEventListener(this);
-            client.connectServer(AnamorphGameManager.getplayerNickname(), (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
+            client.connectServer(
+                    AnamorphGameManager.getplayerNickname(),
+                    (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
         } catch (UnknownHostException e) {
             showError("Server address is invalid.");
         } catch (IOException e) {
@@ -89,17 +91,28 @@ public class LobbyActivity extends AppCompatActivity
 
     @Override
     public void onGameEvent(GameEventType type, Object data) {
-        if (type == GameEventType.PLAYER_LIST_CHANGED) {
-            final List<Player> players = (List<Player>) data;
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        final GameEventType t = type;
+        final Object d = data;
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (t == GameEventType.PLAYER_LIST_CHANGED) {
                     adapter.clear();
-                    adapter.addAll(players);
+                    adapter.addAll((List<Player>) d);
                     adapter.notifyDataSetChanged();
+                } else if (t == GameEventType.GAME_STARTED) {
+                    Intent intent =
+                        new Intent(getApplicationContext(),
+                            AnamorphosisChoiceActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("client", client);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                } else if (t == GameEventType.ERROR_OCCURED) {
+                    showError((String) d);
                 }
-            });
-        } else if (type == GameEventType.PLAYER_STATE_CHANGED) {
-        }
+            }
+        });
     }
 }

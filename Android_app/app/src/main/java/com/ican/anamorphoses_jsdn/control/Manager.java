@@ -119,6 +119,8 @@ public class Manager extends Server {
                 if (areAllPlayerReady()) {
                     this.gameState = GameState.MAIN_GAME;
                     sendMessageToAll(Protocol.buildStartInstruction());
+                } else {
+                    handler.sendMessage(Protocol.buildNotReadyInstruction());
                 }
             break;
 
