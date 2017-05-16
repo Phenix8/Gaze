@@ -136,7 +136,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
         if (selectorImg.getVisibility() == View.INVISIBLE)
             selectorImg.setVisibility(View.VISIBLE);
         button.getLocationInWindow(location);
-        frameLayout.setPadding(location[0] - 80, location[1] - 150, 0, 0);
+        frameLayout.setPadding(location[0] - 45, location[1] - 110, 0, 0);
     }
 
 

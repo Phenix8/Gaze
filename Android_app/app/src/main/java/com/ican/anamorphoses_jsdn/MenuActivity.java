@@ -15,7 +15,6 @@ public class MenuActivity extends AppCompatActivity {
     private ImageButton joinGameButton = null;
     private ImageButton rulesButton = null;
     private ImageButton highscoresButton = null;
-    private ImageButton returnButton = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +59,6 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent menuOptionActivity = new Intent(getApplicationContext(), ProfilMenuActivity.class);
                 startActivity(menuOptionActivity);
-            }
-        });
-
-        ///////////////////////////
-        // IMAGE BUTTON "Return" //
-        ///////////////////////////
-
-        // Evénement de click sur le boutton "Return"
-        returnButton = (ImageButton) findViewById(R.id.returnImgButton);
-        returnButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
     }
