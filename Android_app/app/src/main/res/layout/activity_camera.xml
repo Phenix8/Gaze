@@ -77,16 +77,15 @@
 
     </FrameLayout>
 
-    <!-- ZOOM ANAMORPHOSE -->
+    <!-- TARGET ANAMORPHOSE -->
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="235dp"
         android:layout_marginLeft="5dp"
         android:translationZ="2dp"
         android:id="@+id/frameLayout">
 
-        <!-- TARGET ANAMORPHOSIS -->
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -95,17 +94,19 @@
                 android:id="@+id/target_anamorph_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="14dp"
-                android:paddingTop="15dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:translationZ="2dp"
                 app:srcCompat="@drawable/empty_anamorphosis" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/target_anamorph_bg"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:padding="10dp"
                 android:background="@android:color/transparent"
+                android:id="@+id/target_anamorph_bg"
                 app:srcCompat="@drawable/anamorphose_hard" />
 
         </RelativeLayout>
@@ -120,19 +121,28 @@
         android:layout_centerVertical="true"
         android:translationZ="3dp">
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
         <ImageButton
             android:id="@+id/zoom_anamorph_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@android:color/transparent"/>
 
         <ImageView
             android:id="@+id/zoom_anamorph_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:padding="12dp"/>
 
+        </RelativeLayout>
     </FrameLayout>
 
     <!-- CAMERA TOOL -->

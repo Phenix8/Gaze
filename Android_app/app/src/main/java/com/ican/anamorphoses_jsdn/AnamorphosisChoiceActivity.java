@@ -98,19 +98,23 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 				else if (selectedAnamorphose == 'h')
 					difficulty = AnamorphosisDifficulty.HARD;
 
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage("Do you choose : " + difficulty + " ?");
                 builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id)
                     {
+                        */
                         if (difficulty != null && anamorphosisByDifficulty != null)
                             AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
                         Intent nicknameActivity = new Intent(getApplicationContext(), CameraActivity.class);
                         startActivity(nicknameActivity);
+                        /*
                     }
                 });
                 builder.setNegativeButton("Non", null);
                 builder.show();
+                */
             }
         });
 
@@ -151,7 +155,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 		anamorphosisByDifficulty.put(difficulty, currentAnamorphosis);
 		
 		// ASSIGNATION DE L'IMAGE AU BUTTON EN FONCTION DU PATH
-		button.setImageDrawable(ResourcesCompat.getDrawable(getResources(),currentAnamorphosis.getDrawableImage(), null));
+		button.setImageDrawable(ResourcesCompat.getDrawable(getResources(),currentAnamorphosis.getLargeDrawableImage(), null));
 
 	}
 
