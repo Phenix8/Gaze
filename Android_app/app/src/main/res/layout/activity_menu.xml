@@ -43,7 +43,7 @@
                 android:text="Join Game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@android:color/transparent"
                 android:id="@+id/joinGameButton"
                 app:srcCompat="@drawable/mainmenu_joingame"/>
@@ -70,27 +70,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:id="@+id/highscoresButton"
             app:srcCompat="@drawable/mainmenu_changenickname"/>
 
             </LinearLayout>
 
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="235dp"
-        android:id="@+id/changeActivityLayout">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/backred"
-            android:background="@android:color/transparent"
-            android:id="@+id/returnImgButton" />
-
-    </FrameLayout>
 
 </RelativeLayout>

@@ -24,6 +24,7 @@ public class CameraActivity extends Activity
     private ImageView targetAnamorphImg = null;
     private ImageView targetAnamorphBg = null;
     private ImageView zoomAnamorphImg = null;
+    private ImageView backgroundImg = null;
 
     private ImageButton abandonImg = null;
     private ImageButton cameraImg = null;
@@ -118,7 +119,7 @@ public class CameraActivity extends Activity
                 if (HideTargetAnamorphZoom())
                     return;
                 if (v.getId() == R.id.photo_icon) {
-                    //cameraInstance.takePicture();
+                    cameraInstance.takePicture();
                     hasToCheckGameEnd = true;
                 }
             }
@@ -197,16 +198,19 @@ public class CameraActivity extends Activity
     }
 
 
-    // Initialise les images de l'appareil photo et du bouton d'annulation
+    // Initialise les images de l'appareil photo et du bouton d'annulation + du background
     private void setToolImages()
     {
+        // Background
+        backgroundImg = (ImageView) findViewById(R.id.camera_background);
+        backgroundImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera, null));
         // Icône caméra
         cameraImg = (ImageButton) findViewById(R.id.photo_icon);
-        cameraImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.photo_button, null));
+        cameraImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_pictureicon, null));
 
         // Icône annulation
         abandonImg = (ImageButton) findViewById(R.id.cancel_anamorph_img);
-        abandonImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.abandon_button, null));
+        abandonImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_cancel, null));
     }
 
 
