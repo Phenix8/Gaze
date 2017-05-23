@@ -5,7 +5,9 @@ package com.ican.anamorphoses_jsdn.network;
  */
 
 public class Common {
-    public static int UDP_PORT = 3333;
-    public static int TCP_PORT = 6666;
-    public static String BROADCAST_MESSAGE = "ANAMORPH GAME HERE";
+    public static final int UDP_PORT = 3333;
+    public static final int TCP_PORT = 6666;
+    public static final String BROADCAST_MESSAGE = "ANAMORPH GAME HERE";
+    public static final String DEFAULT_GAME_NAME = "DEFAULT";
+    public static final int DEFAULT_MAX_PLAYER = 4;
 }

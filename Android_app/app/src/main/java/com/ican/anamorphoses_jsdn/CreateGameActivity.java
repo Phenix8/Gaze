@@ -60,14 +60,8 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
         if (v == createButton) {
             String gameName = gameNameField.getText().toString().trim();
             if (gameNameField.getText().toString().trim().length() > 0) {
-                RoomNotifier notifier =
-                        new RoomNotifier(Common.BROADCAST_MESSAGE, gameName, Common.UDP_PORT);
-                notifier.setUncaughtExceptionHandler(handler);
-                new Manager(
-                    notifier,
-                    Common.TCP_PORT,
-                    4
-                ).start();
+                GameServerService.StartServer(this, Common.TCP_PORT, Common.DEFAULT_MAX_PLAYER,
+                        new RoomNotifier(Common.BROADCAST_MESSAGE, gameName, Common.UDP_PORT));
 
                 Intent intent = new Intent(this, LobbyActivity.class);
                 Bundle b = new Bundle();

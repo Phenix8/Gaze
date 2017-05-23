@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.io.Serializable;
 
 /**
  * Created by root on 12/04/2017.
  */
 
-public class RoomNotifier extends Thread {
+public class RoomNotifier extends Thread implements Serializable {
 
     private String broadcastMessage;
 
