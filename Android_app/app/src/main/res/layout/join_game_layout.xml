@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1">
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/joingame"/>
+
+    <!-- Loading bar / Text-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="67dp"
+        android:layout_marginTop="200dp"
+        android:translationZ="2dp"
         android:orientation="horizontal">
 
         <TextView
@@ -26,15 +36,41 @@
             android:layout_gravity="right" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/gameList"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_weight="0.81" />
+    <!-- Rooms list + Join button -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp">
 
-    <Button
-        android:id="@+id/joinButton"
+        <ListView
+            android:id="@+id/gameList"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_weight="0.81" />
+
+        <Button
+            android:id="@+id/joinButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:text="Join" />
+
+    </FrameLayout>
+
+    <!-- Change activity buttons -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Join" />
-</LinearLayout>
+        android:id="@+id/changeActivityLayout">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_margin="15dp"
+            android:id="@+id/returnImgButton"
+            app:srcCompat="@drawable/backred" />
+
+    </FrameLayout>
+
+</RelativeLayout>
