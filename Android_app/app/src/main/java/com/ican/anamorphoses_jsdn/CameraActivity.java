@@ -17,6 +17,9 @@ import android.widget.TextView;
 import dlibwrapper.DLibWrapper;
 
 import com.ican.anamorphoses_jsdn.camera.CameraFragment;
+import com.ican.anamorphoses_jsdn.network.Client;
+
+import java.io.IOException;
 
 public class CameraActivity extends Activity
 {
@@ -32,11 +35,15 @@ public class CameraActivity extends Activity
 
     private CameraFragment cameraInstance = null;
 
+    private Client gameClient;
+
     public static boolean hasToCheckGameEnd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        gameClient = (Client) getIntent().getSerializableExtra("client");
 
         try {
             showMessage(
@@ -233,12 +240,29 @@ public class CameraActivity extends Activity
         AnamorphGameManager.setCurrentPlayerScore(AnamorphGameManager.getCurrentPlayerScore() + 1);
         SaveScores();
 
+        switch (AnamorphGameManager.getTargetAnamorphosis().getDifficulty()) {
+            case EASY:
+                gameClient.incrementScore(20);
+            break;
+
+            case MEDIUM:
+                gameClient.incrementScore(30);
+            break;
+
+            case HARD:
+                gameClient.incrementScore(40);
+            break;
+        }
+
         if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
         {
             //END OF THE GAME
 
-            //Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), ResultActivity.class);
-            //startActivity(anamorphosisChoiceActivity);
+            try {
+                gameClient.annouceAllFound();
+            } catch (IOException e) {
+                showMessage("Error", "A network error occured.");
+            }
         }
     }
 

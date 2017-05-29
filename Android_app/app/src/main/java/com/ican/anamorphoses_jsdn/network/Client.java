@@ -76,8 +76,12 @@ public class Client extends Thread implements Serializable {
         sendInstruction(Protocol.buildReadyInstruction(playerId));
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void annouceAllFound() throws IOException {
+        sendInstruction(Protocol.buildFinishedInstruction());
+    }
+
+    public void incrementScore(int score) {
+        this.score += score;
     }
 
     public void disconnect() {
