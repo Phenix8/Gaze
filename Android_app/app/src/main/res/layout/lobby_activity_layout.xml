@@ -14,12 +14,12 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/room"/>
 
-    <!-- Room Title -->
+    <!-- ROOM TITLE (editable+ non-editable) -->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,12 +35,22 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:visibility="invisible"
-            android:id="@+id/editable_roomTitle"
-            app:srcCompat="@drawable/room_roomname"/>
+            android:id="@+id/editable_roomTitle_bg"
+            app:srcCompat="@drawable/room_roomnameempty"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:lines="1"
+            android:ems="10"
+            android:visibility="invisible"
+            android:id="@+id/editable_roomTitle_txt"/>
 
     </RelativeLayout>
 
-    <!-- Rooms members + tips -->
+    <!-- ROOM MEMBERS + TIPS -->
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,11 +63,47 @@
             android:layout_height="match_parent"
             android:layout_weight="0.9" />
 
-        <ImageView
+        <!-- TIPS -->
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="360dp"
-            app:srcCompat="@drawable/room_tips"/>
+            android:layout_marginLeft="360dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/room_tips"
+                android:id="@+id/Img_tipsBackground"/>
+
+            <!-- Contenu -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:translationZ="3dp"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Tips"
+                    android:textSize="25dp"
+                    android:textAlignment="center"
+                    android:id="@+id/Txt_TipsTitle"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:text="Content"
+                    android:textAlignment="center"
+                    android:id="@+id/Txt_TipsContent" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </FrameLayout>
 
@@ -85,5 +131,6 @@
             app:srcCompat="@drawable/backgreen" />
 
     </FrameLayout>
+
 
 </RelativeLayout>

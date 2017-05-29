@@ -85,6 +85,13 @@ public class AnamorphGameManager {
 	}
 
 
+	// Nom de la room dans lequel le joueur est
+	static private String roomTitle;
+	static public String getTitleRoom() { return roomTitle;}
+	static public void setTitleRoom (String roomTitle) {
+		AnamorphGameManager.roomTitle = roomTitle;
+	}
+
 	// Initalisation du dictionnaire d'anamorphose
 	static public void InitAnamorphosisDict(Context context)
     {

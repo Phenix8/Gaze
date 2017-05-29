@@ -35,9 +35,6 @@
             android:name=".LobbyActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ClientMenuActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
