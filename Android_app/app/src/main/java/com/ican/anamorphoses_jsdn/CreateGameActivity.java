@@ -59,10 +59,13 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v == createButton) {
             String gameName = gameNameField.getText().toString().trim();
+            AnamorphGameManager.setTitleRoom(gameName);
+
             if (gameNameField.getText().toString().trim().length() > 0) {
                 GameServerService.StartServer(this, Common.TCP_PORT, Common.DEFAULT_MAX_PLAYER,
                         new RoomNotifier(Common.BROADCAST_MESSAGE, gameName, Common.UDP_PORT));
 
+                LobbyActivity.isRoomAdmin = true;
                 Intent intent = new Intent(this, LobbyActivity.class);
                 Bundle b = new Bundle();
                 b.putSerializable("serverAddress", InetAddress.getLoopbackAddress());

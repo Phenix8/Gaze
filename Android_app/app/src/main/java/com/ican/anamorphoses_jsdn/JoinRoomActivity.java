@@ -83,6 +83,7 @@ public class JoinRoomActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        LobbyActivity.isRoomAdmin = false;
         Intent intent = new Intent(this, LobbyActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("serverAddress", ((Room)adapter.getItem(position)).getAddress());
