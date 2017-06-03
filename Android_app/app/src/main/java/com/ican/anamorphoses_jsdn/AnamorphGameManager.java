@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
+import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 
 import java.util.ArrayList;
@@ -120,6 +121,16 @@ public class AnamorphGameManager {
 			}
 		}
 		return mediums.get(new Random().nextInt(mediums.size()));
+	}
+
+	private static Client gameClient;
+
+	public static Client getGameClient() {
+		return gameClient;
+	}
+
+	public static void setGameClient(Client gameClient) {
+		AnamorphGameManager.gameClient = gameClient;
 	}
 
 

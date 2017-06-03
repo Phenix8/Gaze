@@ -128,7 +128,7 @@ public class CameraActivity extends Activity
             }
         });
 
-        this.gameClient = (Client) getIntent().getSerializableExtra("client");
+        this.gameClient = AnamorphGameManager.getGameClient();
     }
 
     public void showMessage(String title, String message) {

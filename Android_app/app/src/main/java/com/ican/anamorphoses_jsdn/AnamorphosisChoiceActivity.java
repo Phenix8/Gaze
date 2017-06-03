@@ -112,7 +112,6 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
                         if (difficulty != null && anamorphosisByDifficulty != null)
                             AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
                         Intent nicknameActivity = new Intent(getApplicationContext(), CameraActivity.class);
-                        nicknameActivity.putExtra("client", gameClient);
                         startActivity(nicknameActivity);
                         /*
                     }
@@ -127,7 +126,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, (ImageView) findViewById(R.id.anamorphosis_img_3));
 
-        this.gameClient = (Client) getIntent().getSerializableExtra("client");
+        this.gameClient = AnamorphGameManager.getGameClient();
     }
 
 	

@@ -93,6 +93,7 @@ public class LobbyActivity extends AppCompatActivity
             client.connectServer(
                     AnamorphGameManager.getplayerNickname(),
                     (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
+            AnamorphGameManager.setGameClient(client);
         } catch (UnknownHostException e) {
             showError("Server address is invalid.");
         } catch (IOException e) {
@@ -124,9 +125,6 @@ public class LobbyActivity extends AppCompatActivity
                     Intent intent =
                         new Intent(getApplicationContext(),
                             AnamorphosisChoiceActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("client", client);
-                    intent.putExtras(b);
                     startActivity(intent);
                 } else if (t == GameEventType.ERROR_OCCURED) {
                     showError((String) d);
