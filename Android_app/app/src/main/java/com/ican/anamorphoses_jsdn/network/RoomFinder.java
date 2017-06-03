@@ -91,9 +91,9 @@ public class RoomFinder extends Thread {
                 }
             }
         } catch (SocketException e) {
-
+            e.printStackTrace();
         } catch (IOException e) {
-
+            e.printStackTrace();
         } finally {
             if (socket != null) {
                 socket.close();

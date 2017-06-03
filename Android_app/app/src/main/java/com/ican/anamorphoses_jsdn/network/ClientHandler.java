@@ -47,6 +47,7 @@ public class ClientHandler extends Thread {
             out.write(message);
             out.flush();
         } catch (IOException e) {
+            e.printStackTrace();
             this.close();
         }
     }
@@ -83,7 +84,7 @@ public class ClientHandler extends Thread {
                 } catch (SocketTimeoutException e) {}
             }
         } catch (IOException e) {
-
+            e.printStackTrace();
         } finally {
             try {
                 for (ClientHandlerListener listener : listeners) {
@@ -91,7 +92,9 @@ public class ClientHandler extends Thread {
                 }
                 listeners.clear();
                 sock.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

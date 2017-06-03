@@ -74,7 +74,7 @@ public abstract class Server extends Thread
                     listeningSocket.close();
                 }
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
         }
     }
