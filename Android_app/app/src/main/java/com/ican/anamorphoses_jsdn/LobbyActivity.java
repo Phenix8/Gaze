@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.widget.TextView;
 
 import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
@@ -31,10 +34,14 @@ public class LobbyActivity extends AppCompatActivity
 
     private Client client;
 
+    public static boolean isRoomAdmin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_activity_layout);
+
+        SetEditableRoomTitle();
 
         ///////////////////////////
         // IMAGE BUTTON "Return" //
@@ -115,4 +122,27 @@ public class LobbyActivity extends AppCompatActivity
             }
         });
     }
+
+
+    // Met le titre de la salle en éditable ou en
+    // affichage seulement, si l'utilisateur
+    // est l'admin de la salle
+    private void SetEditableRoomTitle()
+    {
+        EditText titleEdit = (EditText) findViewById(R.id.editable_roomTitle_txt);
+        ImageView titleBackground = (ImageView) findViewById(R.id.editable_roomTitle_bg);
+
+        TextView titleView = (TextView) findViewById(R.id.nonEditable_roomTitle);
+
+        // Assignation du nom de salle depuis le réseau si le joueur n'est pas admin
+        if (!isRoomAdmin) {
+            titleView.setText(AnamorphGameManager.getTitleRoom());
+        }
+
+        titleEdit.setVisibility(isRoomAdmin ? View.VISIBLE : View.INVISIBLE);
+        titleBackground.setVisibility(isRoomAdmin ? View.VISIBLE : View.INVISIBLE);
+        titleView.setVisibility(isRoomAdmin ? View.INVISIBLE : View.VISIBLE);
+
+    }
+
 }
