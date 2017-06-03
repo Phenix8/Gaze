@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/editable_roomTitle_bg"
             app:srcCompat="@drawable/room_roomnameempty"/>
 
@@ -45,7 +45,7 @@
             android:layout_centerVertical="true"
             android:lines="1"
             android:ems="10"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/editable_roomTitle_txt"/>
 
     </RelativeLayout>
@@ -54,7 +54,7 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="80dp"
         android:translationZ="2dp">
 
         <ListView
@@ -104,6 +104,14 @@
             </LinearLayout>
 
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/readyBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="400dp"
+            android:layout_marginTop="220dp"
+            android:text="Ready" />
 
     </FrameLayout>
 

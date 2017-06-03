@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Button;
 
 import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
@@ -67,6 +68,17 @@ public class LobbyActivity extends AppCompatActivity
                     client.toggleReady();
                 } catch (IOException e) {
                     showError("A network error occured.");
+                }
+            }
+        });
+
+        ((Button) findViewById(R.id.readyBtn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    client.startGame();
+                } catch (IOException e) {
+                    showError(e.getMessage());
                 }
             }
         });

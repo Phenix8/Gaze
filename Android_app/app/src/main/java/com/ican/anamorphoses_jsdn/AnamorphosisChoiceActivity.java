@@ -15,6 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.ican.anamorphoses_jsdn.network.Client;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -34,6 +36,8 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 	private HashMap<AnamorphosisDifficulty, Anamorphosis> anamorphosisByDifficulty = new HashMap<>();
     private char selectedAnamorphose = 'n';
 	private Random randomGenerator = new Random();
+
+    private Client gameClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,7 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
                         if (difficulty != null && anamorphosisByDifficulty != null)
                             AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
                         Intent nicknameActivity = new Intent(getApplicationContext(), CameraActivity.class);
+                        nicknameActivity.putExtra("client", gameClient);
                         startActivity(nicknameActivity);
                         /*
                     }
@@ -121,6 +126,8 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, (ImageView) findViewById(R.id.anamorphosis_img_1) );
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, (ImageView) findViewById(R.id.anamorphosis_img_3));
+
+        this.gameClient = (Client) getIntent().getSerializableExtra("client");
     }
 
 	

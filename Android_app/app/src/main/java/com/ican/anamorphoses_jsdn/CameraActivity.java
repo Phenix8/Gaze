@@ -17,6 +17,7 @@ import android.widget.TextView;
 import dlibwrapper.DLibWrapper;
 
 import com.ican.anamorphoses_jsdn.camera.CameraFragment;
+import com.ican.anamorphoses_jsdn.network.Client;
 
 public class CameraActivity extends Activity
 {
@@ -33,6 +34,8 @@ public class CameraActivity extends Activity
     private CameraFragment cameraInstance = null;
 
     public static boolean hasToCheckGameEnd = false;
+
+    private Client gameClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,7 @@ public class CameraActivity extends Activity
             }
         });
 
+        this.gameClient = (Client) getIntent().getSerializableExtra("client");
     }
 
     public void showMessage(String title, String message) {
@@ -235,10 +239,14 @@ public class CameraActivity extends Activity
 
         if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
         {
+
+
             //END OF THE GAME
 
             //Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), ResultActivity.class);
             //startActivity(anamorphosisChoiceActivity);
+        } else {
+
         }
     }
 
