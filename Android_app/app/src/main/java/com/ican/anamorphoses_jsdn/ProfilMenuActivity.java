@@ -114,7 +114,14 @@ public class ProfilMenuActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id)
                     {
                         AnamorphGameManager.setplayerNickname(selectedProfil);
-                        // AnamorphGameManager.setTotalPlayerScore(scoreByNickname.(selectedProfil));
+
+                        // ??
+                        if (scoreByNickname.get(selectedProfil) != null)
+                            AnamorphGameManager.setTotalPlayerScore(Integer.getInteger(scoreByNickname.get(selectedProfil).toString()));
+                        else
+                            AnamorphGameManager.setTotalPlayerScore(0);
+                        //
+
                         Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
                         SaveNickName();
                         startActivity(nicknameActivity);
