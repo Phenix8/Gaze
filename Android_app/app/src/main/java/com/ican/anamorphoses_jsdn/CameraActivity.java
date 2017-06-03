@@ -233,12 +233,16 @@ public class CameraActivity extends Activity
         AnamorphGameManager.setCurrentPlayerScore(AnamorphGameManager.getCurrentPlayerScore() + 1);
         SaveScores();
 
+        //END OF THE GAME
+
         if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
         {
-            //END OF THE GAME
+            Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
+            startActivity(anamorphosisChoiceActivity);
+        }
+        else
+        {
 
-            //Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), ResultActivity.class);
-            //startActivity(anamorphosisChoiceActivity);
         }
     }
 
