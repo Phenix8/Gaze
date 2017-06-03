@@ -90,6 +90,12 @@ public class NicknameActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
         editor.commit();
+
+        // MàJ du dernier surnom utilisé
+        sharedPref = getSharedPreferences("lastNicknameUsed",  MODE_PRIVATE);
+        editor = sharedPref.edit();
+        editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
+        editor.commit();
     }
 
 
