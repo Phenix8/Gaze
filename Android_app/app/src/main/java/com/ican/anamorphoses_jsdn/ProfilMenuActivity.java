@@ -115,12 +115,11 @@ public class ProfilMenuActivity extends AppCompatActivity {
                     {
                         AnamorphGameManager.setplayerNickname(selectedProfil);
 
-                        // ??
-                        if (scoreByNickname.get(selectedProfil) != null)
-                            AnamorphGameManager.setTotalPlayerScore(Integer.getInteger(scoreByNickname.get(selectedProfil).toString()));
+                        // Score récupéré s'il s'agit d'un surnom déjà joué
+                        if (scoreByNickname.containsKey(selectedProfil) && scoreByNickname.get(selectedProfil) != null)
+                            AnamorphGameManager.setTotalPlayerScore( Integer.parseInt(scoreByNickname.get(selectedProfil).toString() ));
                         else
                             AnamorphGameManager.setTotalPlayerScore(0);
-                        //
 
                         Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
                         SaveNickName();

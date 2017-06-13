@@ -53,9 +53,13 @@
             android:name=".CreateGameActivity"
             android:screenOrientation="landscape" />
 
+        <activity android:name=".LoadingActivity"
+            android:screenOrientation="landscape"/>
+
         <service
             android:name=".GameServerService"
-            android:exported="false"></service>
+            android:exported="false" />
+
     </application>
 
 </manifest>
