@@ -66,9 +66,9 @@ public class RoomNotifier extends Thread implements Serializable {
                 } catch (InterruptedException e) {}
             }
         } catch (SocketException e) {
-
+            e.printStackTrace();
         } catch (IOException e) {
-
+            e.printStackTrace();
         } finally {
             if (socket != null) {
                 socket.close();

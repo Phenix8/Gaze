@@ -35,9 +35,9 @@ public class CameraActivity extends Activity
 
     private CameraFragment cameraInstance = null;
 
-    private Client gameClient;
-
     public static boolean hasToCheckGameEnd = false;
+
+    private Client gameClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +132,7 @@ public class CameraActivity extends Activity
             }
         });
 
+        this.gameClient = AnamorphGameManager.getGameClient();
     }
 
     public void showMessage(String title, String message) {
@@ -254,10 +255,15 @@ public class CameraActivity extends Activity
             break;
         }
 
+        //END OF THE GAME
+
         if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
         {
-            //END OF THE GAME
-
+            Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
+            startActivity(anamorphosisChoiceActivity);
+        }
+        else
+        {
             try {
                 gameClient.annouceAllFound();
             } catch (IOException e) {

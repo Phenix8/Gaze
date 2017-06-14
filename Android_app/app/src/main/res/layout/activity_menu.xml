@@ -78,4 +78,11 @@
 
     </LinearLayout>
 
+    <!-- DEBUG -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Beauf Prod"
+        android:id="@+id/Debug_game_button"/>
+
 </RelativeLayout>

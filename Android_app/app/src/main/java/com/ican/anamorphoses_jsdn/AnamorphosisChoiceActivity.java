@@ -131,6 +131,8 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, (ImageView) findViewById(R.id.anamorphosis_img_1) );
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, (ImageView) findViewById(R.id.anamorphosis_img_3));
+
+        this.gameClient = AnamorphGameManager.getGameClient();
     }
 
 	

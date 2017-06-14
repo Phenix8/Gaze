@@ -31,6 +31,8 @@ public class ProfilMenuActivity extends AppCompatActivity {
     private ImageButton okButton = null;
     private String selectedProfil = null;
 
+    private Map<String, ?> scoreByNickname = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,6 @@ public class ProfilMenuActivity extends AppCompatActivity {
         profilsList = (ListView) findViewById(R.id.nicknames_listView);
 
         final String[] profils = LoadNickNameList();//{"player_2", "player_3", "player_4", "player_5"};
-        //final String[] names = LoadNicknames();
 
         ArrayAdapter<String> nicknamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, profils);
         profilsList.setAdapter(nicknamesAdapter);
@@ -113,6 +114,13 @@ public class ProfilMenuActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id)
                     {
                         AnamorphGameManager.setplayerNickname(selectedProfil);
+
+                        // Score récupéré s'il s'agit d'un surnom déjà joué
+                        if (scoreByNickname.containsKey(selectedProfil) && scoreByNickname.get(selectedProfil) != null)
+                            AnamorphGameManager.setTotalPlayerScore( Integer.parseInt(scoreByNickname.get(selectedProfil).toString() ));
+                        else
+                            AnamorphGameManager.setTotalPlayerScore(0);
+
                         Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
                         SaveNickName();
                         startActivity(nicknameActivity);
@@ -130,7 +138,13 @@ public class ProfilMenuActivity extends AppCompatActivity {
     {
         SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
+        editor.putInt(AnamorphGameManager.getplayerNickname(), AnamorphGameManager.getTotalPlayerScore());
+        editor.commit();
+
+        // MàJ du dernier surnom utilisé
+        sharedPref = getSharedPreferences("lastNicknameUsed",  MODE_PRIVATE);
+        editor = sharedPref.edit();
+        editor.putInt(AnamorphGameManager.getplayerNickname(),  AnamorphGameManager.getTotalPlayerScore());
         editor.commit();
     }
 
@@ -139,7 +153,7 @@ public class ProfilMenuActivity extends AppCompatActivity {
     private String[] LoadNickNameList()
     {
         SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
-        Map<String, ?> scoreByNickname = sharedPref.getAll();
+        scoreByNickname = sharedPref.getAll();
         Set<String> nicknamesSet =  scoreByNickname.keySet();
         String[] nicknamesArray = nicknamesSet.toArray(new String[0]);
         //for(int i=0; i<nicknamesArray.length; i++)

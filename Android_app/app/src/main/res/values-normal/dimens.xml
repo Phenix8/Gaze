@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="nextArrow_marginLeft">500dp</dimen>
+    <dimen name="nextArrow_marginTop">260dp</dimen>
+</resources>

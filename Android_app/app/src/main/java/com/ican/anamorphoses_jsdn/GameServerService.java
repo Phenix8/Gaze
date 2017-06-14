@@ -25,7 +25,7 @@ public class GameServerService extends IntentService {
     // TODO: Rename parameters
     private static final String TCP_PORT_PARAM = "com.ican.anamorphoses_jsdn.extra.TCP_PORT_PARAM";
     private static final String MAX_PLAYER_PARAM = "com.ican.anamorphoses_jsdn.extra.MAX_PLAYER_PARAM";
-    private static final String ROOM_NOTIFIER_PARAM = "com.ican.anamorphoses_jsdn.extra.MAX_PLAYER_PARAM";
+    private static final String ROOM_NOTIFIER_PARAM = "com.ican.anamorphoses_jsdn.extra.ROOM_NOTIFIER_PARAM";
 
     private static Server server = null;
 

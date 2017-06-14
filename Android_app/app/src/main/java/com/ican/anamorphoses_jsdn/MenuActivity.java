@@ -10,41 +10,19 @@ import android.widget.ImageButton;
 
 public class MenuActivity extends AppCompatActivity {
 
-
-    private ImageButton createGameButton = null;
-    private ImageButton joinGameButton = null;
-    private ImageButton rulesButton = null;
-    private ImageButton highscoresButton = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        AssignImageButtonRedirection(R.id.createGameButton, CreateGameActivity.class);
+        AssignImageButtonRedirection(R.id.joinGameButton, JoinRoomActivity.class);
+        AssignImageButtonRedirection(R.id.rulesButton, RulesMenuActivity.class);
+        AssignImageButtonRedirection(R.id.highscoresButton, ProfilMenuActivity.class);
 
-        // Boutton "CREATE GAME"
-        createGameButton = (ImageButton) findViewById(R.id.createGameButton);
-        createGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), CreateGameActivity.class);
-                startActivity(menuOptionActivity);
-            }
-        });
-
-        // Boutton "JOIN GAME"
-        joinGameButton = (ImageButton) findViewById(R.id.joinGameButton);
-        joinGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), JoinRoomActivity.class);
-                startActivity(menuOptionActivity);
-            }
-        });
-
-        // Boutton "RULES"
-        rulesButton = (ImageButton) findViewById(R.id.rulesButton);
-        rulesButton.setOnClickListener(new View.OnClickListener() {
+        // Boutton de débug pour commencer directement une partie
+        Button debugButton = (Button) findViewById(R.id.Debug_game_button);
+        debugButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent menuOptionActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
@@ -52,12 +30,18 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        // Boutton "HIGHSCORES"
-        highscoresButton = (ImageButton) findViewById(R.id.highscoresButton);
-        highscoresButton.setOnClickListener(new View.OnClickListener() {
+    }
+
+
+    // Assigne à l'ImageButton dont l'ID est passé en paramètre
+    // une fonction de redirection vers la classe 'redirectionClass'
+    private void AssignImageButtonRedirection(int id, final Class redirectionClass)
+    {
+        ImageButton currentButton = (ImageButton) findViewById(id);
+        currentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), ProfilMenuActivity.class);
+                Intent menuOptionActivity = new Intent(getApplicationContext(), redirectionClass);
                 startActivity(menuOptionActivity);
             }
         });

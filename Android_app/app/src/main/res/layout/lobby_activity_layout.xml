@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/editable_roomTitle_bg"
             app:srcCompat="@drawable/room_roomnameempty"/>
 
@@ -45,7 +45,7 @@
             android:layout_centerVertical="true"
             android:lines="1"
             android:ems="10"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/editable_roomTitle_txt"/>
 
     </RelativeLayout>
@@ -54,14 +54,161 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="80dp"
         android:translationZ="2dp">
 
-        <ListView
-            android:id="@+id/playerList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.9" />
+        <!-- ROOM MEMBERS -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <!--
+            <ListView
+                android:id="@+id/playerList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9" />
+        -->
+
+            <!-- Joueur "host" -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/room_playername"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:id="@+id/playerName_J1"/>
+
+                </FrameLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/checkbox_isReady_J1"
+                    app:srcCompat="@drawable/room_playernotready" />
+
+            </LinearLayout>
+
+            <!-- Joueur 2 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/room_playername"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:id="@+id/playerName_J2"/>
+
+                </FrameLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/checkbox_isReady_J2"
+                    app:srcCompat="@drawable/room_playernotready" />
+
+            </LinearLayout>
+
+            <!-- Joueur 3 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/room_playername"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:id="@+id/playerName_J3"/>
+
+                </FrameLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/checkbox_isReady_J3"
+                    app:srcCompat="@drawable/room_playernotready" />
+
+            </LinearLayout>
+
+            <!-- Joueur 4 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/room_playername"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:id="@+id/playerName_J4"/>
+
+                </FrameLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/checkbox_isReady_J4"
+                    app:srcCompat="@drawable/room_playernotready" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
         <!-- TIPS -->
         <RelativeLayout
@@ -105,7 +252,17 @@
 
         </RelativeLayout>
 
+
+        <Button
+            android:id="@+id/readyBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="400dp"
+            android:layout_marginTop="220dp"
+            android:text="Ready" />
+
     </FrameLayout>
+
 
     <!-- Change activity buttons -->
     <FrameLayout
