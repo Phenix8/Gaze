@@ -52,8 +52,14 @@
         <activity
             android:name=".CreateGameActivity"
             android:screenOrientation="landscape" />
-
-        <activity android:name=".LoadingActivity"
+        <activity
+            android:name=".LoadingActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".LeaderboardActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".DrawActivity"
             android:screenOrientation="landscape"/>
 
         <service

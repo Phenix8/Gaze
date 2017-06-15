@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ican.anamorphoses_jsdn.LeaderboardActivity">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/finalscores"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_leaderbord_marginTop_playerTable"
+        android:orientation="horizontal">
+
+        <!-- PLAYER NAMES PANEL -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/finalscores_playertable"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/activity_leaderbord_marginTop_playerTable"
+                android:orientation="vertical">
+                <!-- J1 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Player Name 1"
+                    android:textSize="25dp"
+                    android:id="@+id/name_player1"/>
+                <!-- J2 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Player Name 2"
+                    android:textSize="25dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/name_player2"/>
+                <!-- J3 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Player Name 3"
+                    android:textSize="25dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/name_player3"/>
+                <!-- J4 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Player Name 4"
+                    android:textSize="25dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/name_player4"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- SCORE PANEL -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/finalscores_scoretable"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/activity_leaderbord_marginTop_playerTable"
+                android:orientation="vertical">
+                <!-- J1 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="25dp"
+                    android:id="@+id/score_player1"/>
+                <!-- J2 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="25dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/score_player2"/>
+                <!-- J3 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="25dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/score_player3"/>
+                <!-- J4 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="25dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/score_player4"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!-- Change activity buttons -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeActivityLayout">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_margin="15dp"
+            android:id="@+id/okImgButton"
+            app:srcCompat="@drawable/backgreen" />
+
+    </FrameLayout>
+
+
+</RelativeLayout>
