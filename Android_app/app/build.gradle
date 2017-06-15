@@ -4,6 +4,7 @@ android {
     signingConfigs {
 
     }
+	
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
