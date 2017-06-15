@@ -46,11 +46,8 @@ public class CameraActivity extends Activity
         gameClient = (Client) getIntent().getSerializableExtra("client");
 
         try {
-            showMessage(
-                    "Infos",
-                    DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors") +
-                    " detecteur(s) chargé(s)."
-            );
+            DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors");
+
 
             //requestWindowFeature(Window.FEATURE_NO_TITLE);
             //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -66,6 +63,17 @@ public class CameraActivity extends Activity
                         .replace(R.id.container, cameraInstance)
                         .commit();
 
+                CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
+                    @Override
+                    public void onFound() {
+                        //TODO make somthing when an anamorphosis was found
+                    }
+
+                    @Override
+                    public void onNotFound() {
+                        //TODO make somthing when nothing was found
+                    }
+                });
             }
         } catch (Exception e) {
             showMessage("Une erreure est survenue", e.getLocalizedMessage());

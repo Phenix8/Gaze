@@ -32,8 +32,6 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
     private ImageButton okButton = null;
     private ImageView selectorImg = null;
     private AnamorphosisDifficulty difficulty = null;
-
-    private Client gameClient;
 	
 	private HashMap<AnamorphosisDifficulty, Anamorphosis> anamorphosisByDifficulty = new HashMap<>();
     private char selectedAnamorphose = 'n';
@@ -43,9 +41,6 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anamorphose_choice);
-
-        /** game client **/
-        gameClient = (Client) getIntent().getExtras().getSerializable("client");
 
         selectorImg = (ImageView) findViewById(R.id.anamorphoseSelector);
 		
@@ -115,9 +110,6 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
                         if (difficulty != null && anamorphosisByDifficulty != null)
                             AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
                         Intent nicknameActivity = new Intent(getApplicationContext(), CameraActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("client", gameClient);
-                        nicknameActivity.putExtras(bundle);
                         startActivity(nicknameActivity);
                         /*
                     }
@@ -131,8 +123,6 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, (ImageView) findViewById(R.id.anamorphosis_img_1) );
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));
 		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, (ImageView) findViewById(R.id.anamorphosis_img_3));
-
-        this.gameClient = AnamorphGameManager.getGameClient();
     }
 
 	

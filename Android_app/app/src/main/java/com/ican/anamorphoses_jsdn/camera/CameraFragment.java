@@ -922,7 +922,7 @@ public class CameraFragment extends Fragment
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
-    private static class ImageTester implements Runnable {
+    public static class ImageTester implements Runnable {
 
         /**
          * The JPEG image
@@ -935,6 +935,21 @@ public class CameraFragment extends Fragment
 
         private final Activity mActivity;
 
+        public interface Callback {
+            void onFound();
+            void onNotFound();
+        }
+
+        private static Callback callback;
+
+        public static Callback getCallback() {
+            return callback;
+        }
+
+        public static void setCallback(Callback call) {
+            callback = call;
+        }
+
         public ImageTester(Image image, File file, Activity activity) {
             mImage = image;
             mFile = file;
@@ -944,17 +959,16 @@ public class CameraFragment extends Fragment
         @Override
         public void run() {
             try {
-                int result = DLibWrapper.getInstance().checkForObjects(mImage, "clef.svm");
-                new AlertDialog.Builder(mActivity)
-                        .setTitle("Result :")
-                        .setMessage(result == 1 ? "detected!" : "Nothing!")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                CameraActivity.hasToCheckGameEnd = true;
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                if (callback == null) {
+                    return;
+                }
+
+                if (DLibWrapper.getInstance().checkForObjects(mImage, "clef.svm") > 0) {
+                    callback.onFound();
+                } else {
+                    callback.onNotFound();
+                }
+
             } catch (Exception e) {
                 StringBuffer buff = new StringBuffer();
                 buff.append(e.getLocalizedMessage())
