@@ -34,12 +34,4 @@ public class DLibWrapper {
                 detectorName
         );
     }
-
-    public static String getProcessorABI() {
-        return Build.SUPPORTED_ABIS[0];
-    }
-
-    public static String[] getSupportedABIs() {
-        return Build.SUPPORTED_ABIS;
-    }
 }

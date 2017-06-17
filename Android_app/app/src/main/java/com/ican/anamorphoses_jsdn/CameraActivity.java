@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -46,7 +47,7 @@ public class CameraActivity extends Activity
         gameClient = (Client) getIntent().getSerializableExtra("client");
 
         try {
-            DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors");
+            Log.d("dlib", String.format("number of detectors loaded %d", DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors")));
 
 
             //requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -66,12 +67,17 @@ public class CameraActivity extends Activity
                 CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
                     @Override
                     public void onFound() {
-                        //TODO make somthing when an anamorphosis was found
+                        showMessage("Result", "Found!");
                     }
 
                     @Override
                     public void onNotFound() {
-                        //TODO make somthing when nothing was found
+                        showMessage("Result", "NOT found!");
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        showMessage("Error processing image :", message);
                     }
                 });
             }

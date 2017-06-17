@@ -14,7 +14,7 @@ include(cmake_utils/use_cpp_11.cmake)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "19")
 set(CPACK_PACKAGE_VERSION_MINOR "4")
-set(CPACK_PACKAGE_VERSION_PATCH "99")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
 # Set DLIB_VERSION in the including CMake file so they can use it to do whatever they want. 
 get_directory_property(has_parent PARENT_DIRECTORY)
@@ -220,7 +220,7 @@ if (NOT TARGET dlib)
       endif()
 
       # we want to link to the right stuff depending on our platform.  
-      if (WIN32 AND NOT CYGWIN) ###############################################################################
+      if ((WIN32 AND NOT CYGWIN) OR MINGW) ###############################################################################
          if (DLIB_NO_GUI_SUPPORT)
             set (dlib_needed_libraries ws2_32 winmm)
          else()
@@ -234,7 +234,7 @@ if (NOT TARGET dlib)
                # If both X11 and anaconda are installed, it's possible for the
                # anaconda path to appear before /opt/X11, so we remove anaconda.
                foreach (ITR ${X11_INCLUDE_DIR})
-                  if ("${ITR}" MATCHES "(.*)(ana|mini)conda(.*)")
+                  if ("${ITR}" MATCHES "(.*)anaconda(.*)")
                      list (REMOVE_ITEM X11_INCLUDE_DIR ${ITR})
                   endif ()
                endforeach(ITR)

@@ -38,7 +38,7 @@ struct membuf : std::streambuf
     }
 };
 
-typedef dlib::scan_fhog_pyramid<dlib::pyramid_down<6> > image_scanner_type;
+typedef dlib::scan_fhog_pyramid< dlib::pyramid_down<6> > image_scanner_type;
 typedef dlib::object_detector<image_scanner_type> Detector;
 
 static std::map<const std::string, Detector> detectors;
@@ -161,15 +161,27 @@ jint checkForObjects(JNIEnv *env, jobject obj,
     const char *cDetectorName = env->GetStringUTFChars(detectorName, NULL);
     std::string cppDetectorName = std::string(cDetectorName);
 
-    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](image, 0);
+    if (detectors.find(cppDetectorName) == detectors.end()) {
+        return -1;
+    }
+
+    dlib::array2d<unsigned char> rsz_img(960, 1280);
+
+    dlib::resize_image(image, rsz_img);
+
+    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](rsz_img);
+
+    LOGI("Used detectors \"%s\"", cppDetectorName.c_str());
 
     env->ReleaseStringUTFChars(detectorName, cDetectorName);
 
-    //dlib::save_jpeg(image, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/test.jpg");
+    LOGI("number of detections : %d", dets.size());
+
+    dlib::save_jpeg(rsz_img, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/test.jpg");
 
     ///storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn.debug/files/
 
-    return (dets.size() > 0 ? (jint) 1 : (jint) 0);
+    return (jint) dets.size();
 }
 
 jstring getMessage(JNIEnv *env, jobject obj) {
