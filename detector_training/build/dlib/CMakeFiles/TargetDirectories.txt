@@ -1,0 +1,13 @@
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/CMakeFiles/install.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/CMakeFiles/list_install_components.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/CMakeFiles/install/strip.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/CMakeFiles/install/local.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/CMakeFiles/rebuild_cache.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/CMakeFiles/edit_cache.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/rebuild_cache.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/install.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/list_install_components.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/dlib.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/install/local.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/install/strip.dir
+/home/Greg/Anamorphoses_JsDN/detector_training/build/dlib/dlib/CMakeFiles/edit_cache.dir
