@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyActivity extends AppCompatActivity
+public class LobbyActivity extends GazeActivity
         implements Client.GameEventListener {
 
     private ImageButton returnButton = null;
@@ -35,8 +35,6 @@ public class LobbyActivity extends AppCompatActivity
     private ArrayAdapter<Player> adapter;
 
     private List<Player> tempPlayersList = null;
-
-    private Client client;
 
     public static boolean isRoomAdmin;
 
@@ -69,7 +67,7 @@ public class LobbyActivity extends AppCompatActivity
             public void onClick(View v) {
                 try {
                     CheckReadyPlayerStates();
-                    client.toggleReady();
+                    getGameClient().toggleReady();
                 } catch (IOException e) {
                     showError("A network error occured.");
                 }
@@ -80,7 +78,7 @@ public class LobbyActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 try {
-                    client.startGame();
+                    getGameClient().startGame();
                 } catch (IOException e) {
                     showError(e.getMessage());
                 }
@@ -92,14 +90,11 @@ public class LobbyActivity extends AppCompatActivity
         adapter = new ArrayAdapter<>(this, R.layout.list_item, players);
         //playerList.setAdapter(adapter);
 
-
-        client = new Client();
         try {
-            client.addGameEventListener(this);
-            client.connectServer(
+            getGameClient().addGameEventListener(this);
+           getGameClient().connectServer(
                     AnamorphGameManager.getplayerNickname(),
                     (InetAddress) getIntent().getExtras().getSerializable("serverAddress"));
-            AnamorphGameManager.setGameClient(client);
         } catch (UnknownHostException e) {
             showError("Server address is invalid.");
         } catch (IOException e) {
@@ -190,6 +185,12 @@ public class LobbyActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onPause() {
+        getGameClient().removeGameEventListener(this);
+
+        super.onPause();
+    }
 
     // Vérifie si chaque joueur et prêt et met à jour l'UI
     // le cas échéant

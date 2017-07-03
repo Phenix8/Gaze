@@ -10,7 +10,7 @@
 extern "C" {
 
 jint    loadDetectors(JNIEnv *, jobject, jobject, jstring);
-jint    checkForObjects(JNIEnv *, jobject, jobject, jint, jint, jstring);
+jint    checkForObjects(JNIEnv *, jobject, jobject, jint, jint, jstring, jint zoomLevel);
 jstring getMessage(JNIEnv *env, jobject obj);
 
 };

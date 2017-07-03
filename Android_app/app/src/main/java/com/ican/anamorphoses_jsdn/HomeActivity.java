@@ -29,13 +29,14 @@ public class HomeActivity extends AppCompatActivity {
                 SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
                 Map<String, ?> scoreByNickname = sharedPref.getAll();
                 if (scoreByNickname == null || scoreByNickname.keySet().size() > 0) {
-                    Intent nicknameActivity = new Intent(getApplicationContext(), NicknameActivity.class);
-                    startActivity(nicknameActivity);
+                    Intent intent = new Intent(getApplicationContext(), NicknameActivity.class);
+                    startActivity(intent);
                 }
                 else
                 {
-                    Intent nicknameActivity = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(nicknameActivity);
+                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
                 }
             }
         });

@@ -97,12 +97,22 @@ public class AnamorphGameManager {
 	static public void InitAnamorphosisDict(Context context)
     {
         AnamorphGameManager.anamorphosisDict = new ArrayList<Anamorphosis>();
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY, ""));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY, ""));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, AnamorphosisDifficulty.MEDIUM, ""));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM, ""));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD, ""));
-        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD, ""));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY, "triangle.svm"));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY, "carre.svm"));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, AnamorphosisDifficulty.EASY, "pentagone.svm"));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM, "sablier2.svm"));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD, "tripik.svm"));
+        AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD, "trefle.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_7_s, R.drawable.anamorphosis_7_l, AnamorphosisDifficulty.HARD, "lajesaispas.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_8_s, R.drawable.anamorphosis_8_l, AnamorphosisDifficulty.HARD, "rond.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_9_s, R.drawable.anamorphosis_9_l, AnamorphosisDifficulty.HARD, "3rond.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_10_s, R.drawable.anamorphosis_10_l, AnamorphosisDifficulty.HARD, "nuage.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_11_s, R.drawable.anamorphosis_11_l, AnamorphosisDifficulty.HARD, "nuage2.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_12_s, R.drawable.anamorphosis_12_l, AnamorphosisDifficulty.HARD, "escalier.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_13_s, R.drawable.anamorphosis_13_l, AnamorphosisDifficulty.HARD, "tripentagone.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_14_s, R.drawable.anamorphosis_14_l, AnamorphosisDifficulty.HARD, "choufleur.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_15_s, R.drawable.anamorphosis_15_l, AnamorphosisDifficulty.HARD, "quille.svm"));
+		AnamorphGameManager.anamorphosisDict.add(new Anamorphosis(R.drawable.anamorphosis_16_s, R.drawable.anamorphosis_16_l, AnamorphosisDifficulty.HARD, "etoile.svm"));
     }
 
     public static Anamorphosis getRandomMediumAnamorphosis() {

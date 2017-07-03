@@ -153,7 +153,7 @@ jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detec
 }
 
 jint checkForObjects(JNIEnv *env, jobject obj,
-                     jobject yBuffer, jint width, jint height, jstring detectorName) {
+                     jobject yBuffer, jint width, jint height, jstring detectorName, jint zoomLevel) {
 
     dlib::array2d<unsigned char> image =
             byteBufferToArray2d(env, yBuffer, width, height);
@@ -165,7 +165,7 @@ jint checkForObjects(JNIEnv *env, jobject obj,
         return -1;
     }
 
-    dlib::array2d<unsigned char> rsz_img(960, 1280);
+    dlib::array2d<unsigned char> rsz_img(480 * zoomLevel, 640 * zoomLevel);
 
     dlib::resize_image(image, rsz_img);
 

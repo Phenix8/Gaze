@@ -68,16 +68,19 @@ public class CameraActivity extends Activity
                     @Override
                     public void onFound() {
                         showMessage("Result", "Found!");
+                        Log.d("dlib", "Test");
                     }
 
                     @Override
                     public void onNotFound() {
                         showMessage("Result", "NOT found!");
+                        Log.d("dlib", "Test2");
                     }
 
                     @Override
                     public void onError(String message) {
                         showMessage("Error processing image :", message);
+                        Log.d("dlib", "Test3");
                     }
                 });
             }
@@ -140,7 +143,7 @@ public class CameraActivity extends Activity
                 if (HideTargetAnamorphZoom())
                     return;
                 if (v.getId() == R.id.photo_icon) {
-                    cameraInstance.takePicture();
+                    cameraInstance.checkForAnamorphosis(AnamorphGameManager.getTargetAnamorphosis().getDetectorName());
                     hasToCheckGameEnd = true;
                 }
             }
@@ -274,6 +277,7 @@ public class CameraActivity extends Activity
         if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
         {
             Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
+            anamorphosisChoiceActivity.setFlags(anamorphosisChoiceActivity.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(anamorphosisChoiceActivity);
         }
         else

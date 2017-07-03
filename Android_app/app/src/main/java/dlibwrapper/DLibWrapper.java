@@ -23,15 +23,16 @@ public class DLibWrapper {
         System.loadLibrary("dlib-wrapper");
     }
 
-    private native int checkForObjects(ByteBuffer y, int width, int height, String detectorName);
+    private native int checkForObjects(ByteBuffer y, int width, int height, String detectorName, int zoomLevel);
     public native int loadDetectors(AssetManager mgr, String detectorsDirectory);
     public native String getMessage();
-    public int checkForObjects(Image image, String detectorName) {
+    public int checkForObjects(Image image, String detectorName, int zoomLevel) {
        return this.checkForObjects(
                 image.getPlanes()[0].getBuffer(),
                 image.getWidth(),
                 image.getHeight(),
-                detectorName
+                detectorName,
+                zoomLevel
         );
     }
 }

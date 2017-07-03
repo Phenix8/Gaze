@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml-stylesheet type='text/xsl' href='image_metadata_stylesheet.xsl'?>
+<dataset>
+<name>imglab dataset</name>
+<comment>Created by imglab tool.</comment>
+<images>
+  <image file='20170617_172919.jpg'>
+  </image>
+  <image file='20170617_172919.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172919.jpg_x4.jpg'>
+  </image>
+  <image file='20170617_172923.jpg'>
+  </image>
+  <image file='20170617_172923.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172923.jpg_x4.jpg'>
+  </image>
+  <image file='20170617_172933.jpg'>
+  </image>
+  <image file='20170617_172933.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172933.jpg_x4.jpg'>
+  </image>
+  <image file='20170617_172935.jpg'>
+  </image>
+  <image file='20170617_172935.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172935.jpg_x4.jpg'>
+  </image>
+  <image file='20170617_172937.jpg'>
+  </image>
+  <image file='20170617_172937.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172937.jpg_x4.jpg'>
+  </image>
+  <image file='20170617_172940.jpg'>
+  </image>
+  <image file='20170617_172940.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172940.jpg_x4.jpg'>
+  </image>
+  <image file='20170617_172942.jpg'>
+  </image>
+  <image file='20170617_172942.jpg_x2.jpg'>
+  </image>
+  <image file='20170617_172942.jpg_x4.jpg'>
+  </image>
+</images>
+</dataset>

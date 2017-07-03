@@ -86,6 +86,7 @@ public class JoinRoomActivity extends AppCompatActivity
         LobbyActivity.isRoomAdmin = false;
         Intent intent = new Intent(this, LobbyActivity.class);
         intent.putExtra("serverAddress", ((Room)adapter.getItem(position)).getAddress());
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }

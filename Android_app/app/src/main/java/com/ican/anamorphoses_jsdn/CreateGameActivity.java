@@ -70,6 +70,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 Bundle b = new Bundle();
                 b.putSerializable("serverAddress", InetAddress.getLoopbackAddress());
                 intent.putExtras(b);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 finish();
             }

@@ -109,8 +109,9 @@ public class AnamorphosisChoiceActivity extends AppCompatActivity {
                         */
                         if (difficulty != null && anamorphosisByDifficulty != null)
                             AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
-                        Intent nicknameActivity = new Intent(getApplicationContext(), CameraActivity.class);
-                        startActivity(nicknameActivity);
+                        Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
                         /*
                     }
                 });
