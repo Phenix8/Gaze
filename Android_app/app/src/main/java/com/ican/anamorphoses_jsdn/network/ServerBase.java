@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException;
  */
 
 public abstract class
-Server extends Thread
+ServerBase extends Thread
     implements ClientHandler.ClientHandlerListener {
 
     public interface ServerStateCallback extends Serializable {
@@ -24,7 +24,7 @@ Server extends Thread
 
     private ServerStateCallback callback = null;
 
-    private static String TAG = "Server";
+    private static String TAG = "ServerBase";
 
     private RoomNotifier roomNotifier;
 
@@ -36,7 +36,7 @@ Server extends Thread
 
     private ArrayList<ClientHandler> client = new ArrayList<>();
 
-    public Server(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+    public ServerBase(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
         this.roomNotifier = roomNotifier;
         this.tcpPort = tcpPort;
         this.maxPlayer = maxPlayer;

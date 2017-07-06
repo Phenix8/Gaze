@@ -1,13 +1,12 @@
 package com.ican.anamorphoses_jsdn.network;
 
-import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
  * Created by root on 05/07/2017.
  */
 
-public class ClientServerSynchronizer implements Server.ServerStateCallback {
+public class ClientServerSynchronizer implements ServerBase.ServerStateCallback {
 
     private InetAddress adresse;
     private String playerName;

@@ -1,186 +1,99 @@
 package com.ican.anamorphoses_jsdn.activity;
 
 import android.content.Intent;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.ican.anamorphoses_jsdn.AnamorphGameManager;
-import com.ican.anamorphoses_jsdn.Anamorphosis;
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.network.Client;
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
+import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.io.IOException;
 
-public class AnamorphosisChoiceActivity extends AppCompatActivity {
+public class AnamorphosisChoiceActivity extends GazeActivity
+        implements View.OnClickListener {
+
+    static final int VALIDATE_ANAMORPHOSIS = 1;
 
     private ImageButton easyButton = null;
     private ImageButton mediumButton = null;
     private ImageButton hardButton = null;
-    private ImageButton okButton = null;
-    private ImageView selectorImg = null;
-    private AnamorphosisDifficulty difficulty = null;
-	
-	private HashMap<AnamorphosisDifficulty, Anamorphosis> anamorphosisByDifficulty = new HashMap<>();
-    private char selectedAnamorphose = 'n';
-	private Random randomGenerator = new Random();
+
+    private Anamorphosis easyAnamorphosis;
+    private Anamorphosis mediumAnamorphosis;
+    private Anamorphosis hardAnamorphosis;
+
+    private Anamorphosis currentAnamorphosis;
+
+    private int foundAnamorphosis = 0;
+
+    private void chooseRandomAnamorphosis() {
+        easyAnamorphosis = AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.EASY, false);
+        easyButton.setImageResource(easyAnamorphosis.getLargeDrawableImage());
+
+        mediumAnamorphosis = AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.MEDIUM, false);
+        mediumButton.setImageResource(mediumAnamorphosis.getLargeDrawableImage());
+
+        hardAnamorphosis = AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.HARD, false);
+        hardButton.setImageResource(hardAnamorphosis.getLargeDrawableImage());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anamorphose_choice);
 
-        selectorImg = (ImageView) findViewById(R.id.anamorphoseSelector);
-		
-        /////////////////////////
-        // IMAGE BUTTON "Easy" //
-        /////////////////////////
-
         easyButton = (ImageButton) findViewById(R.id.easyImgButton);
-        easyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            selectedAnamorphose = 'e';
-            SetSelectorPosition(easyButton);
-            }
-        });
-
-        ///////////////////////////
-        // IMAGE BUTTON "Medium" //
-        ///////////////////////////
+        easyButton.setOnClickListener(this);
 
         mediumButton = (ImageButton) findViewById(R.id.mediumImgButton);
-        mediumButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            selectedAnamorphose = 'm';
-            SetSelectorPosition(mediumButton);
-            }
-        });
-
-        /////////////////////////
-        // IMAGE BUTTON "Hard" //
-        /////////////////////////
+        mediumButton.setOnClickListener(this);
 
         hardButton = (ImageButton) findViewById(R.id.hardImgButton);
-        hardButton.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              selectedAnamorphose = 'h';
-              SetSelectorPosition(hardButton);
-          }
-        });
+        hardButton.setOnClickListener(this);
 
-        ///////////////////////
-        // IMAGE BUTTON "Ok" //
-        ///////////////////////
+        chooseRandomAnamorphosis();
 
-        okButton = (ImageButton) findViewById(R.id.okImgButton);
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedAnamorphose == 'n')
-                    return;
-				else if (selectedAnamorphose == 'e')
-					difficulty = AnamorphosisDifficulty.EASY;
-				else if (selectedAnamorphose == 'm')
-					difficulty = AnamorphosisDifficulty.MEDIUM;
-				else if (selectedAnamorphose == 'h')
-					difficulty = AnamorphosisDifficulty.HARD;
-
-                /*
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Do you choose : " + difficulty + " ?");
-                builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id)
-                    {
-                        */
-                        if (difficulty != null && anamorphosisByDifficulty != null)
-                            AnamorphGameManager.setTargetAnamorphosis(anamorphosisByDifficulty.get(difficulty));
-                        Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
-                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(intent);
-                        /*
-                    }
-                });
-                builder.setNegativeButton("Non", null);
-                builder.show();
-                */
-            }
-        });
-
-		InitializeAnamorphosisImages(AnamorphosisDifficulty.EASY, (ImageView) findViewById(R.id.anamorphosis_img_1) );
-		InitializeAnamorphosisImages(AnamorphosisDifficulty.MEDIUM, (ImageView) findViewById(R.id.anamorphosis_img_2));
-		InitializeAnamorphosisImages(AnamorphosisDifficulty.HARD, (ImageView) findViewById(R.id.anamorphosis_img_3));
+        getGameClient().addGameEventListener(this);
     }
 
-	
     @Override
     public void onBackPressed() {
         return;
     }
 
+    @Override
+    public void onClick(View view) {
+        currentAnamorphosis = null;
 
-    // Fonction de positionnemnt de l'encadré de sélection
-    // en fonction de la position de l'ImageButton en paramètres
-    private void SetSelectorPosition(ImageButton button)
-    {
-        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.selectorLayout);
-        int[] location = new int[2];
+        if (view == easyButton) {
+            currentAnamorphosis = easyAnamorphosis;
+        } else if (view == mediumButton) {
+            currentAnamorphosis = mediumAnamorphosis;
+        } else if (view == hardButton) {
+            currentAnamorphosis = hardAnamorphosis;
+        }
 
-        if (selectorImg.getVisibility() == View.INVISIBLE)
-            selectorImg.setVisibility(View.VISIBLE);
-        button.getLocationInWindow(location);
-        frameLayout.setPadding(location[0] - 45, location[1] - 110, 0, 0);
+        Intent intent = new Intent(this, CameraActivity.class);
+        intent.putExtra("anamorphosis", currentAnamorphosis);
+        startActivityForResult(intent, VALIDATE_ANAMORPHOSIS);
     }
 
-
-	// Fonction d'initialisation de l'affichage et de l'objet
-	// "Anamorphose" d'après la difficulté et le buttonImage envoyés
-	private void InitializeAnamorphosisImages(AnamorphosisDifficulty difficulty, ImageView button)
-	{
-        if (AnamorphGameManager.getAnamorphosisDict() == null)
-            AnamorphGameManager.InitAnamorphosisDict(getApplicationContext());
-
-        Anamorphosis currentAnamorphosis = GenerateAnamorphosisObj(difficulty);
-		anamorphosisByDifficulty.put(difficulty, currentAnamorphosis);
-		
-		// ASSIGNATION DE L'IMAGE AU BUTTON EN FONCTION DU PATH
-		button.setImageDrawable(ResourcesCompat.getDrawable(getResources(),currentAnamorphosis.getLargeDrawableImage(), null));
-
-	}
-
-
-	// Fonction de génération d'un object "Anamorphose"
-	// en fonction de la difficulté en paramètre
-	private Anamorphosis GenerateAnamorphosisObj(AnamorphosisDifficulty difficulty) {
-		ArrayList<Anamorphosis> anamorphSubDict = new ArrayList<>();
-
-        if (AnamorphGameManager.getValidatedAnamorphosis() != null) {
-            if (AnamorphGameManager.getValidatedAnamorphosis().size() == AnamorphGameManager.getAnamorphosisDict().size()) {
-                AnamorphGameManager.getValidatedAnamorphosis().clear();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VALIDATE_ANAMORPHOSIS) {
+            chooseRandomAnamorphosis();
+            if (resultCode == RESULT_OK) {
+                AnamorphDictionary.getInstance().setAlreadyValidated(currentAnamorphosis);
+                try {
+                    getGameClient().setFound(currentAnamorphosis);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-		
-		for (Anamorphosis Anam : AnamorphGameManager.getAnamorphosisDict())
-		{
-			if (Anam.getDifficulty().equals(difficulty))
-				anamorphSubDict.add(Anam);
-		}
-
-		ArrayList<Anamorphosis> validatedAnamorphosis = AnamorphGameManager.getValidatedAnamorphosis();
-
-        while (true) {
-            Anamorphosis a = anamorphSubDict.get(randomGenerator.nextInt(anamorphSubDict.size()));
-            if (validatedAnamorphosis == null || !validatedAnamorphosis.contains(a)) {
-                return a;
-            }
-        }
-	}
-
+    }
 }

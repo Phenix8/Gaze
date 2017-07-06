@@ -4,9 +4,9 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
-import com.ican.anamorphoses_jsdn.control.Manager;
+import com.ican.anamorphoses_jsdn.control.Server;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;
-import com.ican.anamorphoses_jsdn.network.Server;
+import com.ican.anamorphoses_jsdn.network.ServerBase;
 import com.ican.anamorphoses_jsdn.network.Common;
 
 /**
@@ -28,7 +28,7 @@ public class GameServerService extends IntentService {
     private static final String ROOM_NOTIFIER_PARAM = "com.ican.anamorphoses_jsdn.extra.ROOM_NOTIFIER_PARAM";
     private static final String SERVER_STATE_CALLBACK_PARAM = "com.ican.anamorphoses_jsdn.extra.SERVER_STATE_CALLBACK_PARAM";
 
-    private static Server server = null;
+    private static ServerBase server = null;
 
     public GameServerService() {
         super("GameServerService");
@@ -42,7 +42,7 @@ public class GameServerService extends IntentService {
      */
     // TODO: Customize helper method
     public static void StartServer(Context context, int tcpPort, int maxPlayer,
-                                   RoomNotifier notifier, Server.ServerStateCallback callback) {
+                                   RoomNotifier notifier, ServerBase.ServerStateCallback callback) {
         Intent intent = new Intent(context, GameServerService.class);
         intent.setAction(ACTION_START_SERVER);
         intent.putExtra(TCP_PORT_PARAM, tcpPort);
@@ -73,7 +73,7 @@ public class GameServerService extends IntentService {
                 final int tcpPort = intent.getIntExtra(TCP_PORT_PARAM, Common.TCP_PORT);
                 final int maxPlayer = intent.getIntExtra(MAX_PLAYER_PARAM, Common.DEFAULT_MAX_PLAYER);
                 RoomNotifier notifier = (RoomNotifier) intent.getSerializableExtra(ROOM_NOTIFIER_PARAM);
-                Server.ServerStateCallback callback = (Server.ServerStateCallback) intent.getSerializableExtra(SERVER_STATE_CALLBACK_PARAM);
+                ServerBase.ServerStateCallback callback = (ServerBase.ServerStateCallback) intent.getSerializableExtra(SERVER_STATE_CALLBACK_PARAM);
                 if (notifier == null) {
                     notifier = new RoomNotifier(Common.BROADCAST_MESSAGE, Common.DEFAULT_GAME_NAME, Common.UDP_PORT);
                 }
@@ -88,12 +88,12 @@ public class GameServerService extends IntentService {
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
-    private void handleStartServer(int tcpPort, int maxPlayer, RoomNotifier notifier, Server.ServerStateCallback callback) {
+    private void handleStartServer(int tcpPort, int maxPlayer, RoomNotifier notifier, ServerBase.ServerStateCallback callback) {
         if (server != null) {
             return;
         }
 
-        server = new Manager(notifier, tcpPort, maxPlayer);
+        server = new Server(notifier, tcpPort, maxPlayer);
         server.startListening(callback);
     }
 

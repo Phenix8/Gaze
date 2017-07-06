@@ -3,13 +3,12 @@ package com.ican.anamorphoses_jsdn.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.ican.anamorphoses_jsdn.AnamorphGameManager;
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.network.Common;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;
@@ -65,7 +64,7 @@ public class CreateGameActivity extends GazeActivity implements View.OnClickList
     public void onClick(View v) {
         if (v == createButton) {
             String gameName = gameNameField.getText().toString().trim();
-            AnamorphGameManager.setTitleRoom(gameName);
+            //AnamorphDictionary.setTitleRoom(gameName);
 
             if (gameNameField.getText().toString().trim().length() > 0) {
 

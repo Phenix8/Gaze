@@ -1,11 +1,8 @@
 package com.ican.anamorphoses_jsdn.activity;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,18 +18,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Button;
 
-import com.ican.anamorphoses_jsdn.AnamorphGameManager;
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.ClientServerSynchronizer;
-import com.ican.anamorphoses_jsdn.network.Common;
-import com.ican.anamorphoses_jsdn.network.RoomNotifier;
-import com.ican.anamorphoses_jsdn.network.Server;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,7 +195,7 @@ public class LobbyActivity extends GazeActivity
 
         // Assignation du nom de salle depuis le réseau si le joueur n'est pas admin
         if (!isRoomAdmin) {
-            titleView.setText(AnamorphGameManager.getTitleRoom());
+            titleView.setText("");
         }
 
         titleEdit.setVisibility(isRoomAdmin ? View.VISIBLE : View.INVISIBLE);

@@ -10,4 +10,5 @@ public class Common {
     public static final String BROADCAST_MESSAGE = "ANAMORPH GAME HERE";
     public static final String DEFAULT_GAME_NAME = "DEFAULT";
     public static final int DEFAULT_MAX_PLAYER = 4;
+    public static final int VALIDATE_ANAMORPHOSIS_ACTION_CODE = 666;
 }

@@ -39,9 +39,6 @@
             android:name=".activity.RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.ProfilMenuActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".activity.AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity

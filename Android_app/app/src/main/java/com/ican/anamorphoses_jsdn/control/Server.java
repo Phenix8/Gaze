@@ -1,8 +1,9 @@
 package com.ican.anamorphoses_jsdn.control;
 
-import com.ican.anamorphoses_jsdn.AnamorphGameManager;
+import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.network.ClientHandler;
-import com.ican.anamorphoses_jsdn.network.Server;
+import com.ican.anamorphoses_jsdn.network.ServerBase;
 import com.ican.anamorphoses_jsdn.network.Protocol;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;
 
@@ -17,7 +18,7 @@ import java.util.UUID;
  * Created by root on 02/05/2017.
  */
 
-public class Manager extends Server {
+public class Server extends ServerBase {
 
     private enum GameState {
         LOBBY,
@@ -33,7 +34,7 @@ public class Manager extends Server {
         return String.format(
                 Locale.ENGLISH,
                 "%d",
-                AnamorphGameManager.getRandomMediumAnamorphosis().getId()
+                AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.MEDIUM, false).getId()
         );
     }
 
@@ -132,6 +133,9 @@ public class Manager extends Server {
                             Protocol.buildPlayerListInstruction(
                                     players.values()));
                 } else {
+                    for (Player p : players.values()) {
+                        p.setScore(-1);
+                    }
                     sendMessageToAll(Protocol.buildFinishedInstruction());
                 }
             break;
@@ -173,7 +177,7 @@ public class Manager extends Server {
         }
     }
 
-    public Manager(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+    public Server(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
         super(roomNotifier, tcpPort, maxPlayer);
         this.gameState = GameState.LOBBY;
     }

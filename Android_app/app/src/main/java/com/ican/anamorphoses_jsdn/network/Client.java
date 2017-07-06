@@ -3,6 +3,7 @@ package com.ican.anamorphoses_jsdn.network;
 import android.util.Log;
 
 import com.ican.anamorphoses_jsdn.control.Player;
+import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,9 +33,11 @@ public class Client extends Thread implements Serializable {
 
     private String playerId = null;
     private int score = 0;
+    private int nbFoundAnamorphosis = 0;
     private boolean lobby = true;
 
     private List<Player> players = new ArrayList<>();
+    private String roomName = null;
 
     public interface GameEventListener {
         enum GameEventType {
@@ -81,20 +84,20 @@ public class Client extends Thread implements Serializable {
         sendInstruction(Protocol.buildReadyInstruction(playerId));
     }
 
-    public void annouceAllFound() throws IOException {
+    private void annouceAllFound() throws IOException {
         sendInstruction(Protocol.buildFinishedInstruction());
     }
 
-    public void incrementScore(int score) {
-        this.score += score;
+    public void setFound(Anamorphosis a) throws IOException {
+        this.score += a.getDifficulty().ordinal() * 10 + 10;
+        this.nbFoundAnamorphosis++;
+        if (nbFoundAnamorphosis >= 4) {
+            annouceAllFound();
+        }
     }
 
     public void startGame() throws IOException {
         sendInstruction(Protocol.buildStartInstruction());
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public void disconnect() {
@@ -113,6 +116,8 @@ public class Client extends Thread implements Serializable {
     public List<Player> getPlayerList() {
         return players;
     }
+
+    public String getRoomName() { return roomName; }
 
     private void notifyListener(GameEventListener.GameEventType type, Object data) {
         for (GameEventListener listener : listeners) {

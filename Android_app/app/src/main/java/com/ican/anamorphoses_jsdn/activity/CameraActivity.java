@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import dlibwrapper.DLibWrapper;
 
-import com.ican.anamorphoses_jsdn.AnamorphGameManager;
-import com.ican.anamorphoses_jsdn.Anamorphosis;
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
+import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.camera.CameraFragment;
 
@@ -37,11 +37,13 @@ public class CameraActivity extends GazeActivity
 
     private CameraFragment cameraInstance = null;
 
-    public static boolean hasToCheckGameEnd = false;
+    private Anamorphosis currentAnamorphosis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentAnamorphosis = (Anamorphosis) getIntent().getSerializableExtra("anamorphosis");
 
         try {
             Log.d("dlib", String.format("number of detectors loaded %d", DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors")));
@@ -64,7 +66,8 @@ public class CameraActivity extends GazeActivity
                 CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
                     @Override
                     public void onFound() {
-                        CheckForGameEnd();
+                       setResult(RESULT_OK);
+                        finish();
                     }
 
                     @Override
@@ -84,7 +87,6 @@ public class CameraActivity extends GazeActivity
         }
 
         TextView score = (TextView) findViewById(R.id.scoreTxt);
-        score.setText(AnamorphGameManager.getplayerNickname()+ ": " + AnamorphGameManager.getCurrentPlayerScore());
 
         // Evénement de clic sur l'annulation d'anamorphose
         abandonImg.setOnClickListener(new View.OnClickListener()
@@ -99,10 +101,8 @@ public class CameraActivity extends GazeActivity
                 builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        AnamorphGameManager.setTargetAnamorphosis(null);
-                        AnamorphGameManager.setCurrentPlayerScore(AnamorphGameManager.getCurrentPlayerScore() < 2 ? 0 : AnamorphGameManager.getCurrentPlayerScore()-1);
-                        Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
-                        startActivity(anamorphosisChoiceActivity);
+                        setResult(RESULT_CANCELED);
+                        finish();
                     }
                 });
                 builder.setNegativeButton("Non", null);
@@ -137,8 +137,7 @@ public class CameraActivity extends GazeActivity
             public void onClick(View v) {
                 if (HideTargetAnamorphZoom())
                     return;
-                cameraInstance.checkForAnamorphosis(AnamorphGameManager.getTargetAnamorphosis().getDetectorName());
-                hasToCheckGameEnd = true;
+                cameraInstance.checkForAnamorphosis(currentAnamorphosis.getDetectorName());
             }
         });
     }
@@ -167,18 +166,6 @@ public class CameraActivity extends GazeActivity
         return;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (hasToCheckGameEnd)
-        {
-            CheckForGameEnd();
-            hasToCheckGameEnd = false;
-        }
-    }
-
-
     // Initialise l'image et la couleur de background
     // de l'anamorphose cible
     private void setTargetAnamorphImg()
@@ -190,8 +177,6 @@ public class CameraActivity extends GazeActivity
         // anamorphose cible zommée
         zoomAnamorphImg = (ImageView) findViewById(R.id.zoom_anamorph_img);
         zoomAnamorphBg = (ImageButton) findViewById(R.id.zoom_anamorph_bg);
-
-        Anamorphosis currentAnamorphosis =  AnamorphGameManager.getTargetAnamorphosis();
 
         targetAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getDrawableImage(), null));
         zoomAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
@@ -229,7 +214,6 @@ public class CameraActivity extends GazeActivity
         abandonImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_cancel, null));
     }
 
-
     // Dissimuler l'anamorphose zoomée
     private boolean HideTargetAnamorphZoom()
     {
@@ -243,50 +227,5 @@ public class CameraActivity extends GazeActivity
     }
 
 
-    // Vérifie si la partie en cours est terminée
-    public void CheckForGameEnd()
-    {
-        AnamorphGameManager.setCurrentPlayerScore(AnamorphGameManager.getCurrentPlayerScore() + 1);
-        SaveScores();
 
-        switch (AnamorphGameManager.getTargetAnamorphosis().getDifficulty()) {
-            case EASY:
-                getGameClient().incrementScore(20);
-            break;
-
-            case MEDIUM:
-                getGameClient().incrementScore(30);
-            break;
-
-            case HARD:
-                getGameClient().incrementScore(40);
-            break;
-        }
-
-        //END OF THE GAME
-
-        if (AnamorphGameManager.getCurrentPlayerScore() < AnamorphGameManager.VICTORY_ANAMORPH_NB)
-        {
-            Intent anamorphosisChoiceActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
-            anamorphosisChoiceActivity.setFlags(anamorphosisChoiceActivity.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(anamorphosisChoiceActivity);
-        }
-        else
-        {
-            try {
-                getGameClient().annouceAllFound();
-            } catch (IOException e) {
-                showMessage("Error", "A network error occured.");
-            }
-        }
-    }
-
-    // Save the added nickname to datas
-    private void SaveScores()
-    {
-        SharedPreferences sharedPref = getSharedPreferences("scoresByNicknameFile", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(AnamorphGameManager.getplayerNickname(), 0);
-        editor.commit();
-    }
 }

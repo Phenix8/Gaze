@@ -170,7 +170,7 @@ public class Protocol {
 
     public static String buildScoreInstruction(int score) {
         StringBuffer str = new StringBuffer(SCORE_INSTRUCTION_TYPE);
-        str.append(DATA_SEPARATOR).append(score).append(INSTRUCTION_END);
+        str.append(INSTRUCTION_SEPARATOR).append(score).append(INSTRUCTION_END);
         return str.toString();
     }
 
