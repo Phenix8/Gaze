@@ -5,19 +5,28 @@
 <comment>Created by imglab tool.</comment>
 <images>
   <image file='20170616_093057.jpg'>
-    <box top='61' left='75' width='295' height='136' ignore='1'/>
-    <box top='106' left='323' width='23' height='21'/>
+    <box top='108' left='326' width='17' height='15'/>
   </image>
   <image file='20170616_093101.jpg'>
-    <box top='41' left='213' width='142' height='158' ignore='1'/>
-    <box top='107' left='311' width='19' height='18'/>
+    <box top='109' left='310' width='19' height='14'/>
   </image>
   <image file='20170616_093105.jpg'>
-    <box top='107' left='314' width='18' height='14'/>
-    <box top='40' left='214' width='144' height='156' ignore='1'/>
+    <box top='107' left='313' width='20' height='14'/>
   </image>
   <image file='IMG_5357.JPG'>
-    <box top='218' left='275' width='57' height='43'/>
+    <box top='223' left='277' width='54' height='37'/>
+  </image>
+  <image file='sample1499093137.jpg'>
+    <box top='359' left='352' width='57' height='39'/>
+  </image>
+  <image file='sample1499093142.jpg'>
+    <box top='345' left='363' width='54' height='48'/>
+  </image>
+  <image file='sample1499093148.jpg'>
+    <box top='341' left='365' width='55' height='36'/>
+  </image>
+  <image file='sample1499093152.jpg'>
+    <box top='340' left='371' width='59' height='38'/>
   </image>
 </images>
 </dataset>

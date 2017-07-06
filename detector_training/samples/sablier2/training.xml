@@ -19,5 +19,8 @@
   <image file='20170617_172822.jpg'>
     <box top='397' left='298' width='42' height='62'/>
   </image>
+  <image file='test.jpg'>
+    <box top='737' left='449' width='93' height='147'/>
+  </image>
 </images>
 </dataset>

@@ -2,7 +2,9 @@ package com.ican.anamorphoses_jsdn.network;
 
 import com.ican.anamorphoses_jsdn.control.Player;
 
-import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class Protocol {
     public static final String INSTRUCTION_END = "\n";
 
     public static final String PLAYERS_INSTRUCTION_TYPE =           "PLAYERS";
-    public static final String PLAYERS_ID_INSTRUCTION_TYPE =        "ID";
+    public static final String PLAYER_ID_INSTRUCTION_TYPE =        "ID";
     public static final String QUIT_INSTRUCTION_TYPE =              "QUIT";
     public static final String CONNECT_INSTRUCTION_TYPE =           "CONNECT";
     public static final String DISCONNECT_INSTRUCTION_TYPE =        "DISCONNECT";
@@ -51,13 +53,15 @@ public class Protocol {
             if (str.length() > 0) {
                 str.append(DATA_SEPARATOR);
             }
+            try {
             str.append(player.getPlayerId())
                     .append(",")
-                    .append(player.getName().replace(" ", "%"))
+                    .append(URLEncoder.encode(player.getName(), "UTF-8"))
                     .append(",")
                     .append(player.getScore())
                     .append(",")
                     .append(player.isReady());
+            } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
         }
         str.insert(0, INSTRUCTION_SEPARATOR);
         str.insert(0, PLAYERS_INSTRUCTION_TYPE);
@@ -69,14 +73,16 @@ public class Protocol {
         ArrayList<Player> players = new ArrayList<>();
         for(String playerInfos : playerListData.split(":")) {
             String[] infos = playerInfos.split(",");
-            players.add(
-                new Player(
-                    infos[1],
-                    Integer.parseInt(infos[2]),
-                    Boolean.parseBoolean(infos[3]),
-                    infos[0]
-                )
-            );
+            try {
+                players.add(
+                        new Player(
+                                URLDecoder.decode(infos[1], "UTF-8"),
+                                Integer.parseInt(infos[2]),
+                                Boolean.parseBoolean(infos[3]),
+                                infos[0]
+                        )
+                );
+            } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
         }
         return players;
     }
@@ -99,7 +105,23 @@ public class Protocol {
     }
 
     public static String buildConnectInstruction(String playerName) {
-        return String.format("%s %s%s", CONNECT_INSTRUCTION_TYPE, playerName, INSTRUCTION_END);
+        String str = null;
+        try {
+            str = String.format("%s %s%s", CONNECT_INSTRUCTION_TYPE, URLEncoder.encode(playerName, "UTF-8"), INSTRUCTION_END);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String parseConnectInstructionData(String data) {
+        String str = null;
+        try {
+            str = URLDecoder.decode(data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     public static String buildDisconnectInstruction(String playerName) {
@@ -139,7 +161,7 @@ public class Protocol {
     public static String buildPlayerIDInstruction(String playerId) {
         return String.format(
                 "%s%s%s%s",
-                PLAYERS_ID_INSTRUCTION_TYPE,
+                PLAYER_ID_INSTRUCTION_TYPE,
                 INSTRUCTION_SEPARATOR,
                 playerId,
                 INSTRUCTION_END

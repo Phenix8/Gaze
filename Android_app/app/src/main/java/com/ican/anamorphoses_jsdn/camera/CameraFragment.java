@@ -68,6 +68,10 @@ public class CameraFragment extends Fragment
 
     private static String detectorName = null;
 
+    public static void setDetectorName(String detectorName) {
+        CameraFragment.detectorName = detectorName;
+    }
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);

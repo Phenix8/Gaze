@@ -5,31 +5,30 @@
 <comment>Created by imglab tool.</comment>
 <images>
   <image file='20170616_093057.jpg'>
-    <box top='106' left='325' width='20' height='19'/>
   </image>
   <image file='20170616_093057_x2.jpg'>
-    <box top='212' left='648' width='41' height='37'/>
   </image>
   <image file='20170616_093057_x4.jpg'>
-    <box top='425' left='1294' width='86' height='69'/>
   </image>
   <image file='20170616_093101.jpg'>
-    <box top='105' left='306' width='27' height='24'/>
   </image>
   <image file='20170616_093101_x2.jpg'>
-    <box top='216' left='618' width='45' height='33'/>
   </image>
   <image file='20170616_093101_x4.jpg'>
-    <box top='433' left='1239' width='80' height='58'/>
   </image>
   <image file='20170616_093105.jpg'>
-    <box top='105' left='312' width='22' height='17'/>
   </image>
   <image file='20170616_093105_x2.jpg'>
-    <box top='211' left='624' width='43' height='32'/>
   </image>
   <image file='20170616_093105_x4.jpg'>
-    <box top='425' left='1247' width='88' height='60'/>
+  </image>
+  <image file='sample1499093137.jpg'>
+  </image>
+  <image file='sample1499093142.jpg'>
+  </image>
+  <image file='sample1499093148.jpg'>
+  </image>
+  <image file='sample1499093152.jpg'>
   </image>
 </images>
 </dataset>

@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,7 @@ public class RoomFinder extends Thread {
                     String[] messages = new String(buffer, 0, packet.getLength(), "UTF-8").split(":");
                     if (messages.length == 2) {
                         if (messages[0].equals(broadcastMessage)) {
-                            rooms.put(packet.getAddress(), new Room(packet.getAddress(), messages[1]));
+                            rooms.put(packet.getAddress(), new Room(packet.getAddress(), URLDecoder.decode(messages[1], "UTF-8")));
                             notifyListeners();
                         }
                     }

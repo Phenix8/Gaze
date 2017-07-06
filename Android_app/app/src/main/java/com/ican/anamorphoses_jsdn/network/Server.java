@@ -1,6 +1,8 @@
 package com.ican.anamorphoses_jsdn.network;
 
 import android.util.Log;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.io.IOException;
@@ -12,8 +14,15 @@ import java.net.SocketTimeoutException;
  * Created by root on 12/04/2017.
  */
 
-public abstract class Server extends Thread
+public abstract class
+Server extends Thread
     implements ClientHandler.ClientHandlerListener {
+
+    public interface ServerStateCallback extends Serializable {
+        void onServerStarted();
+    }
+
+    private ServerStateCallback callback = null;
 
     private static String TAG = "Server";
 
@@ -31,6 +40,11 @@ public abstract class Server extends Thread
         this.roomNotifier = roomNotifier;
         this.tcpPort = tcpPort;
         this.maxPlayer = maxPlayer;
+    }
+
+    public void startListening(ServerStateCallback callback) {
+        this.callback = callback;
+        this.start();
     }
 
     public void stopListening() {
@@ -54,6 +68,10 @@ public abstract class Server extends Thread
 
             while (listening && client.size() < maxPlayer) {
                 try {
+                    if (callback != null) {
+                        callback.onServerStarted();
+                        callback = null;
+                    }
                     Socket socketClient = listeningSocket.accept();
                     Log.d(TAG, "Client connected (" + socketClient.getInetAddress() + ")");
 

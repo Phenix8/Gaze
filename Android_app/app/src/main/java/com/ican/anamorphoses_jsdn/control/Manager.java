@@ -99,7 +99,7 @@ public class Manager extends Server {
     public void onMessageReceived(ClientHandler handler, String message) {
         switch (Protocol.parseInstructionType(message)) {
             case Protocol.CONNECT_INSTRUCTION_TYPE:
-                String name = Protocol.parseInstructionData(message);
+                String name = Protocol.parseConnectInstructionData(Protocol.parseInstructionData(message));
                 String playerId = addPlayer(handler, name);
                 if (playerId == null) {
                     handler.sendMessage(Protocol.buildAlreadyStartedInstruction());

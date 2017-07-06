@@ -31,6 +31,8 @@
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 
+#include <ctime>
+
 struct membuf : std::streambuf
 {
     membuf(char* begin, char* end) {
@@ -165,11 +167,16 @@ jint checkForObjects(JNIEnv *env, jobject obj,
         return -1;
     }
 
+    int newHeight = 480 * zoomLevel;
+    int newWidth = 640 * zoomLevel;
+
     dlib::array2d<unsigned char> rsz_img(480 * zoomLevel, 640 * zoomLevel);
 
     dlib::resize_image(image, rsz_img);
 
-    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](rsz_img);
+    dlib::extract_image_chip(rsz_img, dlib::rectangle(newWidth / 2 - 480, newHeight / 2 - 640, newWidth / 2 + 480, newHeight / 2 + 640), image);
+
+    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](image);
 
     LOGI("Used detectors \"%s\"", cppDetectorName.c_str());
 
@@ -177,7 +184,11 @@ jint checkForObjects(JNIEnv *env, jobject obj,
 
     LOGI("number of detections : %d", dets.size());
 
-    dlib::save_jpeg(rsz_img, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/test.jpg");
+    //char fileName[1024];
+
+    //sprintf(fileName, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/sample%d.jpg", time(NULL));
+
+    //dlib::save_jpeg(image, fileName);
 
     ///storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn.debug/files/
 

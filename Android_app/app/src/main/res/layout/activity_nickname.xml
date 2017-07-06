@@ -5,7 +5,7 @@
     android:id="@+id/activity_nickname"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.anamorphoses_jsdn.NicknameActivity">
+    tools:context="com.ican.anamorphoses_jsdn.activity.NicknameActivity">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -44,28 +44,31 @@
     </FrameLayout>
 
     <!-- Change activity buttons -->
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/changeActivityLayout">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:layout_margin="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
             android:id="@+id/returnImgButton"
             app:srcCompat="@drawable/backyellow" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/nextArrow_marginLeft"
-            android:layout_marginTop="@dimen/nextArrow_marginTop"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@android:color/transparent"
             android:id="@+id/OkButton"
             app:srcCompat="@drawable/backgreen" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

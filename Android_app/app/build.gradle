@@ -33,7 +33,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             externalNativeBuild {
                 cmake {
@@ -49,6 +49,17 @@ android {
             externalNativeBuild {
                 cmake {
                     arguments "-DCMAKE_BUILD_TYPE=DEBUG"
+                }
+            }
+            signingConfig signingConfigs.config
+        }
+        javaDebugOnly {
+            applicationIdSuffix ".debug"
+            debuggable true
+            jniDebuggable false
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=RELEASE"
                 }
             }
             signingConfig signingConfigs.config

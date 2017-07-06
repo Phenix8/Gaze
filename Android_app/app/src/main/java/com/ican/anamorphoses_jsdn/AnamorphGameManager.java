@@ -1,15 +1,11 @@
 package com.ican.anamorphoses_jsdn;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 
+import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
 import com.ican.anamorphoses_jsdn.network.Client;
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Collection;
 import java.util.Random;
 
 /**

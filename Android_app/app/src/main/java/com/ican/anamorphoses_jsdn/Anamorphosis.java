@@ -1,6 +1,6 @@
 package com.ican.anamorphoses_jsdn;
 
-import android.graphics.drawable.Drawable;
+import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
 
 /**
  * Created by Clément on 12/04/2017.
