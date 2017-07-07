@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.network.Common;
-import com.ican.anamorphoses_jsdn.network.Room;
+import com.ican.anamorphoses_jsdn.model.Room;
 import com.ican.anamorphoses_jsdn.network.RoomFinder;
 
 import java.net.InetAddress;

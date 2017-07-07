@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.control;
+package com.ican.anamorphoses_jsdn.model;
 
 
 import java.io.Serializable;

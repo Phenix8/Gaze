@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.ican.anamorphoses_jsdn.R;
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
-import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
+import com.ican.anamorphoses_jsdn.model.Anamorphosis;
 
 import java.io.IOException;
 

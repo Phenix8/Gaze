@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.network.Common;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;

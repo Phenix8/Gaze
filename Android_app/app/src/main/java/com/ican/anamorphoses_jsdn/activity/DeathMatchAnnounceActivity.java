@@ -7,15 +7,11 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.ican.anamorphoses_jsdn.R;
-import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.Common;
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
-import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
+import com.ican.anamorphoses_jsdn.model.Anamorphosis;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by root on 06/07/2017.

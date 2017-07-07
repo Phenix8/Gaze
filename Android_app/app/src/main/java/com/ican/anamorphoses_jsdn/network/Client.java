@@ -2,8 +2,8 @@ package com.ican.anamorphoses_jsdn.network;
 
 import android.util.Log;
 
-import com.ican.anamorphoses_jsdn.control.Player;
-import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
+import com.ican.anamorphoses_jsdn.model.Anamorphosis;
+import com.ican.anamorphoses_jsdn.model.Player;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 public class Client extends Thread implements Serializable {
 

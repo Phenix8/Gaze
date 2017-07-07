@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.ican.anamorphoses_jsdn.control.Player;
+import com.ican.anamorphoses_jsdn.application.GazeApplication;
+import com.ican.anamorphoses_jsdn.model.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.ClientServerSynchronizer;
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
+import com.ican.anamorphoses_jsdn.model.AnamorphDictionary;
 
 import java.util.ArrayList;
 

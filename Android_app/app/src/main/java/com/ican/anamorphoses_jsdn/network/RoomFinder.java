@@ -1,5 +1,7 @@
 package com.ican.anamorphoses_jsdn.network;
 
+import com.ican.anamorphoses_jsdn.model.Room;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,7 +11,6 @@ import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by root on 13/04/2017.

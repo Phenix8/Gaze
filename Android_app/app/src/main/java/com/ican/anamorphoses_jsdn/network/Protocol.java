@@ -1,6 +1,6 @@
 package com.ican.anamorphoses_jsdn.network;
 
-import com.ican.anamorphoses_jsdn.control.Player;
+import com.ican.anamorphoses_jsdn.model.Player;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

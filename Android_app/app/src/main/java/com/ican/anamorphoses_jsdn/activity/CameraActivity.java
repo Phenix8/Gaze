@@ -1,10 +1,7 @@
 package com.ican.anamorphoses_jsdn.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -16,12 +13,9 @@ import android.widget.TextView;
 
 import dlibwrapper.DLibWrapper;
 
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
-import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
+import com.ican.anamorphoses_jsdn.model.Anamorphosis;
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.camera.CameraFragment;
-
-import java.io.IOException;
 
 public class CameraActivity extends GazeActivity
 {

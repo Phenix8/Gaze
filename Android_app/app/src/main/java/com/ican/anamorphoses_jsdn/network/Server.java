@@ -1,11 +1,8 @@
-package com.ican.anamorphoses_jsdn.control;
+package com.ican.anamorphoses_jsdn.network;
 
 import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
-import com.ican.anamorphoses_jsdn.network.ClientHandler;
-import com.ican.anamorphoses_jsdn.network.ServerBase;
-import com.ican.anamorphoses_jsdn.network.Protocol;
-import com.ican.anamorphoses_jsdn.network.RoomNotifier;
+import com.ican.anamorphoses_jsdn.model.AnamorphDictionary;
+import com.ican.anamorphoses_jsdn.model.Player;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,13 +25,15 @@ public class Server extends ServerBase {
 
     private GameState gameState;
 
+    private AnamorphDictionary anamorphDictionnary;
+
     private HashMap<ClientHandler, Player> players = new HashMap<>();
 
     private String chooseMediumAnamorph() {
         return String.format(
                 Locale.ENGLISH,
                 "%d",
-                AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.MEDIUM, false).getId()
+                anamorphDictionnary.getRandom(AnamorphosisDifficulty.MEDIUM, false).getId()
         );
     }
 
@@ -187,8 +186,9 @@ public class Server extends ServerBase {
         }
     }
 
-    public Server(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
+    public Server(RoomNotifier roomNotifier, AnamorphDictionary anamorphDictionary, int tcpPort, int maxPlayer) {
         super(roomNotifier, tcpPort, maxPlayer);
         this.gameState = GameState.LOBBY;
+        this.anamorphDictionnary = anamorphDictionary;
     }
 }

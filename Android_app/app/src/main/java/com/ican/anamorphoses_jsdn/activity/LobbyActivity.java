@@ -18,9 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Button;
 
-import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.R;
-import com.ican.anamorphoses_jsdn.control.Player;
+import com.ican.anamorphoses_jsdn.model.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.ClientServerSynchronizer;
 

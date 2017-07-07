@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
-import com.ican.anamorphoses_jsdn.control.Server;
+import com.ican.anamorphoses_jsdn.network.Server;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;
 import com.ican.anamorphoses_jsdn.network.ServerBase;
 import com.ican.anamorphoses_jsdn.network.Common;

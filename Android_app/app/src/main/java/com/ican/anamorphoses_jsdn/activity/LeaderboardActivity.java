@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.ican.anamorphoses_jsdn.R;
-import com.ican.anamorphoses_jsdn.control.Player;
+import com.ican.anamorphoses_jsdn.model.Player;
 
 import java.util.Collection;
 

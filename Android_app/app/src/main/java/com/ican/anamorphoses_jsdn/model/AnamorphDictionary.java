@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.resource;
+package com.ican.anamorphoses_jsdn.model;
 
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;

@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.network;
+package com.ican.anamorphoses_jsdn.model;
 
 import java.net.InetAddress;
 
