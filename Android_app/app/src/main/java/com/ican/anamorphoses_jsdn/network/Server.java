@@ -1,6 +1,6 @@
 package com.ican.anamorphoses_jsdn.network;
 
-import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
+import com.ican.anamorphoses_jsdn.model.Anamorphosis;
 import com.ican.anamorphoses_jsdn.model.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.model.Player;
 
@@ -33,7 +33,7 @@ public class Server extends ServerBase {
         return String.format(
                 Locale.ENGLISH,
                 "%d",
-                anamorphDictionnary.getRandom(AnamorphosisDifficulty.MEDIUM, false).getId()
+                anamorphDictionnary.getRandom(Anamorphosis.Difficulty.MEDIUM, false).getId()
         );
     }
 

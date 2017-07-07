@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.game;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,11 +6,12 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGameActivity;
 import com.ican.anamorphoses_jsdn.model.Anamorphosis;
 
 import java.io.IOException;
 
-public class AnamorphosisChoiceActivity extends GazeActivity
+public class AnamorphosisChoiceActivity extends CommonGameActivity
         implements View.OnClickListener {
 
     static final int VALIDATE_ANAMORPHOSIS = 1;
@@ -28,13 +29,13 @@ public class AnamorphosisChoiceActivity extends GazeActivity
     private int foundAnamorphosis = 0;
 
     private void chooseRandomAnamorphosis() {
-        easyAnamorphosis = getAnamorphDictionnary().getRandom(AnamorphosisDifficulty.EASY, false);
+        easyAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.EASY, false);
         easyButton.setImageResource(easyAnamorphosis.getLargeDrawableImage());
 
-        mediumAnamorphosis = getAnamorphDictionnary().getRandom(AnamorphosisDifficulty.MEDIUM, false);
+        mediumAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.MEDIUM, false);
         mediumButton.setImageResource(mediumAnamorphosis.getLargeDrawableImage());
 
-        hardAnamorphosis = getAnamorphDictionnary().getRandom(AnamorphosisDifficulty.HARD, false);
+        hardAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.HARD, false);
         hardButton.setImageResource(hardAnamorphosis.getLargeDrawableImage());
     }
 

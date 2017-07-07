@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.menu;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Button;
 
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGazeActivity;
+import com.ican.anamorphoses_jsdn.activity.game.AnamorphosisChoiceActivity;
 import com.ican.anamorphoses_jsdn.model.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.ClientServerSynchronizer;
@@ -28,7 +30,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyActivity extends GazeActivity
+public class LobbyActivity extends CommonGazeActivity
         implements Client.GameEventListener {
 
     private ImageButton returnButton = null;

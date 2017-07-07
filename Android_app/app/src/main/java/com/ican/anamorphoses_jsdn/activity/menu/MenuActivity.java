@@ -1,19 +1,18 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.menu;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGazeActivity;
+import com.ican.anamorphoses_jsdn.activity.game.AnamorphosisChoiceActivity;
 
-import java.net.InetAddress;
-
-public class MenuActivity extends GazeActivity {
+public class MenuActivity extends CommonGazeActivity {
 
     WifiManager wifiManager;
 

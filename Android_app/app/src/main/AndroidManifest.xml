@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         android:name="com.ican.anamorphoses_jsdn.application.GazeApplication">
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.menu.HomeActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,34 +27,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.NicknameActivity"
+            android:name=".activity.menu.NicknameActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.MenuActivity"
+            android:name=".activity.menu.MenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.LobbyActivity"
+            android:name=".activity.menu.LobbyActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.RulesMenuActivity"
+            android:name=".activity.menu.RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.AnamorphosisChoiceActivity"
+            android:name=".activity.game.AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.CameraActivity"
+            android:name=".activity.game.CameraActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.JoinRoomActivity"
+            android:name=".activity.menu.JoinRoomActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.CreateGameActivity"
+            android:name=".activity.menu.CreateGameActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.LoadingActivity"
+            android:name=".activity.menu.LoadingActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.LeaderboardActivity"
+            android:name=".activity.game.LeaderboardActivity"
             android:screenOrientation="landscape" />
 
     </application>

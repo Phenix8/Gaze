@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.menu;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.menu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,8 +8,9 @@ import android.widget.ImageButton;
 import android.widget.EditText;
 
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGazeActivity;
 
-public class NicknameActivity extends GazeActivity {
+public class NicknameActivity extends CommonGazeActivity {
 
     private ImageButton okButton = null;
     private ImageButton returnButton = null;

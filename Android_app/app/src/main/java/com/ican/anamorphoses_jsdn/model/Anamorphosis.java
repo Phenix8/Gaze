@@ -1,7 +1,5 @@
 package com.ican.anamorphoses_jsdn.model;
 
-import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
-
 import java.io.Serializable;
 
 /**
@@ -9,6 +7,13 @@ import java.io.Serializable;
  */
 
 public class Anamorphosis implements Serializable {
+
+    public enum Difficulty
+    {
+        EASY,
+        MEDIUM,
+        HARD
+    }
 
     private static int idCounter = 0;
 
@@ -56,13 +61,13 @@ public class Anamorphosis implements Serializable {
     /**
      * Niveau de difficulté (facile, moyen, difficile)
      */
-    private AnamorphosisDifficulty difficulty;
+    private Difficulty difficulty;
 
-    public void setDifficulty(AnamorphosisDifficulty difficulty) {
+    public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
 
-    public AnamorphosisDifficulty getDifficulty() {
+    public Difficulty getDifficulty() {
         return this.difficulty;
     }
 
@@ -87,7 +92,7 @@ public class Anamorphosis implements Serializable {
      * @param difficulty
      * @param detectorName
      */
-    public Anamorphosis(int drawableImage, int largeDrawableImage, AnamorphosisDifficulty difficulty, String detectorName) {
+    public Anamorphosis(int drawableImage, int largeDrawableImage, Difficulty difficulty, String detectorName) {
         this.id = idCounter++;
         this.drawableImage = drawableImage;
         this.largeDrawableImage = largeDrawableImage;

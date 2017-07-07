@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.menu;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGazeActivity;
 import com.ican.anamorphoses_jsdn.network.Common;
 import com.ican.anamorphoses_jsdn.network.RoomNotifier;
 import android.app.Activity;
@@ -17,7 +18,7 @@ import android.content.DialogInterface;
 
 import java.net.InetAddress;
 
-public class CreateGameActivity extends GazeActivity implements View.OnClickListener {
+public class CreateGameActivity extends CommonGazeActivity implements View.OnClickListener {
 
     Button createButton;
     EditText gameNameField;

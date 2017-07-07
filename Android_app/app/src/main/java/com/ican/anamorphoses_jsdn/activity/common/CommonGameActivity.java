@@ -1,43 +1,19 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.common;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
-import com.ican.anamorphoses_jsdn.application.GazeApplication;
+import com.ican.anamorphoses_jsdn.activity.game.DeathMatchAnnounceActivity;
+import com.ican.anamorphoses_jsdn.activity.game.LeaderboardActivity;
 import com.ican.anamorphoses_jsdn.model.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
-import com.ican.anamorphoses_jsdn.network.ClientServerSynchronizer;
-import com.ican.anamorphoses_jsdn.model.AnamorphDictionary;
 
 import java.util.ArrayList;
 
 /**
- * Created by Greg on 17/06/2017.
+ * Created by root on 07/07/2017.
  */
 
-public class GazeActivity extends AppCompatActivity implements Client.GameEventListener {
-
-    protected Client getGameClient() {
-        return ((GazeApplication) getApplication()).getGameClient();
-    }
-
-    protected void startServer(ClientServerSynchronizer synch, String roomName) {
-        ((GazeApplication) getApplication()).startServer(synch, roomName);
-    }
-
-    protected void showToast(String text, int duration) {
-        Toast.makeText(this, text, duration).show();
-    }
-
-    protected void showToast(String text) {
-        showToast(text, Toast.LENGTH_SHORT);
-    }
-
-    protected AnamorphDictionary getAnamorphDictionnary() {
-        return ((GazeApplication) getApplication()).getAnamorphDictionary();
-    }
-
+public class CommonGameActivity extends CommonGazeActivity implements Client.GameEventListener {
     @Override
     public void onGameEvent(Client.GameEventListener.GameEventType type, Object data) {
         switch (type) {

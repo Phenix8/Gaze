@@ -5,7 +5,7 @@
     android:id="@+id/activity_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.anamorphoses_jsdn.activity.HomeActivity">
+    tools:context="com.ican.anamorphoses_jsdn.activity.menu.HomeActivity">
     <!--
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"

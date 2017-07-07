@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.game;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGameActivity;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGazeActivity;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.Common;
 import com.ican.anamorphoses_jsdn.model.Anamorphosis;
@@ -17,7 +19,7 @@ import java.io.IOException;
  * Created by root on 06/07/2017.
  */
 
-public class DeathMatchAnnounceActivity extends GazeActivity implements Client.GameEventListener {
+public class DeathMatchAnnounceActivity extends CommonGameActivity {
 
     private TextView deathMatchAnnounceText;
 

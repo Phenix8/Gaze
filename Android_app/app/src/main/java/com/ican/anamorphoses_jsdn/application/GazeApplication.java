@@ -39,7 +39,7 @@ public class GazeApplication extends Application {
                 Common.TCP_PORT,
                 4
             );
-        
+
         server.startListening(synch);
     }
 

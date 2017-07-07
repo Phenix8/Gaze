@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.menu;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.ican.anamorphoses_jsdn.R;
-
-import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
 

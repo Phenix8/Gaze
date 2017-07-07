@@ -1,4 +1,4 @@
-package com.ican.anamorphoses_jsdn.activity;
+package com.ican.anamorphoses_jsdn.activity.game;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import dlibwrapper.DLibWrapper;
 
+import com.ican.anamorphoses_jsdn.model.AnamorphosisDifficulty;
+import com.ican.anamorphoses_jsdn.activity.common.CommonGameActivity;
 import com.ican.anamorphoses_jsdn.model.Anamorphosis;
 import com.ican.anamorphoses_jsdn.R;
 import com.ican.anamorphoses_jsdn.camera.CameraFragment;
 
-public class CameraActivity extends GazeActivity
+public class CameraActivity extends CommonGameActivity
 {
 
     private ImageView targetAnamorphImg = null;
