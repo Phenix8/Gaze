@@ -176,8 +176,14 @@ public class LobbyActivity extends CommonGazeActivity
                     startActivity(intent);
                 } else if (t == GameEventType.ERROR_OCCURED) {
                     Log.d("anamorph", "Error occured");
-                    ((Exception) d).printStackTrace();
-                    showError(((Exception) d).getLocalizedMessage());
+                    if (d instanceof Exception) {
+                        ((Exception) d).printStackTrace();
+                        showError(((Exception) d).getLocalizedMessage());
+                    } else if (d instanceof String) {
+                        showToast((String) d);
+                    } else {
+                        showToast("Unknown error");
+                    }
                 }
             }
         });
