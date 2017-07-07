@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Anamorphoses_JsDN</string>
-    <string name="request_permission">Impossible d\'accéder à l\'appareil photo.</string>
-    <string name="camera_error">Configuration non-supportée.</string>
-    <string name="preference_file_key">scoreByNickname</string>
-</resources>

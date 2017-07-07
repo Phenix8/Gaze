@@ -14,6 +14,14 @@ import java.util.ArrayList;
  */
 
 public class CommonGameActivity extends CommonGazeActivity implements Client.GameEventListener {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getGameClient().setGameEventListener(this);
+    }
+
     @Override
     public void onGameEvent(Client.GameEventListener.GameEventType type, Object data) {
         switch (type) {

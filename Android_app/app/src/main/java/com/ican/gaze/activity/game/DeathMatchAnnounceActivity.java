@@ -53,8 +53,6 @@ public class DeathMatchAnnounceActivity extends CommonGameActivity {
         } else {
             deathMatchAnnounceText.setText("Two players are tied.. Please wait while they are separating");
         }
-
-        getGameClient().addGameEventListener(this);
     }
 
     @Override

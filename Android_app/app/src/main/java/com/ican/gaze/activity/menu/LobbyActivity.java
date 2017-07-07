@@ -121,7 +121,7 @@ public class LobbyActivity extends CommonGazeActivity
         });
 
 
-        getGameClient().addGameEventListener(this);
+        getGameClient().setGameEventListener(this);
 
         playerList = (ListView) findViewById(R.id.playerList);
         adapter = new CustomAdapter(this, new ArrayList<Player>());
@@ -174,7 +174,6 @@ public class LobbyActivity extends CommonGazeActivity
                         new Intent(getApplicationContext(),
                             AnamorphosisChoiceActivity.class);
                     startActivity(intent);
-                    getGameClient().removeGameEventListener(self);
                 } else if (t == GameEventType.ERROR_OCCURED) {
                     Log.d("anamorph", "Error occured");
                     ((Exception) d).printStackTrace();
@@ -207,7 +206,6 @@ public class LobbyActivity extends CommonGazeActivity
 
     @Override
     protected void onPause() {
-        getGameClient().removeGameEventListener(this);
 
         super.onPause();
     }

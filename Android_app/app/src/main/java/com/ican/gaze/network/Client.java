@@ -15,10 +15,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Client extends Thread implements Serializable {
 
     private static String TAG = "Client";
+
+    private ReentrantLock mutex = new ReentrantLock();
 
     private Socket socketServer;
     private String playerName;
@@ -28,7 +31,7 @@ public class Client extends Thread implements Serializable {
 
     private boolean connected = false;
 
-    private ArrayList<GameEventListener> listeners = new ArrayList<>();
+    private GameEventListener listener = null;
 
     private String playerId = null;
     private int score = 0;
@@ -119,19 +122,17 @@ public class Client extends Thread implements Serializable {
     public String getRoomName() { return roomName; }
 
     private void notifyListener(GameEventListener.GameEventType type, Object data) {
-        for (GameEventListener listener : listeners) {
-            listener.onGameEvent(type, data);
-        }
+        mutex.lock();
+            if (listener != null) {
+                listener.onGameEvent(type, data);
+            }
+        mutex.unlock();
     }
 
-    public void addGameEventListener(GameEventListener listener) {
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-
-    public void removeGameEventListener(GameEventListener listener) {
-        listeners.remove(listener);
+    public void setGameEventListener(GameEventListener listener) {
+        mutex.lock();
+            this.listener = listener;
+        mutex.unlock();
     }
 
     public boolean isConnected() {

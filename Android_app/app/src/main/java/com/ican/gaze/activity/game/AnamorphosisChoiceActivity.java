@@ -53,8 +53,6 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
         hardButton.setOnClickListener(this);
 
         chooseRandomAnamorphosis();
-
-        getGameClient().addGameEventListener(this);
     }
 
     @Override
