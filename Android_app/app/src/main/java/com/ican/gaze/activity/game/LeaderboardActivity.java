@@ -52,7 +52,8 @@ public class LeaderboardActivity extends AppCompatActivity {
                 break;
             }
             tvPlayerNames[i].setText(p.getName());
-            tvPlayerScores[i].setText(p.getScore());
+            tvPlayerScores[i].setText(String.valueOf(p.getScore()));
+            i++;
         }
     }
 }

@@ -132,9 +132,9 @@ public class CameraActivity extends CommonGameActivity
             public void onClick(View v) {
                 if (HideTargetAnamorphZoom())
                     return;
-                //cameraInstance.checkForAnamorphosis(currentAnamorphosis.getDetectorName());
-                setResult(RESULT_OK);
-                finish();
+                cameraInstance.checkForAnamorphosis(currentAnamorphosis.getDetectorName());
+                //setResult(RESULT_OK);
+                //finish();
             }
         });
     }
