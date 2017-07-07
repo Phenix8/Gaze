@@ -8,13 +8,12 @@ import android.widget.ImageButton;
 import com.ican.gaze.R;
 import com.ican.gaze.activity.common.CommonGameActivity;
 import com.ican.gaze.model.Anamorphosis;
+import com.ican.gaze.network.Common;
 
 import java.io.IOException;
 
 public class AnamorphosisChoiceActivity extends CommonGameActivity
         implements View.OnClickListener {
-
-    static final int VALIDATE_ANAMORPHOSIS = 1;
 
     private ImageButton easyButton = null;
     private ImageButton mediumButton = null;
@@ -29,13 +28,13 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
     private int foundAnamorphosis = 0;
 
     private void chooseRandomAnamorphosis() {
-        easyAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.EASY, false);
+        easyAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.EASY, true);
         easyButton.setImageResource(easyAnamorphosis.getLargeDrawableImage());
 
-        mediumAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.MEDIUM, false);
+        mediumAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.MEDIUM, true);
         mediumButton.setImageResource(mediumAnamorphosis.getLargeDrawableImage());
 
-        hardAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.HARD, false);
+        hardAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.HARD, true);
         hardButton.setImageResource(hardAnamorphosis.getLargeDrawableImage());
     }
 
@@ -77,13 +76,12 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
 
         Intent intent = new Intent(this, CameraActivity.class);
         intent.putExtra("anamorphosis", currentAnamorphosis);
-        startActivityForResult(intent, VALIDATE_ANAMORPHOSIS);
+        startActivityForResult(intent, Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VALIDATE_ANAMORPHOSIS) {
-            chooseRandomAnamorphosis();
+        if (requestCode == Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE) {
             if (resultCode == RESULT_OK) {
                 getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
                 try {
@@ -92,6 +90,7 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
                     e.printStackTrace();
                 }
             }
+            chooseRandomAnamorphosis();
         }
     }
 }

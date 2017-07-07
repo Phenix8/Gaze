@@ -3,6 +3,7 @@ package com.ican.gaze.model;
 import com.ican.gaze.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
  
 public class AnamorphDictionary {
@@ -13,7 +14,9 @@ public class AnamorphDictionary {
 	private ArrayList<Anamorphosis> medium = new ArrayList<>();
 	private ArrayList<Anamorphosis> hard = new ArrayList<>();
 
-	private ArrayList<Anamorphosis> alreadyValidated = new ArrayList<>();
+	private ArrayList<Anamorphosis> alreadyValidatedEasy = new ArrayList<>();
+	private ArrayList<Anamorphosis> alreadyValidatedMedium = new ArrayList<>();
+	private ArrayList<Anamorphosis> alreadyValidatedHard = new ArrayList<>();
 
 	private Random rng = new Random();
 
@@ -62,67 +65,64 @@ public class AnamorphDictionary {
 	}
 
 	public void setAlreadyValidated(Anamorphosis a) {
-		alreadyValidated.add(a);
-	}
-
-	public void clearAlreadyValidated() {
-		alreadyValidated.clear();
-	}
-
-	public Anamorphosis getRandom(Anamorphosis.Difficulty difficulty, boolean notAlreadyValidated) {
-		//Le nombre de fois ou l'on a choisi une anamorphose deja validee.
-		int nbAttempt = 0;
-
-		//La liste d'anamorphose dans laquelle on faire le tirage au sort.
-		//Facile, moyen, difficile ou all.
-		ArrayList<Anamorphosis> usedList = null;
-
-		//On prend l'une des trois listes en fonction de la difficulte demandee.
-		//Si difficulty est null, on choisit une anamorphose sans se soucier de la difficulte
-		//On utilise donc la liste all.
-		switch (difficulty) {
+		switch (a.getDifficulty()) {
 			case EASY:
-				usedList = easy;
+				alreadyValidatedEasy.add(a);
 			break;
 
 			case MEDIUM:
+				alreadyValidatedMedium.add(a);
+			break;
+
+			case HARD:
+				alreadyValidatedHard.add(a);
+			break;
+		}
+	}
+
+	public Anamorphosis getRandom(Anamorphosis.Difficulty difficulty, boolean notAlreadyValidated) {
+		ArrayList<Anamorphosis> usedList;
+		ArrayList<Anamorphosis> usedAlreadyValidatedList;
+
+		switch (difficulty) {
+			case EASY:
 				usedList = easy;
+				usedAlreadyValidatedList = alreadyValidatedEasy;
+			break;
+
+			case MEDIUM:
+				usedList = medium;
+				usedAlreadyValidatedList = alreadyValidatedMedium;
 			break;
 
 			case HARD:
 				usedList = hard;
+				usedAlreadyValidatedList = alreadyValidatedHard;
 			break;
 
 			default:
 				usedList = all;
+				usedAlreadyValidatedList = new ArrayList<Anamorphosis>();
+				usedAlreadyValidatedList.addAll(alreadyValidatedEasy);
+				usedAlreadyValidatedList.addAll(alreadyValidatedMedium);
+				usedAlreadyValidatedList.addAll(alreadyValidatedHard);
 		}
 
-		//On tire un nombre au hasard entre 0 et le nombre d'anamorphose dans la liste.
-		int index = rng.nextInt(usedList.size());
-
-		//Tant que l'on a pas essayé toute les anamorphose de la liste :
-		//C'est a dire quand on aura essaye autant de fois qu'il y a d'anamorphose dans a liste.
-		while (nbAttempt < usedList.size()) {
-
-			//On recupere l'anamorphose correspondant au nombre que l'on vient de tirer au sort.
-			Anamorphosis a = usedList.get(index);
-
-			//Si cette anamorphose n'a pas deja ete validee,
-			//Ou si il n'est pas demande que l'anamorphose n'ai pas deja ete valide
-			//On retourne cette anamorphose.
-			if (!alreadyValidated.contains(a) || !notAlreadyValidated) {
-				return a;
+		if (usedAlreadyValidatedList.size() == usedList.size()) {
+			if (usedList == all) {
+				alreadyValidatedEasy.clear();
+				alreadyValidatedMedium.clear();
+				alreadyValidatedHard.clear();
+			} else {
+				usedAlreadyValidatedList.clear();
 			}
-
-			//Sinon, on essait avec l'anamorphose suivante dans la liste.
-			index = (index + 1) % usedList.size();
-
-			//On incremente le nombre de tentatives
-			nbAttempt++;
 		}
 
-		//Si toutes les anamorphoses de la liste on deja ete validee, on retourne null.
-		return null;
+		ArrayList<Anamorphosis> copy = new ArrayList<>(usedList);
+
+		copy.removeAll(usedAlreadyValidatedList);
+
+		return copy.get(rng.nextInt(copy.size()));
 	}
 
 	public Anamorphosis getById(int id) {
