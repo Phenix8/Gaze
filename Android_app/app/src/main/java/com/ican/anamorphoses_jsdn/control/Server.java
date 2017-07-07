@@ -98,6 +98,10 @@ public class Server extends ServerBase {
 
     @Override
     public void onMessageReceived(ClientHandler handler, String message) {
+        if (message == null) {
+            return;
+        }
+
         switch (Protocol.parseInstructionType(message)) {
             case Protocol.CONNECT_INSTRUCTION_TYPE:
                 String name = Protocol.parseConnectInstructionData(Protocol.parseInstructionData(message));
@@ -151,10 +155,16 @@ public class Server extends ServerBase {
                     if (sortedPlayer.get(0) == sortedPlayer.get(1)) {
                         gameState = GameState.DEATH_MATCH;
                         sendMessageToAll(
-                            Protocol.buildDeathMatchInstruction(
-                                sortedPlayer.get(0).getPlayerId(),
-                                sortedPlayer.get(1).getPlayerId(),
-                                chooseMediumAnamorph()
+                                Protocol.buildDeathMatchInstruction(
+                                        sortedPlayer.get(0).getPlayerId(),
+                                        sortedPlayer.get(1).getPlayerId(),
+                                        chooseMediumAnamorph()
+                                )
+                        );
+                    } else {
+                        sendMessageToAll(
+                            Protocol.buildPlayerListInstruction(
+                                sortedPlayer
                             )
                         );
                     }

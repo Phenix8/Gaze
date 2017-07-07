@@ -38,6 +38,7 @@ public class GazeActivity extends AppCompatActivity implements Client.GameEventL
             case GAME_ENDED:
                 Intent intent = new Intent(this, LeaderboardActivity.class);
                 intent.putExtra("playersList", (ArrayList<Player>)data);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 break;
 
@@ -45,6 +46,7 @@ public class GazeActivity extends AppCompatActivity implements Client.GameEventL
                 String anamorphId = (String) data;
                 Intent intent1 = new Intent(this, DeathMatchAnnounceActivity.class);
                 intent1.putExtra("id", anamorphId);
+                intent1.setFlags(intent1.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent1);
                 break;
 

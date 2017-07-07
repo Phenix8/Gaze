@@ -2,12 +2,10 @@ package com.ican.anamorphoses_jsdn.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.ican.anamorphoses_jsdn.R;
-import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
 
