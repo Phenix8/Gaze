@@ -5,7 +5,7 @@
     android:id="@+id/activity_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.anamorphoses_jsdn.activity.menu.MenuActivity">
+    tools:context="com.ican.gaze.activity.menu.MenuActivity">
 
 
     <ImageButton

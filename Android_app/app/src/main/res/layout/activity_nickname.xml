@@ -5,7 +5,7 @@
     android:id="@+id/activity_nickname"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.anamorphoses_jsdn.activity.menu.NicknameActivity">
+    tools:context="com.ican.gaze.activity.menu.NicknameActivity">
 
     <ImageButton
         android:layout_width="wrap_content"
