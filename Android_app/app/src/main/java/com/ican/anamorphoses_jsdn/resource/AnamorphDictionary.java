@@ -1,65 +1,153 @@
 package com.ican.anamorphoses_jsdn.resource;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import com.ican.anamorphoses_jsdn.R;
+import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
- * Created by root on 12/04/2017.
+ * Created by Clément on 12/04/2017.
  */
 
+ 
+ 
 public class AnamorphDictionary {
 
-    private HashMap<Integer, Anamorph> items = new HashMap<>();
+	private static AnamorphDictionary instance = null;
 
-    public static Bitmap loadImageFromAsset(String fileName, Activity act)
-        throws IOException {
-        InputStream is = act.getAssets().open(fileName);
-        return BitmapFactory.decodeStream(is);
+	private ArrayList<Anamorphosis> all = new ArrayList<>();
+
+	private ArrayList<Anamorphosis> easy = new ArrayList<>();
+	private ArrayList<Anamorphosis> medium = new ArrayList<>();
+	private ArrayList<Anamorphosis> hard = new ArrayList<>();
+
+	private ArrayList<Anamorphosis> alreadyValidated = new ArrayList<>();
+
+	private Random rng = new Random();
+
+	public static AnamorphDictionary getInstance() {
+		if (instance == null) {
+			instance= new AnamorphDictionary();
+		}
+
+		return instance;
+	}
+
+	// Initalisation du dictionnaire d'anamorphose
+	private void loadAnamorphosis()
+    {
+		all.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, AnamorphosisDifficulty.EASY, "triangle.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, AnamorphosisDifficulty.EASY, "carre.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, AnamorphosisDifficulty.EASY, "pentagone.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, AnamorphosisDifficulty.MEDIUM, "sablier2.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, AnamorphosisDifficulty.HARD, "tripik.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, AnamorphosisDifficulty.HARD, "trefle.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_7_s, R.drawable.anamorphosis_7_l, AnamorphosisDifficulty.HARD, "lajesaispas.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_8_s, R.drawable.anamorphosis_8_l, AnamorphosisDifficulty.HARD, "rond.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_9_s, R.drawable.anamorphosis_9_l, AnamorphosisDifficulty.HARD, "3rond.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_10_s, R.drawable.anamorphosis_10_l, AnamorphosisDifficulty.HARD, "nuage.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_11_s, R.drawable.anamorphosis_11_l, AnamorphosisDifficulty.HARD, "nuage2.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_12_s, R.drawable.anamorphosis_12_l, AnamorphosisDifficulty.HARD, "escalier.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_13_s, R.drawable.anamorphosis_13_l, AnamorphosisDifficulty.HARD, "tripentagone.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_14_s, R.drawable.anamorphosis_14_l, AnamorphosisDifficulty.HARD, "choufleur.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_15_s, R.drawable.anamorphosis_15_l, AnamorphosisDifficulty.HARD, "quille.svm"));
+		all.add(new Anamorphosis(R.drawable.anamorphosis_16_s, R.drawable.anamorphosis_16_l, AnamorphosisDifficulty.HARD, "etoile.svm"));
     }
 
-    public static AnamorphDictionary FromAssetFile(String fileName, Activity act)
-        throws IOException, JSONException {
-        InputStream is = act.getAssets().open(fileName);
-        int size = is.available();
-        byte[] buffer = new byte[size];
-        is.read(buffer);
-        is.close();
-        JSONObject json = new JSONObject(new String(buffer, "UTF-8"));
-        JSONArray anamorphs = json.getJSONArray("anamorphoses");
+    private void sortAnamorphosisByDifficulty() {
+		for (Anamorphosis a : all) {
+			switch (a.getDifficulty()) {
+				case EASY:
+					easy.add(a);
+				break;
 
-        AnamorphDictionary result = new AnamorphDictionary();
+				case MEDIUM:
+					medium.add(a);
+				break;
 
-        for (int i=0; i<anamorphs.length(); i++) {
-            JSONObject anamorph = anamorphs.getJSONObject(i);
-            result.add(
-                    new Anamorph(
-                            i,
-                            anamorph.getString("detector"),
-                            loadImageFromAsset(anamorph.getString("image"), act))
-            );
-        }
-
-        return result;
-    }
+				case HARD:
+					hard.add(a);
+				break;
+			}
+		}
+	}
 
     private AnamorphDictionary() {
+		loadAnamorphosis();
+		sortAnamorphosisByDifficulty();
+	}
 
-    }
+	public void setAlreadyValidated(Anamorphosis a) {
+		alreadyValidated.add(a);
+	}
 
-    public Anamorph getById(int id) {
-        return items.get(id);
-    }
+	public void clearAlreadyValidated() {
+		alreadyValidated.clear();
+	}
 
-    private void add(Anamorph a) {
-        items.put(a.getId(), a);
+	public Anamorphosis getRandom(AnamorphosisDifficulty difficulty, boolean notAlreadyValidated) {
+		//Le nombre de fois ou l'on a choisi une anamorphose deja validee.
+		int nbAttempt = 0;
+
+		//La liste d'anamorphose dans laquelle on faire le tirage au sort.
+		//Facile, moyen, difficile ou all.
+		ArrayList<Anamorphosis> usedList = null;
+
+		//On prend l'une des trois listes en fonction de la difficulte demandee.
+		//Si difficulty est null, on choisit une anamorphose sans se soucier de la difficulte
+		//On utilise donc la liste all.
+		switch (difficulty) {
+			case EASY:
+				usedList = easy;
+			break;
+
+			case MEDIUM:
+				usedList = easy;
+			break;
+
+			case HARD:
+				usedList = hard;
+			break;
+
+			default:
+				usedList = all;
+		}
+
+		//On tire un nombre au hasard entre 0 et le nombre d'anamorphose dans la liste.
+		int index = rng.nextInt(usedList.size());
+
+		//Tant que l'on a pas essayé toute les anamorphose de la liste :
+		//C'est a dire quand on aura essaye autant de fois qu'il y a d'anamorphose dans a liste.
+		while (nbAttempt < usedList.size()) {
+
+			//On recupere l'anamorphose correspondant au nombre que l'on vient de tirer au sort.
+			Anamorphosis a = usedList.get(index);
+
+			//Si cette anamorphose n'a pas deja ete validee,
+			//Ou si il n'est pas demande que l'anamorphose n'ai pas deja ete valide
+			//On retourne cette anamorphose.
+			if (!alreadyValidated.contains(a) || !notAlreadyValidated) {
+				return a;
+			}
+
+			//Sinon, on essait avec l'anamorphose suivante dans la liste.
+			index = (index + 1) % usedList.size();
+
+			//On incremente le nombre de tentatives
+			nbAttempt++;
+		}
+
+		//Si toutes les anamorphoses de la liste on deja ete validee, on retourne null.
+		return null;
+	}
+
+	public Anamorphosis getById(int id) {
+        for (Anamorphosis a : all) {
+            if (a.getId() == id) {
+                return a;
+            }
+        }
+        return null;
     }
 }

@@ -2,6 +2,9 @@ package com.ican.anamorphoses_jsdn.network;
 
 import android.util.Log;
 
+import com.ican.anamorphoses_jsdn.control.Player;
+import com.ican.anamorphoses_jsdn.resource.Anamorphosis;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,6 +14,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 public class Client extends Thread implements Serializable {
 
@@ -28,7 +33,11 @@ public class Client extends Thread implements Serializable {
 
     private String playerId = null;
     private int score = 0;
+    private int nbFoundAnamorphosis = 0;
     private boolean lobby = true;
+
+    private List<Player> players = new ArrayList<>();
+    private String roomName = null;
 
     public interface GameEventListener {
         enum GameEventType {
@@ -42,8 +51,7 @@ public class Client extends Thread implements Serializable {
         void onGameEvent(GameEventType type, Object data);
     }
 
-    public void connectServer(String playerName, InetAddress serverAddress)
-        throws IOException {
+    public void connectServer(String playerName, InetAddress serverAddress) {
         this.playerName = playerName;
         this.serverAddress = serverAddress;
         this.connected = true;
@@ -76,20 +84,20 @@ public class Client extends Thread implements Serializable {
         sendInstruction(Protocol.buildReadyInstruction(playerId));
     }
 
-    public void annouceAllFound() throws IOException {
+    private void annouceAllFound() throws IOException {
         sendInstruction(Protocol.buildFinishedInstruction());
     }
 
-    public void incrementScore(int score) {
-        this.score += score;
+    public void setFound(Anamorphosis a) throws IOException {
+        this.score += a.getDifficulty().ordinal() * 10 + 10;
+        this.nbFoundAnamorphosis++;
+        if (nbFoundAnamorphosis >= 4) {
+            annouceAllFound();
+        }
     }
 
     public void startGame() throws IOException {
         sendInstruction(Protocol.buildStartInstruction());
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public void disconnect() {
@@ -105,6 +113,12 @@ public class Client extends Thread implements Serializable {
         } catch (InterruptedException e) {}
     }
 
+    public List<Player> getPlayerList() {
+        return players;
+    }
+
+    public String getRoomName() { return roomName; }
+
     private void notifyListener(GameEventListener.GameEventType type, Object data) {
         for (GameEventListener listener : listeners) {
             listener.onGameEvent(type, data);
@@ -112,7 +126,9 @@ public class Client extends Thread implements Serializable {
     }
 
     public void addGameEventListener(GameEventListener listener) {
-        listeners.add(listener);
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
     }
 
     public void removeGameEventListener(GameEventListener listener) {
@@ -138,16 +154,15 @@ public class Client extends Thread implements Serializable {
 
                 switch (instructionType) {
                     case Protocol.PLAYERS_INSTRUCTION_TYPE:
-                        notifyListener(
-                                lobby ?
-                                    GameEventListener.GameEventType.PLAYER_LIST_CHANGED
-                                :
-                                    GameEventListener.GameEventType.GAME_ENDED,
-                                Protocol.parsePlayerListInstructionData(
-                                        Protocol.parseInstructionData(message)));
+                        players = Protocol.parsePlayerListInstructionData(Protocol.parseInstructionData(message));
+                            if (lobby) {
+                                notifyListener(GameEventListener.GameEventType.PLAYER_LIST_CHANGED, players);
+                            } else {
+                                notifyListener(GameEventListener.GameEventType.GAME_ENDED, players);
+                            }
                     break;
 
-                    case Protocol.PLAYERS_ID_INSTRUCTION_TYPE:
+                    case Protocol.PLAYER_ID_INSTRUCTION_TYPE:
                         this.playerId = Protocol.parseInstructionData(message);
                     break;
 
@@ -183,10 +198,8 @@ public class Client extends Thread implements Serializable {
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            notifyListener(GameEventListener.GameEventType.ERROR_OCCURED, e);
         } finally {
             try {
                 if (socketServer != null) {

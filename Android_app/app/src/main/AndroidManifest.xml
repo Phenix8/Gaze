@@ -15,9 +15,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="com.ican.anamorphoses_jsdn.activity.GazeApplication">
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,46 +27,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NicknameActivity"
+            android:name=".activity.NicknameActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".MenuActivity"
+            android:name=".activity.MenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".LobbyActivity"
+            android:name=".activity.LobbyActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".RulesMenuActivity"
+            android:name=".activity.RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ProfilMenuActivity"
+            android:name=".activity.AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AnamorphosisChoiceActivity"
+            android:name=".activity.CameraActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".CameraActivity"
+            android:name=".activity.JoinRoomActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".JoinRoomActivity"
+            android:name=".activity.CreateGameActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".CreateGameActivity"
+            android:name=".activity.LoadingActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".LoadingActivity"
+            android:name=".activity.LeaderboardActivity"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".LeaderboardActivity"
-            android:screenOrientation="landscape" />
-    <!--    <activity
-            android:name=".DrawActivity"
-            android:screenOrientation="landscape"/>
-            -->
-
-        <service
-            android:name=".GameServerService"
-            android:exported="false" />
 
     </application>
 

@@ -31,6 +31,8 @@
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 
+#include <ctime>
+
 struct membuf : std::streambuf
 {
     membuf(char* begin, char* end) {
@@ -38,7 +40,7 @@ struct membuf : std::streambuf
     }
 };
 
-typedef dlib::scan_fhog_pyramid<dlib::pyramid_down<6> > image_scanner_type;
+typedef dlib::scan_fhog_pyramid< dlib::pyramid_down<6> > image_scanner_type;
 typedef dlib::object_detector<image_scanner_type> Detector;
 
 static std::map<const std::string, Detector> detectors;
@@ -153,7 +155,7 @@ jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detec
 }
 
 jint checkForObjects(JNIEnv *env, jobject obj,
-                     jobject yBuffer, jint width, jint height, jstring detectorName) {
+                     jobject yBuffer, jint width, jint height, jstring detectorName, jint zoomLevel) {
 
     dlib::array2d<unsigned char> image =
             byteBufferToArray2d(env, yBuffer, width, height);
@@ -161,15 +163,36 @@ jint checkForObjects(JNIEnv *env, jobject obj,
     const char *cDetectorName = env->GetStringUTFChars(detectorName, NULL);
     std::string cppDetectorName = std::string(cDetectorName);
 
-    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](image, 0);
+    if (detectors.find(cppDetectorName) == detectors.end()) {
+        return -1;
+    }
+
+    int newHeight = 480 * zoomLevel;
+    int newWidth = 640 * zoomLevel;
+
+    dlib::array2d<unsigned char> rsz_img(480 * zoomLevel, 640 * zoomLevel);
+
+    dlib::resize_image(image, rsz_img);
+
+    dlib::extract_image_chip(rsz_img, dlib::rectangle(newWidth / 2 - 480, newHeight / 2 - 640, newWidth / 2 + 480, newHeight / 2 + 640), image);
+
+    const std::vector<dlib::rectangle> dets = detectors[cppDetectorName](image);
+
+    LOGI("Used detectors \"%s\"", cppDetectorName.c_str());
 
     env->ReleaseStringUTFChars(detectorName, cDetectorName);
 
-    //dlib::save_jpeg(image, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/test.jpg");
+    LOGI("number of detections : %d", dets.size());
+
+    //char fileName[1024];
+
+    //sprintf(fileName, "/storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn/files/sample%d.jpg", time(NULL));
+
+    //dlib::save_jpeg(image, fileName);
 
     ///storage/emulated/0/Android/data/com.ican.anamorphoses_jsdn.debug/files/
 
-    return (dets.size() > 0 ? (jint) 1 : (jint) 0);
+    return (jint) dets.size();
 }
 
 jstring getMessage(JNIEnv *env, jobject obj) {

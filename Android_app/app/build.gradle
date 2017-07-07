@@ -2,7 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-
+        config {
+            keyAlias 'main.c'
+            keyPassword 'main.c'
+            storeFile file('C:/Users/root/Desktop/Anamorphoses_JsDN/APK_Key.jks')
+            storePassword 'main.c'
+        }
     }
 	
     compileSdkVersion 26
@@ -29,13 +34,14 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             externalNativeBuild {
                 cmake {
                     arguments "-DCMAKE_BUILD_TYPE=RELEASE"
                 }
             }
+            signingConfig signingConfigs.config
         }
         debug {
             applicationIdSuffix ".debug"
@@ -46,6 +52,18 @@ android {
                     arguments "-DCMAKE_BUILD_TYPE=DEBUG"
                 }
             }
+            signingConfig signingConfigs.config
+        }
+        javaDebugOnly {
+            applicationIdSuffix ".debug"
+            debuggable true
+            jniDebuggable false
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=RELEASE"
+                }
+            }
+            signingConfig signingConfigs.config
         }
     }
     externalNativeBuild {

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml-stylesheet type='text/xsl' href='image_metadata_stylesheet.xsl'?>
+<dataset>
+<name>imglab dataset</name>
+<comment>Created by imglab tool.</comment>
+<images>
+  <image file='20170616_093147.jpg'>
+    <box top='390' left='211' width='40' height='40'/>
+  </image>
+  <image file='20170616_093151.jpg'>
+    <box top='387' left='216' width='38' height='43'/>
+  </image>
+  <image file='IMG_20170615_114931.jpg'>
+    <box top='281' left='303' width='35' height='37'/>
+  </image>
+  <image file='IMG_20170615_114934.jpg'>
+    <box top='298' left='300' width='39' height='39'/>
+  </image>
+  <image file='IMG_20170615_114938.jpg'>
+    <box top='294' left='299' width='33' height='37'/>
+  </image>
+  <image file='IMG_20170615_114940.jpg'>
+    <box top='286' left='299' width='36' height='38'/>
+  </image>
+  <image file='IMG_20170615_114941.jpg'>
+    <box top='289' left='297' width='34' height='36'/>
+  </image>
+  <image file='IMG_20170615_114943.jpg'>
+    <box top='281' left='293' width='34' height='34'/>
+  </image>
+  <image file='IMG_20170615_114950.jpg'>
+    <box top='284' left='287' width='31' height='35'/>
+  </image>
+  <image file='IMG_20170615_114952.jpg'>
+    <box top='283' left='291' width='33' height='36'/>
+  </image>
+  <image file='IMG_20170615_114953.jpg'>
+    <box top='280' left='293' width='33' height='37'/>
+  </image>
+  <image file='IMG_5352.JPG'>
+    <box top='185' left='239' width='47' height='44'/>
+  </image>
+</images>
+</dataset>

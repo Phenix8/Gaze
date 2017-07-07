@@ -45,13 +45,9 @@ import android.widget.Toast;
 
 import dlibwrapper.DLibWrapper;
 
-import com.ican.anamorphoses_jsdn.CameraActivity;
 import com.ican.anamorphoses_jsdn.R;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,7 +57,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class CameraFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements FragmentCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -69,6 +65,12 @@ public class CameraFragment extends Fragment
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+
+    private static String detectorName = null;
+
+    public static void setDetectorName(String detectorName) {
+        CameraFragment.detectorName = detectorName;
+    }
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -787,7 +789,8 @@ public class CameraFragment extends Fragment
     /**
      * Initiate a still image capture.
      */
-    public void takePicture() {
+    public void checkForAnamorphosis(String detectorName) {
+        this.detectorName = detectorName;
         lockFocus();
     }
 
@@ -857,8 +860,6 @@ public class CameraFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
             };
@@ -905,13 +906,6 @@ public class CameraFragment extends Fragment
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.photo_icon) {
-            takePicture();
-        }
-    }
-
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
@@ -938,6 +932,7 @@ public class CameraFragment extends Fragment
         public interface Callback {
             void onFound();
             void onNotFound();
+            void onError(String message);
         }
 
         private static Callback callback;
@@ -963,10 +958,14 @@ public class CameraFragment extends Fragment
                     return;
                 }
 
-                if (DLibWrapper.getInstance().checkForObjects(mImage, "clef.svm") > 0) {
+                int result = DLibWrapper.getInstance().checkForObjects(mImage, detectorName, 4);
+
+                if (result > 0) {
                     callback.onFound();
-                } else {
+                } else if (result == 0) {
                     callback.onNotFound();
+                } else {
+                    callback.onError("Detector not found !");
                 }
 
             } catch (Exception e) {
@@ -977,16 +976,7 @@ public class CameraFragment extends Fragment
                         .append(":")
                         .append(e.getStackTrace()[0].getLineNumber());
 
-                new AlertDialog.Builder(mActivity)
-                        .setTitle("Error processing image.")
-                        .setMessage(buff.toString())
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                callback.onError(buff.toString());
             } finally {
                 mImage.close();
             }
