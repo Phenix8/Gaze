@@ -48,9 +48,6 @@
             android:name="com.ican.gaze.activity.menu.JoinRoomActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.menu.CreateGameActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.ican.gaze.activity.menu.LoadingActivity"
             android:screenOrientation="landscape" />
         <activity

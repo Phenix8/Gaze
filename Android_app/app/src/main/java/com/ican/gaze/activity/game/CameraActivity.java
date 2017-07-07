@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import dlibwrapper.DLibWrapper;
 
-import com.ican.gaze.model.AnamorphosisDifficulty;
 import com.ican.gaze.activity.common.CommonGameActivity;
 import com.ican.gaze.model.Anamorphosis;
 import com.ican.gaze.R;
@@ -177,11 +176,11 @@ public class CameraActivity extends CommonGameActivity
         targetAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getDrawableImage(), null));
         zoomAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
 
-        if (currentAnamorphosis.getDifficulty() == AnamorphosisDifficulty.HARD) {
+        if (currentAnamorphosis.getDifficulty() == Anamorphosis.Difficulty.HARD) {
             targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_hardanam, null));
             zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choos_hard, null));
         }
-        else if (currentAnamorphosis.getDifficulty() == AnamorphosisDifficulty.MEDIUM) {
+        else if (currentAnamorphosis.getDifficulty() == Anamorphosis.Difficulty.MEDIUM) {
             targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_mediumanam, null));
             zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choose_medium, null));
         }
