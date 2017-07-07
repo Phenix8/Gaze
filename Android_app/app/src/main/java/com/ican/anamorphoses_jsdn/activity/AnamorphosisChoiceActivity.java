@@ -29,13 +29,13 @@ public class AnamorphosisChoiceActivity extends GazeActivity
     private int foundAnamorphosis = 0;
 
     private void chooseRandomAnamorphosis() {
-        easyAnamorphosis = AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.EASY, false);
+        easyAnamorphosis = getAnamorphDictionnary().getRandom(AnamorphosisDifficulty.EASY, false);
         easyButton.setImageResource(easyAnamorphosis.getLargeDrawableImage());
 
-        mediumAnamorphosis = AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.MEDIUM, false);
+        mediumAnamorphosis = getAnamorphDictionnary().getRandom(AnamorphosisDifficulty.MEDIUM, false);
         mediumButton.setImageResource(mediumAnamorphosis.getLargeDrawableImage());
 
-        hardAnamorphosis = AnamorphDictionary.getInstance().getRandom(AnamorphosisDifficulty.HARD, false);
+        hardAnamorphosis = getAnamorphDictionnary().getRandom(AnamorphosisDifficulty.HARD, false);
         hardButton.setImageResource(hardAnamorphosis.getLargeDrawableImage());
     }
 
@@ -85,7 +85,7 @@ public class AnamorphosisChoiceActivity extends GazeActivity
         if (requestCode == VALIDATE_ANAMORPHOSIS) {
             chooseRandomAnamorphosis();
             if (resultCode == RESULT_OK) {
-                AnamorphDictionary.getInstance().setAlreadyValidated(currentAnamorphosis);
+                getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
                 try {
                     getGameClient().setFound(currentAnamorphosis);
                 } catch (IOException e) {

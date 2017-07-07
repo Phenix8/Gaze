@@ -45,7 +45,7 @@ public class DeathMatchAnnounceActivity extends GazeActivity implements Client.G
                         Thread.sleep(3000);
                         Intent intent = new Intent(self, CameraActivity.class);
                         try {
-                            currentAnamorphosis = AnamorphDictionary.getInstance().getById(Integer.parseInt(anamorpId));
+                            currentAnamorphosis = getAnamorphDictionnary().getById(Integer.parseInt(anamorpId));
                             intent.putExtra("anamorphosis", currentAnamorphosis);
                             startActivityForResult(intent, Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE);
                         } catch (NumberFormatException e) {
@@ -65,7 +65,7 @@ public class DeathMatchAnnounceActivity extends GazeActivity implements Client.G
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE) {
             if (resultCode == RESULT_OK) {
-                AnamorphDictionary.getInstance().setAlreadyValidated(currentAnamorphosis);
+                getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
 
                 try {
                     getGameClient().setFound(currentAnamorphosis);

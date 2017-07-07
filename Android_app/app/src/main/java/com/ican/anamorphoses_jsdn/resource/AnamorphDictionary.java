@@ -5,16 +5,8 @@ import com.ican.anamorphoses_jsdn.activity.AnamorphosisDifficulty;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-/**
- * Created by Clément on 12/04/2017.
- */
-
- 
  
 public class AnamorphDictionary {
-
-	private static AnamorphDictionary instance = null;
 
 	private ArrayList<Anamorphosis> all = new ArrayList<>();
 
@@ -25,14 +17,6 @@ public class AnamorphDictionary {
 	private ArrayList<Anamorphosis> alreadyValidated = new ArrayList<>();
 
 	private Random rng = new Random();
-
-	public static AnamorphDictionary getInstance() {
-		if (instance == null) {
-			instance= new AnamorphDictionary();
-		}
-
-		return instance;
-	}
 
 	// Initalisation du dictionnaire d'anamorphose
 	private void loadAnamorphosis()
@@ -73,7 +57,7 @@ public class AnamorphDictionary {
 		}
 	}
 
-    private AnamorphDictionary() {
+    public AnamorphDictionary() {
 		loadAnamorphosis();
 		sortAnamorphosisByDifficulty();
 	}

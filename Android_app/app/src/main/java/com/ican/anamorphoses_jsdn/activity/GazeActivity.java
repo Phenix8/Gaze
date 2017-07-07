@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.ican.anamorphoses_jsdn.control.Player;
 import com.ican.anamorphoses_jsdn.network.Client;
 import com.ican.anamorphoses_jsdn.network.ClientServerSynchronizer;
+import com.ican.anamorphoses_jsdn.resource.AnamorphDictionary;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,10 @@ public class GazeActivity extends AppCompatActivity implements Client.GameEventL
 
     protected void showToast(String text) {
         showToast(text, Toast.LENGTH_SHORT);
+    }
+
+    protected AnamorphDictionary getAnamorphDictionnary() {
+        return ((GazeApplication) getApplication()).getAnamorphDictionary();
     }
 
     @Override
