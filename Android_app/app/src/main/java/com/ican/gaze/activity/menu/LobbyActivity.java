@@ -128,7 +128,7 @@ public class LobbyActivity extends CommonGazeActivity
             getGameClient().connectServer(playerName, serverAddress);
         }
 
-        Button startButton = (Button) findViewById(R.id.startBtn);
+        ImageButton startButton = (ImageButton) findViewById(R.id.startBtn);
         if (serverAddress == null) {
             startButton.setOnClickListener(new View.OnClickListener() {
                 @Override
