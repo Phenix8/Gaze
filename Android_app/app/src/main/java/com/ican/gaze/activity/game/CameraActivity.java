@@ -2,6 +2,7 @@ package com.ican.gaze.activity.game;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -34,9 +35,13 @@ public class CameraActivity extends CommonGameActivity
 
     private Anamorphosis currentAnamorphosis;
 
+    private MediaPlayer sonObturateur;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sonObturateur = MediaPlayer.create(getApplicationContext(), R.raw.obturateur);
 
         currentAnamorphosis = (Anamorphosis) getIntent().getSerializableExtra("anamorphosis");
 
@@ -133,6 +138,7 @@ public class CameraActivity extends CommonGameActivity
             public void onClick(View v) {
                 if (HideTargetAnamorphZoom())
                     return;
+                sonObturateur.start();
                 cameraInstance.checkForAnamorphosis(currentAnamorphosis.getDetectorName());
                 //setResult(RESULT_OK);
                 //finish();

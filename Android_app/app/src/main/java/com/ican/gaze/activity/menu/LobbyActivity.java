@@ -212,7 +212,6 @@ public class LobbyActivity extends CommonGazeActivity
 
     @Override
     protected void onPause() {
-
         super.onPause();
     }
 
