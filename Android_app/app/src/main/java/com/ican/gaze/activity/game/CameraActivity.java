@@ -61,7 +61,7 @@ public class CameraActivity extends CommonGameActivity
                 CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
                     @Override
                     public void onFound() {
-                       setResult(RESULT_OK);
+                        setResult(RESULT_OK);
                         finish();
                     }
 
@@ -82,6 +82,7 @@ public class CameraActivity extends CommonGameActivity
         }
 
         TextView score = (TextView) findViewById(R.id.scoreTxt);
+        score.setText(String.format("Score : %d",getGameClient().getScore()));
 
         // Evénement de clic sur l'annulation d'anamorphose
         abandonImg.setOnClickListener(new View.OnClickListener()

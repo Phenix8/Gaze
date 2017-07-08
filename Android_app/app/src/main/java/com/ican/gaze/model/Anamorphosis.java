@@ -17,6 +17,10 @@ public class Anamorphosis implements Serializable {
 
     private static int idCounter = 0;
 
+    private static int[] values = {
+            2, 4, 7
+    };
+
     /**
      * Identifiant de l'anamorphose (attribué automatiquement)
      */
@@ -83,6 +87,10 @@ public class Anamorphosis implements Serializable {
 
     public void setDetectorName(String detectorName) {
         this.detectorName = detectorName;
+    }
+
+    public int getValue() {
+        return values[difficulty.ordinal()];
     }
 
     /**

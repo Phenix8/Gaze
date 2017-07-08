@@ -91,7 +91,7 @@ public class Client extends Thread implements Serializable {
     }
 
     public void setFound(Anamorphosis a) throws IOException {
-        this.score += a.getDifficulty().ordinal() * 10 + 10;
+        this.score += a.getValue();
         this.nbFoundAnamorphosis++;
         if (nbFoundAnamorphosis >= 4) {
             annouceAllFound();
@@ -120,6 +120,10 @@ public class Client extends Thread implements Serializable {
     }
 
     public String getRoomName() { return roomName; }
+
+    public int getScore() {
+        return this.score;
+    }
 
     private void notifyListener(GameEventListener.GameEventType type, Object data) {
         mutex.lock();
