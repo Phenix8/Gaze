@@ -73,7 +73,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 app:srcCompat="@drawable/room_tips"
                 android:id="@+id/Img_tipsBackground"/>
 
@@ -99,23 +99,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
-                    android:text="Content"
+                    android:text="- Press your name to be ready\n\n- Take anamorphosis\n in the right sens"
                     android:textAlignment="center"
                     android:id="@+id/Txt_TipsContent" />
 
             </LinearLayout>
 
         </RelativeLayout>
-
-
-        <Button
-            android:id="@+id/readyBtn"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="20dp"
-            android:text="Ready" />
 
     </RelativeLayout>
 
@@ -134,16 +124,16 @@
             android:id="@+id/returnImgButton"
             app:srcCompat="@drawable/backred" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/nextArrow_marginLeft"
-            android:layout_marginTop="15dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/readyImgButton"
-            app:srcCompat="@drawable/backgreen" />
-
     </FrameLayout>
 
+    <Button
+        android:id="@+id/startBtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="Start !"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="15dp" />
 
 </RelativeLayout>

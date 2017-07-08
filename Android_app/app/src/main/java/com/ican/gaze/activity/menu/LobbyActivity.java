@@ -1,22 +1,22 @@
 package com.ican.gaze.activity.menu;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Button;
 
 import com.ican.gaze.R;
 import com.ican.gaze.activity.common.CommonGazeActivity;
@@ -33,15 +33,10 @@ import java.util.List;
 public class LobbyActivity extends CommonGazeActivity
         implements Client.GameEventListener {
 
-    private ImageButton returnButton = null;
-    private ImageButton readyButton = null;
-
-    private ListView playerList;
     private ArrayAdapter<Player> adapter;
 
     public static boolean isRoomAdmin;
 
-    private String playerName;
     private InetAddress serverAddress = null;
 
     private class CustomAdapter extends ArrayAdapter<Player> {
@@ -59,8 +54,11 @@ public class LobbyActivity extends CommonGazeActivity
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.lobby_player_list_item, parent, false);
             }
             // Lookup view for data population
-            TextView tvPlayerName = (TextView) convertView.findViewById(R.id.playerName);
-            ImageView ivPlayerReadyState = (ImageView) convertView.findViewById(R.id.playerReadyState);
+            TextView tvPlayerName = convertView.findViewById(R.id.playerName);
+            ImageView ivPlayerReadyState = convertView.findViewById(R.id.playerReadyState);
+            if (player == null) {
+                return convertView;
+            }
             // Populate the data into the template view using the data object
             tvPlayerName.setText(player.getName());
             ivPlayerReadyState
@@ -68,6 +66,18 @@ public class LobbyActivity extends CommonGazeActivity
                     player.isReady() ?
                         R.drawable.room_playerready : R.drawable.room_playernotready);
 
+            if (player.getPlayerId().equals(getGameClient().getPlayerId())){
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            getGameClient().toggleReady();
+                        } catch (IOException e) {
+                            showError(e.getLocalizedMessage());
+                        }
+                    }
+                });
+            }
             // Return the completed view to render on screen
             return convertView;
         }
@@ -85,7 +95,7 @@ public class LobbyActivity extends CommonGazeActivity
         ///////////////////////////
 
         // Evénement de click sur le boutton "Return"
-        returnButton = (ImageButton)findViewById(R.id.returnImgButton);
+        ImageButton returnButton = (ImageButton)findViewById(R.id.returnImgButton);
         returnButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -96,38 +106,13 @@ public class LobbyActivity extends CommonGazeActivity
         }
         });
 
-        readyButton = (ImageButton) findViewById(R.id.readyImgButton);
-        readyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    CheckReadyPlayerStates();
-                    getGameClient().toggleReady();
-                } catch (IOException e) {
-                    showError("A network error occured.");
-                }
-            }
-        });
-
-        ((Button) findViewById(R.id.readyBtn)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    getGameClient().startGame();
-                } catch (IOException e) {
-                    showError(e.getMessage());
-                }
-            }
-        });
-
-
         getGameClient().setGameEventListener(this);
 
-        playerList = (ListView) findViewById(R.id.playerList);
+        ListView playerList = (ListView) findViewById(R.id.playerList);
         adapter = new CustomAdapter(this, new ArrayList<Player>());
         playerList.setAdapter(adapter);
 
-        playerName = getSharedPreferences("main", MODE_PRIVATE).getString("nickname", "unknown player");
+        String playerName = getSharedPreferences("main", MODE_PRIVATE).getString("nickname", "unknown player");
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -135,13 +120,28 @@ public class LobbyActivity extends CommonGazeActivity
         }
 
         if (serverAddress == null) {
-            serverAddress = InetAddress.getLoopbackAddress();
             startServer(
-                new ClientServerSynchronizer(getGameClient(), playerName, serverAddress),
+                new ClientServerSynchronizer(getGameClient(), playerName, InetAddress.getLoopbackAddress()),
                 String.format("Room created by %s", playerName)
             );
         } else {
             getGameClient().connectServer(playerName, serverAddress);
+        }
+
+        Button startButton = (Button) findViewById(R.id.startBtn);
+        if (serverAddress == null) {
+            startButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        getGameClient().startGame();
+                    } catch (IOException e) {
+                        showError(e.getLocalizedMessage());
+                    }
+                }
+            });
+        } else {
+            startButton.setVisibility(View.INVISIBLE);
         }
 
         adapter.addAll(getGameClient().getPlayerList());

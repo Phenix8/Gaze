@@ -125,6 +125,10 @@ public class Client extends Thread implements Serializable {
         return this.score;
     }
 
+    public String getPlayerId() {
+        return this.playerId;
+    }
+
     private void notifyListener(GameEventListener.GameEventType type, Object data) {
         mutex.lock();
             if (listener != null) {
