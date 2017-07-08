@@ -799,6 +799,9 @@ public class CameraFragment extends Fragment
      */
     private void lockFocus() {
         try {
+            if (mCaptureSession == null) {
+                return;
+            }
             // This is how to tell the camera to lock focus.
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_START);
@@ -817,6 +820,10 @@ public class CameraFragment extends Fragment
      */
     private void runPrecaptureSequence() {
         try {
+            if (mCaptureSession == null) {
+                return;
+            }
+
             // This is how to tell the camera to trigger.
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
                     CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START);
@@ -891,6 +898,10 @@ public class CameraFragment extends Fragment
      */
     private void unlockFocus() {
         try {
+            if (mCaptureSession == null) {
+                return;
+            }
+
             // Reset the auto-focus trigger
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
