@@ -5,19 +5,19 @@
 <comment>Created by imglab tool.</comment>
 <images>
   <image file='20170617_172048.jpg'>
-    <box top='205' left='282' width='62' height='60'/>
+    <box top='210' left='283' width='56' height='52'/>
   </image>
   <image file='20170617_172051.jpg'>
-    <box top='210' left='281' width='64' height='59'/>
+    <box top='213' left='285' width='56' height='52'/>
   </image>
   <image file='20170617_172053.jpg'>
-    <box top='209' left='281' width='64' height='63'/>
+    <box top='214' left='285' width='55' height='52'/>
   </image>
   <image file='20170617_172055.jpg'>
-    <box top='207' left='284' width='64' height='63'/>
+    <box top='211' left='289' width='56' height='51'/>
   </image>
   <image file='20170617_172102.jpg'>
-    <box top='208' left='288' width='67' height='63'/>
+    <box top='213' left='293' width='55' height='52'/>
   </image>
 </images>
 </dataset>
