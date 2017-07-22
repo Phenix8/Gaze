@@ -5,13 +5,13 @@
 <comment>Created by imglab tool.</comment>
 <images>
   <image file='20170617_171715.jpg'>
-    <box top='225' left='329' width='38' height='44'/>
+    <box top='231' left='331' width='32' height='28'/>
   </image>
   <image file='20170617_171752.jpg'>
-    <box top='227' left='313' width='26' height='24'/>
+    <box top='231' left='315' width='22' height='17'/>
   </image>
   <image file='20170617_171838.jpg'>
-    <box top='221' left='300' width='26' height='25'/>
+    <box top='223' left='300' width='23' height='19'/>
   </image>
 </images>
 </dataset>
