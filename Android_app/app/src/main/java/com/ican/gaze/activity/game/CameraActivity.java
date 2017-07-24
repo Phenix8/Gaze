@@ -185,19 +185,6 @@ public class CameraActivity extends CommonGameActivity
         targetAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getDrawableImage(), null));
         zoomAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
 
-        if (currentAnamorphosis.getDifficulty() == Anamorphosis.Difficulty.HARD) {
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_hardanam, null));
-            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choos_hard, null));
-        }
-        else if (currentAnamorphosis.getDifficulty() == Anamorphosis.Difficulty.MEDIUM) {
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_mediumanam, null));
-            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choose_medium, null));
-        }
-        else {
-            targetAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_easyanam, null));
-            zoomAnamorphBg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.choose_easy, null));
-        }
-
         zoomAnamorphBg.setVisibility(View.INVISIBLE);
         zoomAnamorphImg.setVisibility(View.INVISIBLE);
     }
