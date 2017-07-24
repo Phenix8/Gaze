@@ -5,7 +5,7 @@
     android:id="@+id/activity_anamorphose_choice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.gaze.activity.AnamorphoseChoiceActivity">
+    tools:context="com.ican.gaze.activity.game.AnamorphosisChoiceActivity">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/choose_easy"
+                        app:srcCompat="@drawable/camera_large_anamorhp_bg"
                         android:background="@android:color/transparent"
                         android:id="@+id/easyImgButton"
                         android:layout_weight="1" >
@@ -106,7 +106,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/choose_medium"
+                        app:srcCompat="@drawable/camera_large_anamorhp_bg"
                         android:background="@android:color/transparent"
                         android:id="@+id/mediumImgButton"
                         android:layout_weight="1" />
@@ -145,7 +145,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/choos_hard"
+                        app:srcCompat="@drawable/camera_large_anamorhp_bg"
                         android:background="@android:color/transparent"
                         android:id="@+id/hardImgButton"
                         android:layout_weight="1" />

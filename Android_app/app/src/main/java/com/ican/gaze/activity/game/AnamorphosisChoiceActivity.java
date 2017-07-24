@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.ican.gaze.R;
 import com.ican.gaze.activity.common.CommonGameActivity;
@@ -27,15 +28,19 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
 
     private int foundAnamorphosis = 0;
 
+    private void setImage(int viewId, int imageId) {
+        ((ImageView) findViewById(viewId)).setImageResource(imageId);
+    }
+
     private void chooseRandomAnamorphosis() {
         easyAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.EASY, true);
-        easyButton.setImageResource(easyAnamorphosis.getLargeDrawableImage());
+        setImage(R.id.anamorphosis_img_1, easyAnamorphosis.getLargeDrawableImage());
 
         mediumAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.MEDIUM, true);
-        mediumButton.setImageResource(mediumAnamorphosis.getLargeDrawableImage());
+        setImage(R.id.anamorphosis_img_2, mediumAnamorphosis.getLargeDrawableImage());
 
         hardAnamorphosis = getAnamorphDictionnary().getRandom(Anamorphosis.Difficulty.HARD, true);
-        hardButton.setImageResource(hardAnamorphosis.getLargeDrawableImage());
+        setImage(R.id.anamorphosis_img_3, hardAnamorphosis.getLargeDrawableImage());
     }
 
     @Override
