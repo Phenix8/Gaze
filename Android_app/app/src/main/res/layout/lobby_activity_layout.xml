@@ -54,61 +54,30 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:translationZ="2dp">
+        android:layout_marginTop="80dp">
 
         <!-- ROOM MEMBERS -->
 
             <ListView
                 android:id="@+id/playerList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.9" />
-
-        <!-- TIPS -->
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="360dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                app:srcCompat="@drawable/room_tips"
-                android:id="@+id/Img_tipsBackground"/>
-
-            <!-- Contenu -->
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:translationZ="3dp"
-                android:gravity="center_horizontal"
-                android:layout_centerHorizontal="true"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Tips"
-                    android:textSize="25dp"
-                    android:textAlignment="center"
-                    android:id="@+id/Txt_TipsTitle"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:text="- Press your name to be ready\n\n- Take anamorphosis\n in the right sens"
-                    android:textAlignment="center"
-                    android:id="@+id/Txt_TipsContent" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
+        <ImageButton
+            android:id="@+id/startBtn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/start_game_button"
+            android:layout_marginBottom="18dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
-
 
     <!-- Change activity buttons -->
     <FrameLayout
@@ -125,16 +94,5 @@
             app:srcCompat="@drawable/backred" />
 
     </FrameLayout>
-
-    <ImageButton
-        android:id="@+id/startBtn"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="17dp"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/start_game_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp" />
 
 </RelativeLayout>
