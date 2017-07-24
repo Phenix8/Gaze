@@ -26,6 +26,8 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
 
     private Anamorphosis currentAnamorphosis;
 
+    private boolean alreadyCanceled = false;
+
     private int foundAnamorphosis = 0;
 
     private void setImage(int viewId, int imageId) {
@@ -79,19 +81,27 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
 
         Intent intent = new Intent(this, CameraActivity.class);
         intent.putExtra("anamorphosis", currentAnamorphosis);
+        intent.putExtra("alreadyCanceled", alreadyCanceled);
         startActivityForResult(intent, Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE) {
-            if (resultCode == RESULT_OK) {
-                getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
-                try {
-                    getGameClient().setFound(currentAnamorphosis);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            switch (resultCode) {
+                case RESULT_OK:
+                    alreadyCanceled = false;
+                    getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
+                    try {
+                        getGameClient().setFound(currentAnamorphosis);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                break;
+
+                case RESULT_CANCELED:
+                    alreadyCanceled = true;
+                break;
             }
             chooseRandomAnamorphosis();
         }

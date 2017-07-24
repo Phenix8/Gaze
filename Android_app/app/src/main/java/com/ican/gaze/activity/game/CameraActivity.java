@@ -19,6 +19,9 @@ import com.ican.gaze.model.Anamorphosis;
 import com.ican.gaze.R;
 import com.ican.gaze.camera.CameraFragment;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class CameraActivity extends CommonGameActivity
 {
 
@@ -89,8 +92,7 @@ public class CameraActivity extends CommonGameActivity
         TextView score = (TextView) findViewById(R.id.scoreTxt);
         score.setText(String.format("Score : %d",getGameClient().getScore()));
 
-        // Evénement de clic sur l'annulation d'anamorphose
-        abandonImg.setOnClickListener(new View.OnClickListener()
+        final View.OnClickListener cancelListener = new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
@@ -109,7 +111,32 @@ public class CameraActivity extends CommonGameActivity
                 builder.setNegativeButton("Non", null);
                 builder.show();
             }
-        });
+        };
+
+        if (getIntent().getBooleanExtra("alreadyCanceled", false)) {
+            Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            abandonImg.setImageResource(R.drawable.camera_cancel);
+                            abandonImg.setOnClickListener(cancelListener);
+                        }
+                    });
+                }
+            }, 30000);
+            abandonImg.setImageResource(R.drawable.camera_cancel_disabled);
+            abandonImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showToast(String.format("Please wait a few seconds..."));
+                }
+            });
+        } else {
+            abandonImg.setOnClickListener(cancelListener);
+        }
 
         // Evénement de clic sur l'anamorphose cible
         targetAnamorphBg.setOnClickListener(new View.OnClickListener()
