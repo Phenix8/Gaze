@@ -69,10 +69,21 @@ public class Client extends Thread implements Serializable {
                 new InputStreamReader(socket.getInputStream()));
     }
 
-    private void sendInstruction(String instruction)
+    private void sendInstruction(final String instruction)
         throws IOException {
-        out.write(String.format("%s\n", instruction));
-        out.flush();
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    out.write(String.format("%s\n", instruction));
+                    out.flush();
+                } catch (IOException e) {
+                    notifyListener(GameEventListener.GameEventType.ERROR_OCCURED, e);
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
     }
 
     private void sendPlayerName()

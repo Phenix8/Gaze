@@ -2,6 +2,7 @@ package com.ican.gaze.network;
 
 import android.util.Log;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
@@ -32,7 +33,7 @@ public class Util {
                     inetAddress = IpAddresses.nextElement();
 
                     if (!inetAddress.isLoopbackAddress() && (singleInterface.getDisplayName()
-                            .contains("wlan0") ||
+                            .contains("wlan0") && !(inetAddress instanceof Inet6Address) ||
                             singleInterface.getDisplayName().contains("eth0") ||
                             singleInterface.getDisplayName().contains("ap0"))) {
 
@@ -60,9 +61,15 @@ public class Util {
             temp = NetworkInterface.getByInetAddress(inetAddr);
             List<InterfaceAddress> addresses = temp.getInterfaceAddresses();
 
-            for (InterfaceAddress inetAddress: addresses)
+            for (InterfaceAddress inetAddress: addresses) {
+                if (inetAddress == null) {
+                    continue;
+                }
 
-                iAddr = inetAddress.getBroadcast();
+                if (!(inetAddress.getAddress() instanceof Inet6Address)) {
+                    iAddr = inetAddress.getBroadcast();
+                }
+            }
             Log.d(TAG, "iAddr=" + iAddr);
             return iAddr;
 
