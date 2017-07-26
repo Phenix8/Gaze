@@ -24,6 +24,10 @@ import java.util.TimerTask;
 
 public class CameraActivity extends CommonGameActivity
 {
+    private static final String[] tips = {
+            "Make sure you have framed the anamorphosis in the center of the screen",
+            "Make sure to take the anamorphosis in the right sens"
+    };
 
     private ImageView targetAnamorphImg = null;
     private ImageView targetAnamorphBg = null;
@@ -39,6 +43,8 @@ public class CameraActivity extends CommonGameActivity
     private Anamorphosis currentAnamorphosis;
 
     private MediaPlayer sonObturateur;
+
+    private int tipIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +75,15 @@ public class CameraActivity extends CommonGameActivity
                 CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
                     @Override
                     public void onFound() {
+                        
                         setResult(RESULT_OK);
                         finish();
                     }
 
                     @Override
                     public void onNotFound() {
-
+                        showToast(tips[tipIndex]);
+                        tipIndex = (tipIndex + 1) % tips.length;
                     }
 
                     @Override
