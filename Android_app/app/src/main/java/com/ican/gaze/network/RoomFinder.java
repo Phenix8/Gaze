@@ -1,11 +1,14 @@
 package com.ican.gaze.network;
 
+import android.net.wifi.WifiManager;
+
 import com.ican.gaze.model.Room;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
@@ -19,6 +22,7 @@ import java.util.HashMap;
 public class RoomFinder extends Thread {
 
     private String broadcastMessage;
+    private InetAddress broadcastAddr;
     private int udpPort;
     private boolean listening;
 
@@ -30,8 +34,9 @@ public class RoomFinder extends Thread {
         void onRoomListChanged(HashMap<InetAddress, Room> roomList);
     }
 
-    public RoomFinder(String broadcastMessage, int udpPort) {
+    public RoomFinder(String broadcastMessage, InetAddress broadcastAddr, int udpPort) {
         this.broadcastMessage = broadcastMessage;
+        this.broadcastAddr = broadcastAddr;
         this.udpPort = udpPort;
     }
 
@@ -77,7 +82,7 @@ public class RoomFinder extends Thread {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
             socket = new DatagramSocket(udpPort);
-            socket.setSoTimeout(100);
+            socket.setSoTimeout(1000);
 
             while (listening) {
                 try {
@@ -92,8 +97,6 @@ public class RoomFinder extends Thread {
                 } catch (SocketTimeoutException e) {
                 }
             }
-        } catch (SocketException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

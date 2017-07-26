@@ -1,12 +1,18 @@
 package com.ican.gaze.network;
 
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import java.math.BigInteger;
+import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -18,65 +24,82 @@ public class Util {
 
     private static String TAG = "network.Util";
 
-    public static InetAddress getIpAddress() {
-        InetAddress inetAddress = null;
-        InetAddress myAddr = null;
+    private static final String IPV6_MCAST_ADDR = "FF02::1";
+    private static final String IPV4_MCAST_ADDR = "224.0.0.1";
 
-        try {
-            for (Enumeration<NetworkInterface> networkInterface = NetworkInterface
-                    .getNetworkInterfaces(); networkInterface.hasMoreElements();) {
-
-                NetworkInterface singleInterface = networkInterface.nextElement();
-
-                for (Enumeration < InetAddress > IpAddresses = singleInterface.getInetAddresses(); IpAddresses
-                        .hasMoreElements();) {
-                    inetAddress = IpAddresses.nextElement();
-
-                    if (!inetAddress.isLoopbackAddress() && (singleInterface.getDisplayName()
-                            .contains("wlan0") && !(inetAddress instanceof Inet6Address) ||
-                            singleInterface.getDisplayName().contains("eth0") ||
-                            singleInterface.getDisplayName().contains("ap0"))) {
-
-                        myAddr = inetAddress;
-                    }
-                }
-            }
-
-        } catch (SocketException ex) {
-            Log.e(TAG, ex.toString());
-        }
-        return myAddr;
+    public static boolean isWifiEnabled(WifiManager manager) {
+        return manager.isWifiEnabled();
     }
 
-    public static InetAddress getBroadcast(InetAddress inetAddr) {
+    public static InetAddress getWifiIpAddress(WifiManager wifiManager) {
+        int ipAddr = wifiManager.getConnectionInfo().getIpAddress();
 
-        NetworkInterface temp;
-        InetAddress iAddr = null;
+        // Convert little-endian to big-endianif needed
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+            ipAddr = Integer.reverseBytes(ipAddr);
+        }
+
+        byte[] ipByteArray = BigInteger.valueOf(ipAddr).toByteArray();
+
+        InetAddress ipAddress;
+        try {
+            ipAddress = InetAddress.getByAddress(ipByteArray);
+            Log.d("Network.Util", ipAddress.toString());
+        } catch (UnknownHostException ex) {
+            Log.e("WIFIIP", "Unable to get host address.");
+            ipAddress = null;
+        }
+
+        return ipAddress;
+    }
+
+    public static InetAddress getMulticastAddr(InetAddress inetAddr) {
 
         if (inetAddr == null) {
             return null;
         }
 
         try {
-            temp = NetworkInterface.getByInetAddress(inetAddr);
-            List<InterfaceAddress> addresses = temp.getInterfaceAddresses();
 
-            for (InterfaceAddress inetAddress: addresses) {
-                if (inetAddress == null) {
-                    continue;
-                }
+            if (inetAddr instanceof Inet6Address) {
+                return InetAddress.getByName(IPV6_MCAST_ADDR);
+            }
 
-                if (!(inetAddress.getAddress() instanceof Inet6Address)) {
-                    iAddr = inetAddress.getBroadcast();
+            if (inetAddr instanceof Inet4Address) {
+                return InetAddress.getByName(IPV4_MCAST_ADDR);
+            }
+        } catch (UnknownHostException e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    public static InetAddress getBroadcastAddr(InetAddress inetAddr) {
+
+        if (inetAddr == null) {
+            return null;
+        }
+
+        if (inetAddr instanceof Inet6Address){
+            return null;
+        }
+
+        try {
+            NetworkInterface ni = NetworkInterface.getByInetAddress(inetAddr);
+
+            if (ni.isLoopback()) {
+                return null;
+            }
+
+            for (InterfaceAddress interfaceAddress : ni.getInterfaceAddresses()) {
+                if (inetAddr.equals(interfaceAddress.getAddress())) {
+                    Log.d("network.util", interfaceAddress.toString());
+                    return interfaceAddress.getBroadcast();
                 }
             }
-            Log.d(TAG, "iAddr=" + iAddr);
-            return iAddr;
-
         } catch (SocketException e) {
-
-            e.printStackTrace();
-            Log.d(TAG, "getBroadcast" + e.getMessage());
+            return null;
         }
         return null;
     }

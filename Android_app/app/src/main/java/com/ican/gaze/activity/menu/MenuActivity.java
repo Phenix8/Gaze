@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import com.ican.gaze.R;
 import com.ican.gaze.activity.common.CommonGazeActivity;
 import com.ican.gaze.activity.game.AnamorphosisChoiceActivity;
+import com.ican.gaze.network.Util;
 
 public class MenuActivity extends CommonGazeActivity {
 
@@ -33,8 +34,9 @@ public class MenuActivity extends CommonGazeActivity {
         debugButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuOptionActivity = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
-                startActivity(menuOptionActivity);
+                Intent intent = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
+                intent.putExtra("debug", true);
+                startActivity(intent);
             }
         });
 
@@ -50,7 +52,7 @@ public class MenuActivity extends CommonGazeActivity {
             @Override
             public void onClick(View v) {
                 if (checkForWifi) {
-                    if (!wifiManager.isWifiEnabled()) {
+                    if (!Util.isWifiEnabled(wifiManager)) {
                         showToast("Pease enable wifi");
                         return;
                     }

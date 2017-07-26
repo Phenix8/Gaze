@@ -26,6 +26,8 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
 
     private Anamorphosis currentAnamorphosis;
 
+    private boolean debugMode = false;
+
     private boolean alreadyCanceled = false;
 
     private int foundAnamorphosis = 0;
@@ -59,6 +61,8 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
         hardButton = (ImageButton) findViewById(R.id.hardImgButton);
         hardButton.setOnClickListener(this);
 
+        debugMode = getIntent().getBooleanExtra("debug", false);
+
         chooseRandomAnamorphosis();
     }
 
@@ -88,20 +92,22 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE) {
-            switch (resultCode) {
-                case RESULT_OK:
-                    alreadyCanceled = false;
-                    getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
-                    try {
-                        getGameClient().setFound(currentAnamorphosis);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                break;
+            if (!debugMode) {
+                switch (resultCode) {
+                    case RESULT_OK:
+                        alreadyCanceled = false;
+                        getAnamorphDictionnary().setAlreadyValidated(currentAnamorphosis);
+                        try {
+                            getGameClient().setFound(currentAnamorphosis);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
 
-                case RESULT_CANCELED:
-                    alreadyCanceled = true;
-                break;
+                    case RESULT_CANCELED:
+                        alreadyCanceled = true;
+                        break;
+                }
             }
             chooseRandomAnamorphosis();
         }
