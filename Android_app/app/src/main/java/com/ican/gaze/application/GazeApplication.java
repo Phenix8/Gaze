@@ -10,6 +10,8 @@ import com.ican.gaze.network.RoomNotifier;
 import com.ican.gaze.network.ServerBase;
 import com.ican.gaze.model.AnamorphDictionary;
 
+import java.net.InetAddress;
+
 /**
  * Created by Greg on 17/06/2017.
  */
@@ -24,7 +26,7 @@ public class GazeApplication extends Application {
         return gameClient;
     }
 
-    public void startServer(ClientServerSynchronizer synch, String roomName) {
+    public void startServer(ClientServerSynchronizer synch, String roomName, InetAddress multicastAddr) {
         if (server != null) {
             return;
         }
@@ -33,7 +35,7 @@ public class GazeApplication extends Application {
             new Server(
                 new RoomNotifier(
                     Common.BROADCAST_MESSAGE,
-                    roomName, Common.UDP_PORT
+                    roomName, multicastAddr, Common.UDP_PORT
                 ),
                 anamorphDictionary,
                 Common.TCP_PORT,

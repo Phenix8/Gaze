@@ -3,6 +3,7 @@ package com.ican.gaze.activity.menu;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.ican.gaze.activity.game.AnamorphosisChoiceActivity;
 import com.ican.gaze.model.Player;
 import com.ican.gaze.network.Client;
 import com.ican.gaze.network.ClientServerSynchronizer;
+import com.ican.gaze.network.Util;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -120,9 +122,24 @@ public class LobbyActivity extends CommonGazeActivity
         }
 
         if (serverAddress == null) {
+            InetAddress broadcastAddr =
+                Util.getBroadcastAddr(
+                    Util.getWifiIpAddress(
+                        (WifiManager) getApplicationContext()
+                            .getSystemService(Context.WIFI_SERVICE)
+                    )
+                );
+
+            if (broadcastAddr == null) {
+                Log.e("LobbyActivity", "Impossible to get the multicast IP.");
+                finish();
+                return;
+            }
+
             startServer(
                 new ClientServerSynchronizer(getGameClient(), playerName, InetAddress.getLoopbackAddress()),
-                String.format("Room created by %s", playerName)
+                String.format("Room created by %s", playerName),
+                broadcastAddr
             );
         } else {
             getGameClient().connectServer(playerName, serverAddress);

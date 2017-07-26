@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.io.Serializable;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 
 /**
  * Created by root on 12/04/2017.
@@ -16,15 +21,17 @@ public class RoomNotifier extends Thread implements Serializable {
 
     private String broadcastMessage;
 
+    private InetAddress broadcastAddr;
     private int udpPort;
 
     private boolean notifying;
 
     private long notifyingInterval = 1000;
 
-    public RoomNotifier(String broadcastMessage, String roomName, int udpPort) {
+    public RoomNotifier(String broadcastMessage, String roomName, InetAddress broadcastAddr, int udpPort) {
         try {
             this.broadcastMessage = String.format("%s:%s\n", broadcastMessage, URLEncoder.encode(roomName, "UTF-8"));
+            this.broadcastAddr = broadcastAddr;
             this.udpPort = udpPort;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -61,7 +68,7 @@ public class RoomNotifier extends Thread implements Serializable {
                     new DatagramPacket(
                         broadcastMessage.getBytes(),
                         broadcastMessage.length(),
-                        Util.getBroadcast(Util.getIpAddress()),
+                        broadcastAddr,
                         udpPort
                     );
 
@@ -71,8 +78,6 @@ public class RoomNotifier extends Thread implements Serializable {
                     Thread.sleep(notifyingInterval);
                 } catch (InterruptedException e) {}
             }
-        } catch (SocketException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

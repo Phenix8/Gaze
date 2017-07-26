@@ -1,6 +1,8 @@
 package com.ican.gaze.activity.menu;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.ican.gaze.R;
 import com.ican.gaze.network.Common;
 import com.ican.gaze.model.Room;
 import com.ican.gaze.network.RoomFinder;
+import com.ican.gaze.network.Util;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ import java.util.HashMap;
 public class JoinRoomActivity extends AppCompatActivity
         implements RoomFinder.RoomListChangeListener, AdapterView.OnItemClickListener {
 
-    RoomFinder finder = new RoomFinder(Common.BROADCAST_MESSAGE, Common.UDP_PORT);
+    RoomFinder finder;
     ListView gameList;
     ArrayAdapter adapter;
     Button joinButton;
@@ -32,6 +35,27 @@ public class JoinRoomActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_game_layout);
+
+        WifiManager wifiManager = (WifiManager) getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
+
+        InetAddress broadcastAddr =
+            Util.getBroadcastAddr(
+                Util.getWifiIpAddress(
+                    wifiManager
+                )
+            );
+
+        if (broadcastAddr == null) {
+            finish();
+            return;
+        }
+
+        finder = new RoomFinder(
+                Common.BROADCAST_MESSAGE,
+                broadcastAddr,
+                Common.UDP_PORT
+        );
 
         gameList = (ListView) findViewById(R.id.gameList);
         adapter = new ArrayAdapter<>(
@@ -43,7 +67,6 @@ public class JoinRoomActivity extends AppCompatActivity
         gameList.setOnItemClickListener(this);
 
         finder.addRoomListChangeListener(this);
-        finder.startListening();
     }
 
     @Override

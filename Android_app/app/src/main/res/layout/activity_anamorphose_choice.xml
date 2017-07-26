@@ -65,22 +65,22 @@
                         app:srcCompat="@drawable/empty_anamorphosis" />
 
                     <ImageButton
+                        android:id="@+id/easyImgButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/camera_large_anamorhp_bg"
+                        android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:id="@+id/easyImgButton"
-                        android:layout_weight="1" >
-                    </ImageButton>
+                        app:srcCompat="@drawable/camera_large_anamorhp_bg"></ImageButton>
 
                 </RelativeLayout>
 
-      <!--          <TextView
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Easy"
-                    android:layout_gravity="center"/>
-       -->
+                    android:text="Easy\n2 points"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             </LinearLayout>
 
@@ -113,12 +113,13 @@
 
                 </RelativeLayout>
 
-        <!--        <TextView
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Medium"
-                    android:layout_gravity="center"/>
-        -->
+                    android:text="Medium\n4 points"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             </LinearLayout>
 
@@ -152,12 +153,13 @@
 
                 </RelativeLayout>
 
-        <!--       <TextView
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hard"
-                    android:layout_gravity="center"/>
-            -->
+                    android:text="Hard\n7 points"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             </LinearLayout>
 

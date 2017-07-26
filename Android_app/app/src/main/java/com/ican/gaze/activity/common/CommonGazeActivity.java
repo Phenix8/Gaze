@@ -8,6 +8,8 @@ import com.ican.gaze.network.Client;
 import com.ican.gaze.network.ClientServerSynchronizer;
 import com.ican.gaze.model.AnamorphDictionary;
 
+import java.net.InetAddress;
+
 /**
  * Created by Greg on 17/06/2017.
  */
@@ -18,8 +20,8 @@ public class CommonGazeActivity extends AppCompatActivity {
         return ((GazeApplication) getApplication()).getGameClient();
     }
 
-    protected void startServer(ClientServerSynchronizer synch, String roomName) {
-        ((GazeApplication) getApplication()).startServer(synch, roomName);
+    protected void startServer(ClientServerSynchronizer synch, String roomName, InetAddress multicastAddr) {
+        ((GazeApplication) getApplication()).startServer(synch, roomName, multicastAddr);
     }
 
     protected void showToast(String text, int duration) {
