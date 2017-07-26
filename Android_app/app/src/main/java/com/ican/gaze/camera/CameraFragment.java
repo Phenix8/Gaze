@@ -10,9 +10,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -21,9 +23,11 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureFailure;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
+import android.hardware.camera2.params.MeteringRectangle;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
@@ -118,6 +122,12 @@ public class CameraFragment extends Fragment
      * Max preview height that is guaranteed by Camera2 API
      */
     private static final int MAX_PREVIEW_HEIGHT = 1080;
+
+    private Rect sensorArraySize;
+
+    private boolean mManualFocusEngaged = false;
+
+    private boolean isMeteringAreaAFSupported;
 
     private void showMessage(String title, String message) {
         new AlertDialog.Builder(getActivity())
@@ -601,6 +611,10 @@ public class CameraFragment extends Fragment
                 mFlashSupported = available == null ? false : available;
 
                 mCameraId = cameraId;
+
+                sensorArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
+                isMeteringAreaAFSupported = characteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF) >= 1;
+
                 return true;
             }
         } catch (CameraAccessException e) {
@@ -792,6 +806,79 @@ public class CameraFragment extends Fragment
     public void checkForAnamorphosis(String detectorName) {
         this.detectorName = detectorName;
         lockFocus();
+    }
+
+    public void setFocusPoint(float x, float y) {
+        if (mManualFocusEngaged) {
+            Log.d(TAG, "Manual focus already engaged");
+            return;
+        }
+
+        int xReal = (int) (x * sensorArraySize.width());
+        int yReal = (int) (y * sensorArraySize.height());
+
+        Log.d("Camera", String.format("Focusing point (%d, %d)", xReal, yReal));
+
+        MeteringRectangle focusAreaTouch =
+            new MeteringRectangle(
+                Math.max(xReal - 15,  0),
+                Math.max(yReal - 15, 0),
+                30,
+                30,
+                MeteringRectangle.METERING_WEIGHT_MAX - 1
+            );
+
+        CameraCaptureSession.CaptureCallback captureCallbackHandler = new CameraCaptureSession.CaptureCallback() {
+            @Override
+            public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
+                super.onCaptureCompleted(session, request, result);
+                mManualFocusEngaged = false;
+
+                if (request.getTag() == "FOCUS_TAG") {
+                    //the focus trigger is complete -
+                    //resume repeating (preview surface will get frames), clear AF trigger
+                    try {
+                        mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, null);
+                        mCaptureSession.setRepeatingRequest(mPreviewRequestBuilder.build(), null, null);
+                        mManualFocusEngaged = false;
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCaptureFailed(CameraCaptureSession session, CaptureRequest request, CaptureFailure failure) {
+                super.onCaptureFailed(session, request, failure);
+                Log.e(TAG, "Manual AF failure: " + failure);
+                mManualFocusEngaged = false;
+            }
+        };
+
+        try {
+            //first stop the existing repeating request
+            mCaptureSession.stopRepeating();
+
+            //cancel any existing AF trigger (repeated touches, etc.)
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_OFF);
+            mCaptureSession.capture(mPreviewRequestBuilder.build(), captureCallbackHandler, mBackgroundHandler);
+
+            //Now add a new AF trigger with focus region
+            if (isMeteringAreaAFSupported) {
+                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_REGIONS, new MeteringRectangle[]{focusAreaTouch});
+            }
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_AUTO);
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START);
+            mPreviewRequestBuilder.setTag("FOCUS_TAG"); //we'll capture this later for resuming the preview
+
+            //then we ask for a single request (not repeating!)
+            mCaptureSession.capture(mPreviewRequestBuilder.build(), captureCallbackHandler, mBackgroundHandler);
+            mManualFocusEngaged = true;
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
