@@ -2,6 +2,7 @@ package com.ican.gaze.activity.game;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import dlibwrapper.DLibWrapper;
 
@@ -37,6 +39,7 @@ public class CameraActivity extends CommonGameActivity
     private ImageButton abandonImg = null;
     private ImageButton cameraImg = null;
     private ImageButton zoomAnamorphBg = null;
+    private ImageButton cameraGrid = null;
 
     private CameraFragment cameraInstance = null;
 
@@ -63,6 +66,9 @@ public class CameraActivity extends CommonGameActivity
 
             setContentView(R.layout.activity_camera);
 
+            cameraGrid = (ImageButton) findViewById(R.id.camera_background);
+            cameraGrid.setImageResource(R.drawable.camera);
+
             setTargetAnamorphImg();
             setToolImages();
 
@@ -73,16 +79,39 @@ public class CameraActivity extends CommonGameActivity
                         .commit();
 
                 CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
-                    @Override
-                    public void onFound() {
-                        
+                        @Override
+                        public void onFound() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cameraGrid.setImageResource(R.drawable.camera_right);
+                            }
+                        });
                         setResult(RESULT_OK);
                         finish();
                     }
 
                     @Override
                     public void onNotFound() {
-                        showToast(tips[tipIndex]);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cameraGrid.setImageResource(R.drawable.camera_wrong);
+                            }
+                        });
+                        Timer t = new Timer();
+                        t.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cameraGrid.setImageResource(R.drawable.camera);
+                                    }
+                                });
+                            }
+                        }, 1000);
+                        showToast(tips[tipIndex], Toast.LENGTH_LONG);
                         tipIndex = (tipIndex + 1) % tips.length;
                     }
 
