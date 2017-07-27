@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/camera_pictureicon"/>
+            app:srcCompat="@drawable/camera_pictureicon" />
 
     </FrameLayout>
 

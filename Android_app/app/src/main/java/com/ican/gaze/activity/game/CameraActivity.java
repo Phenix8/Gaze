@@ -9,6 +9,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -123,23 +124,6 @@ public class CameraActivity extends CommonGameActivity
                 });
             }
 
-            cameraGrid.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    final int actionMasked = motionEvent.getActionMasked();
-                    if (actionMasked != MotionEvent.ACTION_DOWN) {
-                        return false;
-                    }
-
-                    float x = motionEvent.getX() / (float) view.getWidth();
-                    float y = motionEvent.getY() / (float) view.getHeight();
-                    Log.d("Camera", String.format("Touched point (%f, %f)", x, y));
-
-                    cameraInstance.setFocusPoint(x, y);
-
-                    return true;
-                }
-            });
         } catch (Exception e) {
             showMessage("Une erreure est survenue", e.getLocalizedMessage());
         }
@@ -215,15 +199,39 @@ public class CameraActivity extends CommonGameActivity
             public void onClick(View v) { HideTargetAnamorphZoom();  }
         });
 
-        cameraImg.setOnClickListener(new View.OnClickListener() {
+        cameraImg.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int actionMasked = motionEvent.getActionMasked();
+                if (actionMasked != MotionEvent.ACTION_DOWN) {
+                    return true;
+                }
                 if (HideTargetAnamorphZoom())
-                    return;
+                    return true;
                 sonObturateur.start();
                 cameraInstance.checkForAnamorphosis(currentAnamorphosis.getDetectorName());
-                //setResult(RESULT_OK);
-                //finish();
+                return true;
+            }
+        });
+
+        cameraGrid.setClickable(false);
+        cameraGrid.setFocusable(false);
+
+        findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int actionMasked = motionEvent.getActionMasked();
+                if (actionMasked != MotionEvent.ACTION_DOWN) {
+                    return false;
+                }
+
+                float x = motionEvent.getX() / (float) view.getWidth();
+                float y = motionEvent.getY() / (float) view.getHeight();
+                Log.d("Camera", String.format("Touched point (%f, %f)", x, y));
+
+                cameraInstance.setFocusPoint(x, y);
+
+                return false;
             }
         });
     }
