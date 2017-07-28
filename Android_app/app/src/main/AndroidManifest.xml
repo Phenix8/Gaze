@@ -11,14 +11,14 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
+        android:name=".application.GazeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.ican.gaze.application.GazeApplication">
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.ican.gaze.activity.menu.HomeActivity"
+            android:name=".activity.menu.HomeActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,33 +27,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ican.gaze.activity.menu.NicknameActivity"
+            android:name=".activity.menu.NicknameActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.menu.MenuActivity"
+            android:name=".activity.menu.MenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.menu.LobbyActivity"
+            android:name=".activity.menu.LobbyActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.menu.RulesMenuActivity"
+            android:name=".activity.menu.RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.game.AnamorphosisChoiceActivity"
+            android:name=".activity.game.AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.game.CameraActivity"
+            android:name=".activity.game.CameraActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.menu.JoinRoomActivity"
+            android:name=".activity.menu.JoinRoomActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.menu.LoadingActivity"
+            android:name=".activity.menu.LoadingActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.ican.gaze.activity.game.LeaderboardActivity"
+            android:name=".activity.game.LeaderboardActivity"
             android:screenOrientation="landscape" />
-
+        <activity
+            android:name=".activity.test.TestCamera"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

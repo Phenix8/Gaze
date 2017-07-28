@@ -9,12 +9,12 @@ android {
             storePassword 'main.c'
         }
     }
-	
+
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.ican.anamorphoses_jsdn"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 8
         versionName "0.8"
@@ -82,5 +82,6 @@ dependencies {
     compile 'com.android.support:support-v13:26.0.0-alpha1'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     testCompile 'junit:junit:4.12'
 }

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.ican.gaze.R;
 import com.ican.gaze.activity.common.CommonGameActivity;
+import com.ican.gaze.activity.test.TestCamera;
 import com.ican.gaze.model.Anamorphosis;
 import com.ican.gaze.network.Common;
 
@@ -83,7 +84,7 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
             currentAnamorphosis = hardAnamorphosis;
         }
 
-        Intent intent = new Intent(this, CameraActivity.class);
+        Intent intent = new Intent(this, TestCamera.class);
         intent.putExtra("anamorphosis", currentAnamorphosis);
         intent.putExtra("alreadyCanceled", alreadyCanceled);
         startActivityForResult(intent, Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE);
