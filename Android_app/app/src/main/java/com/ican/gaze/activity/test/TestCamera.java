@@ -3,6 +3,7 @@ package com.ican.gaze.activity.test;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
@@ -145,17 +146,16 @@ public class TestCamera extends CommonGameActivity
         checkForAlreadyCanceledState();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-
         cameraProcessor.start(this, textureView);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         cameraProcessor.stop();
     }
 }

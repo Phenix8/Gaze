@@ -108,6 +108,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
         while (!joined) {
             try{
                 handlerThread.join();
+                joined = true;
             } catch (InterruptedException e) {}
         }
         handlerThread = null;
@@ -162,6 +163,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
         float scale = Math.max(
                 (float) viewHeight / optimalSize.getHeight(),
                 (float) viewWidth / optimalSize.getWidth());
+
         matrix.postScale(scale, scale, centerX, centerY);
         matrix.postRotate(270, centerX, centerY);
 
@@ -249,8 +251,12 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                     Collections.max(sizes, new CompareSizesByArea())
                 );
 
-                textureView.setAspectRatio(optimalSize.getWidth(), optimalSize.getHeight());
+                Log.d("CameraProcessor", String.format("preview size : %dx%d", optimalSize.getWidth(), optimalSize.getHeight()));
+                Log.d("CameraProcessor", String.format("texture size size : %dx%d", textureView.getWidth(), textureView.getHeight()));
+
                 textureView.getSurfaceTexture().setDefaultBufferSize(optimalSize.getWidth(), optimalSize.getHeight());
+                textureView.setAspectRatio(optimalSize.getWidth(), optimalSize.getHeight());
+
                 imageReader = ImageReader.newInstance(640, 480, ImageFormat.YUV_420_888, 2);
 
                 return cameraId;
@@ -362,6 +368,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        //stop();
         return false;
     }
 
