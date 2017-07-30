@@ -404,11 +404,12 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                                 CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                         captureSession.setRepeatingRequest(requestBuilder.build(), null, null);
                         Log.d(TAG, "Focusing camera manually : restarted preview");
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    } finally {
                         unlockCamera();
                         Log.d(TAG, "Focusing camera manually : unlocked camera");
                         Log.d(TAG, "Focusing camera manually : done");
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
                     }
                 }
             }
