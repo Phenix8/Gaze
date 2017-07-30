@@ -165,14 +165,6 @@ public class LobbyActivity extends CommonGazeActivity
         adapter.notifyDataSetChanged();
     }
 
-    private void showError(String message) {
-        new AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage(message)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-
     @Override
     public void onGameEvent(GameEventType type, Object data) {
         final GameEventType t = type;

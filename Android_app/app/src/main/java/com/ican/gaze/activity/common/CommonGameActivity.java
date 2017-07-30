@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.ican.gaze.activity.game.DeathMatchAnnounceActivity;
 import com.ican.gaze.activity.game.LeaderboardActivity;
+import com.ican.gaze.activity.menu.MenuActivity;
 import com.ican.gaze.model.Player;
 import com.ican.gaze.network.Client;
 
@@ -42,7 +43,9 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
 
             case ERROR_OCCURED:
                 Exception e = (Exception) data;
+                showError(e.getLocalizedMessage());
                 e.printStackTrace();
+                startActivity(new Intent(getApplicationContext(), MenuActivity.class));
                 break;
         }
     }

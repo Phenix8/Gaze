@@ -303,6 +303,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
+            errorHandler.onError("Access to camera denied, please check application's permissions");
             return;
         }
 
@@ -371,6 +372,12 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
      * @param y Coordinate of the point between 0 and 1
      */
     public void focusOnPoint(float x, float y) {
+
+        //If capture session has not been created
+        //(Example : access denied to camera
+        if (captureSession == null) {
+            return;
+        }
 
         Log.d(TAG, "Focusing camera manually...");
         lockCamera();

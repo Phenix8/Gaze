@@ -30,14 +30,6 @@ public class TestCamera extends CommonGameActivity
 
     private CameraProcessor cameraProcessor = new CameraProcessor(this);
 
-    private void showError(String message) {
-        new AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage(message)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-
     private void loadComponents() {
         cancelImg = (ImageView) findViewById(R.id.camera_act_cancel_img);
         cancelImg.setOnClickListener(this);
@@ -137,6 +129,11 @@ public class TestCamera extends CommonGameActivity
         }
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     @Override

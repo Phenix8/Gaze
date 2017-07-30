@@ -1,5 +1,6 @@
 package com.ican.gaze.activity.common;
 
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -34,5 +35,20 @@ public class CommonGazeActivity extends AppCompatActivity {
 
     protected AnamorphDictionary getAnamorphDictionnary() {
         return ((GazeApplication) getApplication()).getAnamorphDictionary();
+    }
+
+    protected void showError(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    protected void showInfo(String message) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 }
