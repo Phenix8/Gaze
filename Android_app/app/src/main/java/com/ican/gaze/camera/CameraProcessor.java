@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -13,7 +14,11 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureFailure;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.TotalCaptureResult;
+import android.hardware.camera2.params.MeteringRectangle;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
 import android.os.Handler;
@@ -40,6 +45,8 @@ import java.util.concurrent.Semaphore;
 
 public class CameraProcessor implements TextureView.SurfaceTextureListener {
 
+    private static final String TAG = "CameraProcessor";
+
     static class CompareSizesByArea implements Comparator<Size> {
 
         @Override
@@ -65,11 +72,13 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
 
     private CameraDevice camera;
     private CameraCaptureSession captureSession;
-    private CaptureRequest previewCaptureRequest;
+    private CaptureRequest.Builder requestBuilder;
 
     private Semaphore cameraOpenCloseLock = new Semaphore(1);
 
     private Size optimalSize = null;
+    private Rect sensorArraySize;
+    private boolean isMeteringAreaAFSupported;
 
     private CameraDevice.StateCallback cameraStateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -81,7 +90,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                 errorHandler.onError("Error configuring camera");
                 e.printStackTrace();
             } finally {
-                cameraOpenCloseLock.release();
+                unlockCamera();
             }
         }
 
@@ -176,7 +185,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
 
     private void createCaptureSession(CameraDevice cameraDevice) throws CameraAccessException {
 
-        final CaptureRequest.Builder requestBuilder =
+        requestBuilder =
                 cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
 
         Surface surface = new Surface(textureView.getSurfaceTexture());
@@ -194,8 +203,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                     requestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                             CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
 
-                    previewCaptureRequest = requestBuilder.build();
-                    captureSession.setRepeatingRequest(previewCaptureRequest,
+                    captureSession.setRepeatingRequest(requestBuilder.build(),
                             captureCallback, handler);
                 } catch (CameraAccessException e) {
                     errorHandler.onError("An error occured while configuring preview.");
@@ -251,18 +259,35 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                     Collections.max(sizes, new CompareSizesByArea())
                 );
 
-                Log.d("CameraProcessor", String.format("preview size : %dx%d", optimalSize.getWidth(), optimalSize.getHeight()));
-                Log.d("CameraProcessor", String.format("texture size size : %dx%d", textureView.getWidth(), textureView.getHeight()));
+                Log.d(TAG, String.format("preview size : %dx%d", optimalSize.getWidth(), optimalSize.getHeight()));
+                Log.d(TAG, String.format("texture size size : %dx%d", textureView.getWidth(), textureView.getHeight()));
 
                 textureView.getSurfaceTexture().setDefaultBufferSize(optimalSize.getWidth(), optimalSize.getHeight());
                 textureView.setAspectRatio(optimalSize.getWidth(), optimalSize.getHeight());
 
                 imageReader = ImageReader.newInstance(640, 480, ImageFormat.YUV_420_888, 2);
 
+                sensorArraySize = cameraInfo.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
+                isMeteringAreaAFSupported = cameraInfo.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF) >= 1;
+
                 return cameraId;
             }
         }
         return null;
+    }
+
+    private void lockCamera() {
+        boolean acquired = false;
+        while (!acquired) {
+            try {
+                cameraOpenCloseLock.acquire();
+                acquired = true;
+            } catch (InterruptedException e) {}
+        }
+    }
+
+    private void unlockCamera() {
+        cameraOpenCloseLock.release();
     }
 
     private void openCamera(Context context) throws CameraAccessException {
@@ -288,13 +313,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
             }
         }, handler);
 
-        boolean acquired = false;
-        while (!acquired) {
-            try {
-                cameraOpenCloseLock.acquire();
-                acquired = true;
-            } catch (InterruptedException e) {}
-        }
+        lockCamera();
         cameraManager.openCamera(cameraId, cameraStateCallback, handler);
     }
 
@@ -344,6 +363,89 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
     public void stop() {
         closeCamera();
         stopBackgroundHandler();
+    }
+
+    /**
+     * Tell the camera to focus on the given point.
+     * @param x Coordinate of the point between 0 and 1
+     * @param y Coordinate of the point between 0 and 1
+     */
+    public void focusOnPoint(float x, float y) {
+
+        Log.d(TAG, "Focusing camera manually...");
+        lockCamera();
+        Log.d(TAG, "Focusing camera manually : locked camera");
+
+        int xReal = (int) (x * sensorArraySize.width());
+        int yReal = (int) (y * sensorArraySize.height());
+
+        Log.d(TAG, String.format("Focusing point (%d, %d) on sensor", xReal, yReal));
+
+        MeteringRectangle focusAreaTouch =
+                new MeteringRectangle(
+                        Math.max(xReal - 15,  0),
+                        Math.max(yReal - 15, 0),
+                        30,
+                        30,
+                        MeteringRectangle.METERING_WEIGHT_MAX - 1
+                );
+
+        CameraCaptureSession.CaptureCallback captureCallbackHandler = new CameraCaptureSession.CaptureCallback() {
+            @Override
+            public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
+                super.onCaptureCompleted(session, request, result);
+
+                if (request.getTag() == "FOCUS_TAG") {
+                    //the focus trigger is complete -
+                    //resume repeating (preview surface will get frames), clear AF trigger
+                    try {
+                        requestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, null);
+                        requestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                        captureSession.setRepeatingRequest(requestBuilder.build(), null, null);
+                        Log.d(TAG, "Focusing camera manually : restarted preview");
+                        unlockCamera();
+                        Log.d(TAG, "Focusing camera manually : unlocked camera");
+                        Log.d(TAG, "Focusing camera manually : done");
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCaptureFailed(CameraCaptureSession session, CaptureRequest request, CaptureFailure failure) {
+                super.onCaptureFailed(session, request, failure);
+                Log.e(TAG, "Manual AF failure: " + failure);
+                unlockCamera();
+            }
+        };
+
+        try {
+
+            Log.d(TAG, "Focusing camera manually : stopping preview");
+            captureSession.stopRepeating();
+
+            requestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
+            requestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_OFF);
+            captureSession.capture(requestBuilder.build(), captureCallbackHandler, handler);
+            //Now add a new AF trigger with focus region
+            if (isMeteringAreaAFSupported) {
+                requestBuilder.set(CaptureRequest.CONTROL_AF_REGIONS, new MeteringRectangle[]{focusAreaTouch});
+            }
+
+            requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
+            requestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_AUTO);
+            requestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START);
+            requestBuilder.setTag("FOCUS_TAG"); //we'll capture this later for resuming the preview
+
+            //then we ask for a single request (not repeating!)
+            Log.d(TAG, "Focusing camera manually : sensor is moving");
+            captureSession.capture(requestBuilder.build(), captureCallbackHandler, handler);
+        } catch (CameraAccessException e) {
+            unlockCamera();
+            e.printStackTrace();
+        }
     }
 
     public CameraProcessor(CameraErrorHandler errorHandler) {

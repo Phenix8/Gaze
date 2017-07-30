@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'main.c'
             keyPassword 'main.c'
-            storeFile file('C:/Users/root/Desktop/Anamorphoses_JsDN/APK_Key.jks')
+            storeFile file('APK_Key.jks')
             storePassword 'main.c'
         }
     }

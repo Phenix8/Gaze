@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TestCamera extends CommonGameActivity
-        implements View.OnClickListener, CameraProcessor.CameraErrorHandler {
+        implements View.OnClickListener, CameraProcessor.CameraErrorHandler, View.OnTouchListener {
 
     private ImageView cancelImg, littleAnamorphImg, largeAnamorphImg, cameraImg, gridImg;
     private AutoFitTextureView textureView;
@@ -37,11 +38,6 @@ public class TestCamera extends CommonGameActivity
                 .show();
     }
 
-    @Override
-    public void onError(String error) {
-        showError(error);
-    }
-
     private void loadComponents() {
         cancelImg = (ImageView) findViewById(R.id.camera_act_cancel_img);
         cancelImg.setOnClickListener(this);
@@ -56,6 +52,7 @@ public class TestCamera extends CommonGameActivity
         cameraImg.setOnClickListener(this);
 
         gridImg = (ImageView) findViewById(R.id.camera_act_grid_img);
+        gridImg.setOnTouchListener(this);
 
         textureView = (AutoFitTextureView) findViewById(R.id.camera_act_surface);
     }
@@ -121,6 +118,25 @@ public class TestCamera extends CommonGameActivity
                 });
             }
         }, 30000);
+    }
+
+    @Override
+    public void onError(String error) {
+        showError(error);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            if (view == gridImg) {
+                cameraProcessor.focusOnPoint(
+                        motionEvent.getX() / (float) view.getWidth(),
+                        motionEvent.getY() / (float) view.getHeight()
+                );
+            }
+        }
+
+        return true;
     }
 
     @Override
