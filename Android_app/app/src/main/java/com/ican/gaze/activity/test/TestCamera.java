@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -120,8 +121,19 @@ public class TestCamera extends CommonGameActivity
 
     @Override
     public void onImageAvailable(Image img) {
-        if (DLibWrapper.getInstance().checkForObjects(img, /*targetAnamorphosis.getDetectorName()*/"identitite.svm", 4) > 0) {
-            showToast("Found something");
+        Log.d("TestCamera", "Got an image, analysing...");
+        int result =
+                DLibWrapper.getInstance()
+                        .checkForObjects(
+                                img,
+                                /*targetAnamorphosis.getDetectorName()*/"identitite.svm",
+                                4
+                        );
+        if (result == -1) {
+            showToast("An error occured");
+        } else if (result > 0) {
+            setResult(RESULT_OK);
+            finish();
         } else {
             showToast("Nothing found");
         }

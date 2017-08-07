@@ -315,13 +315,6 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
             return;
         }
 
-        imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-            @Override
-            public void onImageAvailable(ImageReader imageReader) {
-
-            }
-        }, handler);
-
         lockCamera();
         cameraManager.openCamera(cameraId, cameraStateCallback, handler);
     }

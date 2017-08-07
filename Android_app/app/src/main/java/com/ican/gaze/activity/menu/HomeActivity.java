@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.ican.gaze.R;
 
+import dlibwrapper.DLibWrapper;
+
 public class HomeActivity extends AppCompatActivity {
 
     private ImageView splashScreenImg;
@@ -39,6 +41,8 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors");
     }
 
     @Override
