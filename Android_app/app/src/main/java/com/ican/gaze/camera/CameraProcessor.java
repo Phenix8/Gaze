@@ -1,7 +1,6 @@
 package com.ican.gaze.camera;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
@@ -20,6 +19,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.MeteringRectangle;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.media.ImageReader;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -29,7 +29,6 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +42,7 @@ import java.util.concurrent.Semaphore;
  * Created by root on 27/07/2017.
  */
 
-public class CameraProcessor implements TextureView.SurfaceTextureListener {
+public class CameraProcessor implements TextureView.SurfaceTextureListener, ImageReader.OnImageAvailableListener {
 
     private static final String TAG = "CameraProcessor";
 
@@ -57,11 +56,12 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
         }
     }
 
-    public interface CameraErrorHandler {
+    public interface CameraProcessorListener {
         void onError(String error);
+        void onImageAvailable(Image img);
     }
 
-    private CameraErrorHandler errorHandler;
+    private CameraProcessorListener listener;
 
     private Context context;
     private AutoFitTextureView textureView;
@@ -87,7 +87,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                 camera = cameraDevice;
                 createCaptureSession(cameraDevice);
             } catch (CameraAccessException e) {
-                errorHandler.onError("Error configuring camera");
+                listener.onError("Error configuring camera");
                 e.printStackTrace();
             } finally {
                 unlockCamera();
@@ -101,9 +101,16 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
 
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int i) {
-            errorHandler.onError("Error accessing camera.");
+            listener.onError("Error accessing camera.");
         }
     };
+
+    @Override
+    public void onImageAvailable(ImageReader imageReader) {
+        Image img = imageReader.acquireNextImage();
+        listener.onImageAvailable(img);
+        img.close();
+    }
 
     private void startBackgroundHandler() {
         handlerThread = new HandlerThread("cameraHandlerThread");
@@ -206,13 +213,13 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                     captureSession.setRepeatingRequest(requestBuilder.build(),
                             captureCallback, handler);
                 } catch (CameraAccessException e) {
-                    errorHandler.onError("An error occured while configuring preview.");
+                    listener.onError("An error occured while configuring preview.");
                 }
             }
 
             @Override
             public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                errorHandler.onError("An error occured while configuring preview.");
+                listener.onError("An error occured while configuring preview.");
             }
         }, handler);
     }
@@ -266,6 +273,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                 textureView.setAspectRatio(optimalSize.getWidth(), optimalSize.getHeight());
 
                 imageReader = ImageReader.newInstance(640, 480, ImageFormat.YUV_420_888, 2);
+                imageReader.setOnImageAvailableListener(this, handler);
 
                 sensorArraySize = cameraInfo.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
                 isMeteringAreaAFSupported = cameraInfo.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF) >= 1;
@@ -297,13 +305,13 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
         String cameraId = chooseCamera(cameraManager);
 
         if (cameraId == null) {
-            errorHandler.onError("No suitable camera found on your device.");
+            listener.onError("No suitable camera found on your device.");
             return;
         }
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            errorHandler.onError("Access to camera denied, please check application's permissions");
+            listener.onError("Access to camera denied, please check application's permissions");
             return;
         }
 
@@ -357,7 +365,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
                 textureView.setSurfaceTextureListener(this);
             }
         } catch (CameraAccessException e) {
-            errorHandler.onError("Error accessing camera.");
+            listener.onError("Error accessing camera.");
         }
     }
 
@@ -424,7 +432,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
             @Override
             public void onCaptureFailed(CameraCaptureSession session, CaptureRequest request, CaptureFailure failure) {
                 super.onCaptureFailed(session, request, failure);
-                Log.e(TAG, "Manual AF failure: " + failure);
+                Log.e(TAG, "Manual AF failure: " + failure.toString());
                 unlockCamera();
             }
         };
@@ -456,8 +464,66 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
         }
     }
 
-    public CameraProcessor(CameraErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
+    public void captureImage() {
+        Log.d(TAG, "Capturing image...");
+        lockCamera();
+        Log.d(TAG, "Capturing image : locked camera");
+
+        CameraCaptureSession.CaptureCallback captureCallbackHandler = new CameraCaptureSession.CaptureCallback() {
+            @Override
+            public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
+                super.onCaptureCompleted(session, request, result);
+
+                if (request.getTag() == "CAPTURE_TAG") {
+                    try {
+                        Log.d(TAG, "Capturing image : image captured");
+                        requestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, null);
+                        requestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                        captureSession.setRepeatingRequest(requestBuilder.build(), null, null);
+                        Log.d(TAG, "Capturing image : restarted preview");
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    } finally {
+                        unlockCamera();
+                        Log.d(TAG, "Capturing image : unlocked camera");
+                        Log.d(TAG, "Capturing image : done");
+                    }
+                }
+            }
+
+            @Override
+            public void onCaptureFailed(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull CaptureFailure failure) {
+                super.onCaptureFailed(session, request, failure);
+                Log.e(TAG, "Image capture failed : " + failure.toString());
+                unlockCamera();
+            }
+        };
+
+
+        try {
+            Log.d(TAG, "Capturing image : stopping preview");
+            captureSession.stopRepeating();
+
+            final CaptureRequest.Builder captureRequestBuilder = camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+            captureRequestBuilder.addTarget(imageReader.getSurface());
+
+            captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+
+            captureRequestBuilder.setTag("CAPTURE_TAG");
+
+            Log.d(TAG, "Capturing image : sensor is capturing..");
+            captureSession.capture(captureRequestBuilder.build(), captureCallbackHandler, handler);
+
+
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+            unlockCamera();
+        }
+    }
+
+    public CameraProcessor(CameraProcessorListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -467,7 +533,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener {
             configureTransform(width, height);
         } catch (CameraAccessException e) {
             stopBackgroundHandler();
-            errorHandler.onError("Error accessing camera.");
+            listener.onError("Error accessing camera.");
         }
     }
 

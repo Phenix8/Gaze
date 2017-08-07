@@ -2,10 +2,9 @@ package com.ican.gaze.activity.test;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,8 +17,10 @@ import com.ican.gaze.model.Anamorphosis;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import dlibwrapper.DLibWrapper;
+
 public class TestCamera extends CommonGameActivity
-        implements View.OnClickListener, CameraProcessor.CameraErrorHandler, View.OnTouchListener {
+        implements View.OnClickListener, CameraProcessor.CameraProcessorListener, View.OnTouchListener {
 
     private ImageView cancelImg, littleAnamorphImg, largeAnamorphImg, cameraImg, gridImg;
     private AutoFitTextureView textureView;
@@ -81,7 +82,7 @@ public class TestCamera extends CommonGameActivity
     }
 
     private void searchTargetAnamorphosis() {
-
+        cameraProcessor.captureImage();
     }
 
     private void toggleLargeAnamorphosisImg() {
@@ -115,6 +116,15 @@ public class TestCamera extends CommonGameActivity
     @Override
     public void onError(String error) {
         showError(error);
+    }
+
+    @Override
+    public void onImageAvailable(Image img) {
+        if (DLibWrapper.getInstance().checkForObjects(img, /*targetAnamorphosis.getDetectorName()*/"identitite.svm", 4) > 0) {
+            showToast("Found something");
+        } else {
+            showToast("Nothing found");
+        }
     }
 
     @Override
