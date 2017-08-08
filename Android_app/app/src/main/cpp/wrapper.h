@@ -3,9 +3,10 @@
 
 #include <jni.h>
 
-#define loadDetectors Java_dlibwrapper_DLibWrapper_loadDetectors
-#define checkForObjects Java_dlibwrapper_DLibWrapper_checkForObjects
-#define getMessage Java_dlibwrapper_DLibWrapper_getMessage
+
+#define loadDetectors Java_com_bof_gaze_detection_ObjectDetector_loadDetectors
+#define checkForObjects Java_com_bof_gaze_detection_ObjectDetector_checkForObjects
+#define getMessage Java_com_bof_gaze_detection_ObjectDetector_getMessage
 
 extern "C" {
 

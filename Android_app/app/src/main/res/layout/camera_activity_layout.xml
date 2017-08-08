@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.gaze.activity.game.CameraActivity">
+    tools:context="com.bof.gaze.activity.game.CameraActivity">
 
-    <com.ican.gaze.view.AutoFitTextureView
+    <com.bof.gaze.view.AutoFitTextureView
         android:id="@+id/camera_act_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.ican.gaze.view.CameraGlassSurfaceView
+    <com.bof.gaze.view.CameraGlassSurfaceView
         android:id="@+id/camera_act_grid_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -5,10 +5,11 @@
     android:id="@+id/activity_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.gaze.activity.menu.MenuActivity">
+    tools:context="com.bof.gaze.activity.menu.MenuActivity">
 
 
     <ImageButton
+        android:id="@+id/menu_act_background_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/mainmenu"/>
