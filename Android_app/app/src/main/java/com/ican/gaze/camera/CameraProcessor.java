@@ -30,6 +30,8 @@ import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
 
+import com.ican.gaze.view.AutoFitTextureView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -159,7 +161,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
         } else if (notBigEnough.size() > 0) {
             return Collections.max(notBigEnough, new CompareSizesByArea());
         } else {
-            Log.e("TestCamera", "Couldn't find any suitable preview size");
+            Log.e("CameraActivity", "Couldn't find any suitable preview size");
             return choices[0];
         }
     }
@@ -371,13 +373,15 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
      * Tell the camera to focus on the given point.
      * @param x Coordinate of the point between 0 and 1
      * @param y Coordinate of the point between 0 and 1
+     * @return true on success, false if not supported.
      */
-    public void focusOnPoint(float x, float y) {
+    public boolean focusOnPoint(float x, float y) {
 
+        boolean result = false;
         //If capture session has not been created
         //(Example : access denied to camera
         if (captureSession == null) {
-            return;
+            return result;
         }
 
         Log.d(TAG, "Focusing camera manually...");
@@ -441,6 +445,7 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
             //Now add a new AF trigger with focus region
             if (isMeteringAreaAFSupported) {
                 requestBuilder.set(CaptureRequest.CONTROL_AF_REGIONS, new MeteringRectangle[]{focusAreaTouch});
+                result = true;
             }
 
             requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
@@ -455,6 +460,8 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
             unlockCamera();
             e.printStackTrace();
         }
+
+        return result;
     }
 
     public void captureImage() {

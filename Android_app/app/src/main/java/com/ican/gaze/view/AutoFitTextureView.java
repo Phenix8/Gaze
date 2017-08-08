@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ican.gaze.camera;
+package com.ican.gaze.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

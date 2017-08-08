@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ican.gaze.activity.test.TestCamera">
+    tools:context="com.ican.gaze.activity.game.CameraActivity">
 
-    <com.ican.gaze.camera.AutoFitTextureView
+    <com.ican.gaze.view.AutoFitTextureView
         android:id="@+id/camera_act_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
+    <com.ican.gaze.view.CameraGlassSurfaceView
         android:id="@+id/camera_act_grid_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/grid"
         android:scaleType="fitXY"/>
 
     <ImageView
@@ -24,7 +22,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/camera_cancel"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginStart="20dp"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"

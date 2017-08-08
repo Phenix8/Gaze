@@ -2,311 +2,204 @@ package com.ican.gaze.activity.game;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.media.MediaPlayer;
+import android.media.Image;
 import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import dlibwrapper.DLibWrapper;
-
-import com.ican.gaze.activity.common.CommonGameActivity;
-import com.ican.gaze.model.Anamorphosis;
 import com.ican.gaze.R;
-import com.ican.gaze.camera.CameraFragment;
+import com.ican.gaze.activity.common.CommonGameActivity;
+import com.ican.gaze.view.AutoFitTextureView;
+import com.ican.gaze.camera.CameraProcessor;
+import com.ican.gaze.model.Anamorphosis;
+import com.ican.gaze.view.CameraGlassSurfaceView;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import dlibwrapper.DLibWrapper;
+
 public class CameraActivity extends CommonGameActivity
-{
-    private static final String[] tips = {
-            "Make sure you have framed the anamorphosis in the center of the screen",
-            "Make sure to take the anamorphosis in the right sens"
-    };
+        implements View.OnClickListener, CameraProcessor.CameraProcessorListener, View.OnTouchListener {
 
-    private ImageView targetAnamorphImg = null;
-    private ImageView targetAnamorphBg = null;
-    private ImageView zoomAnamorphImg = null;
-    private ImageView backgroundImg = null;
+    private ImageView cancelImg, littleAnamorphImg, largeAnamorphImg, cameraImg;
+    private CameraGlassSurfaceView cameraGlassSurfaceView;
+    private AutoFitTextureView textureView;
 
-    private ImageButton abandonImg = null;
-    private ImageButton cameraImg = null;
-    private ImageButton zoomAnamorphBg = null;
-    private ImageButton cameraGrid = null;
+    private Anamorphosis targetAnamorphosis;
 
-    private CameraFragment cameraInstance = null;
+    private boolean canCancel = true;
 
-    private Anamorphosis currentAnamorphosis;
+    private CameraProcessor cameraProcessor = new CameraProcessor(this);
 
-    private MediaPlayer sonObturateur;
+    private void loadComponents() {
+        cancelImg = (ImageView) findViewById(R.id.camera_act_cancel_img);
+        cancelImg.setOnClickListener(this);
 
-    private int tipIndex = 0;
+        littleAnamorphImg = (ImageView) findViewById(R.id.camera_act_little_anamorph_img);
+        littleAnamorphImg.setOnClickListener(this);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        largeAnamorphImg = (ImageView) findViewById(R.id.camera_act_large_anamorph_img);
+        largeAnamorphImg.setOnClickListener(this);
 
-        sonObturateur = MediaPlayer.create(getApplicationContext(), R.raw.obturateur);
+        cameraImg = (ImageView) findViewById(R.id.camera_act_camera_img);
+        cameraImg.setOnClickListener(this);
 
-        currentAnamorphosis = (Anamorphosis) getIntent().getSerializableExtra("anamorphosis");
+        cameraGlassSurfaceView = (CameraGlassSurfaceView) findViewById(R.id.camera_act_grid_img);
+        cameraGlassSurfaceView.setOnTouchListener(this);
 
-        try {
-            Log.d("dlib", String.format("number of detectors loaded %d", DLibWrapper.getInstance().loadDetectors(this.getAssets(), "detectors")));
+        textureView = (AutoFitTextureView) findViewById(R.id.camera_act_surface);
+    }
 
+    private void loadTargetAnamorphosis() {
+        targetAnamorphosis = (Anamorphosis) getIntent().getSerializableExtra("anamorphosis");
 
-            //requestWindowFeature(Window.FEATURE_NO_TITLE);
-            //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-            setContentView(R.layout.activity_camera);
-
-            cameraGrid = (ImageButton) findViewById(R.id.camera_background);
-            cameraGrid.setImageResource(R.drawable.camera);
-
-            setTargetAnamorphImg();
-            setToolImages();
-
-            if (null == savedInstanceState) {
-                cameraInstance = CameraFragment.newInstance();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, cameraInstance)
-                        .commit();
-
-                CameraFragment.ImageTester.setCallback(new CameraFragment.ImageTester.Callback() {
-                        @Override
-                        public void onFound() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                cameraGrid.setImageResource(R.drawable.camera_right);
-                            }
-                        });
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-
-                    @Override
-                    public void onNotFound() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                cameraGrid.setImageResource(R.drawable.camera_wrong);
-                            }
-                        });
-                        Timer t = new Timer();
-                        t.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        cameraGrid.setImageResource(R.drawable.camera);
-                                    }
-                                });
-                            }
-                        }, 1000);
-                        showToast(tips[tipIndex], Toast.LENGTH_LONG);
-                        tipIndex = (tipIndex + 1) % tips.length;
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        showMessage("Error processing image :", message);
-                        Log.d("dlib", "Test3");
-                    }
-                });
-            }
-
-        } catch (Exception e) {
-            showMessage("Une erreure est survenue", e.getLocalizedMessage());
+        if (targetAnamorphosis == null) {
+            showToast("Error : no target anamorphosis defined");
+            return;
         }
 
-        TextView score = (TextView) findViewById(R.id.scoreTxt);
-        score.setText(String.format("Score : %d",getGameClient().getScore()));
+        littleAnamorphImg.setImageResource(targetAnamorphosis.getDrawableImage());
+        largeAnamorphImg.setImageResource(targetAnamorphosis.getLargeDrawableImage());
+    }
 
-        final View.OnClickListener cancelListener = new View.OnClickListener()
-        {
+    private void cancelAnamorphosis(){
+        if (!canCancel) {
+            showToast("Please wait a few more seconds");
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you  really want to try another anamorphosis ?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id)
+            {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
+    }
+
+    private void searchTargetAnamorphosis() {
+        cameraProcessor.captureImage();
+    }
+
+    private void toggleLargeAnamorphosisImg() {
+        View v = (View) largeAnamorphImg.getParent();
+        v.setVisibility(v.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void checkForAlreadyCanceledState() {
+        if (!getIntent().getBooleanExtra("alreadyCanceled", false) ||
+                getIntent().getBooleanExtra("debug", false)) {
+            return;
+        }
+
+        canCancel = false;
+        cancelImg.setImageResource(R.drawable.camera_cancel_disabled);
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
             @Override
-            public void onClick(View v) {
-                if (HideTargetAnamorphZoom())
-                    return;
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Do you want to abandon this anamorphosis ?");
-                builder.setPositiveButton("Oui", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id)
-                    {
-                        setResult(RESULT_CANCELED);
-                        finish();
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCancel = true;
+                        cancelImg.setImageResource(R.drawable.camera_cancel);
                     }
                 });
-                builder.setNegativeButton("Non", null);
-                builder.show();
             }
-        };
+        }, 30000);
+    }
 
-        if (getIntent().getBooleanExtra("alreadyCanceled", false)) {
-            Timer t = new Timer();
-            t.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            abandonImg.setImageResource(R.drawable.camera_cancel);
-                            abandonImg.setOnClickListener(cancelListener);
-                        }
-                    });
-                }
-            }, 30000);
-            abandonImg.setImageResource(R.drawable.camera_cancel_disabled);
-            abandonImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showToast(String.format("Please wait a few seconds..."));
-                }
-            });
+    @Override
+    public void onError(String error) {
+        showError(error);
+    }
+
+    @Override
+    public void onImageAvailable(Image img) {
+        Log.d("CameraActivity", "Got an image, analysing...");
+        int result =
+                DLibWrapper.getInstance()
+                        .checkForObjects(
+                                img,
+                                targetAnamorphosis.getDetectorName(),
+                                4
+                        );
+
+        if (result == -1) {
+            showToast("An error occured");
+        } else if (result > 0) {
+            cameraGlassSurfaceView.displayFeedbackFound();
+            setResult(RESULT_OK);
+            finish();
         } else {
-            abandonImg.setOnClickListener(cancelListener);
+            cameraGlassSurfaceView.displayFeedbackNotFound();
         }
-
-        // Evénement de clic sur l'anamorphose cible
-        targetAnamorphBg.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                if (HideTargetAnamorphZoom())
-                    return;
-                else if (zoomAnamorphBg.getVisibility() == View.INVISIBLE)
-                {
-                    zoomAnamorphBg.setVisibility(View.VISIBLE);
-                    zoomAnamorphImg.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        // Evénement de clic sur l'anamorphose zoomée
-        zoomAnamorphBg.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) { HideTargetAnamorphZoom();  }
-        });
-
-        cameraImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int actionMasked = motionEvent.getActionMasked();
-                if (actionMasked != MotionEvent.ACTION_DOWN) {
-                    return true;
-                }
-                if (HideTargetAnamorphZoom())
-                    return true;
-                sonObturateur.start();
-                cameraInstance.checkForAnamorphosis(currentAnamorphosis.getDetectorName());
-                return true;
-            }
-        });
-
-        cameraGrid.setClickable(false);
-        cameraGrid.setFocusable(false);
-
-        findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int actionMasked = motionEvent.getActionMasked();
-                if (actionMasked != MotionEvent.ACTION_DOWN) {
-                    return false;
-                }
-
-                float x = motionEvent.getX() / (float) view.getWidth();
-                float y = motionEvent.getY() / (float) view.getHeight();
-                Log.d("Camera", String.format("Touched point (%f, %f)", x, y));
-
-                cameraInstance.setFocusPoint(x, y);
-
-                return false;
-            }
-        });
-    }
-
-    public void showMessage(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        HideTargetAnamorphZoom();
-        return super.onTouchEvent(event);
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            if (view == cameraGlassSurfaceView) {
+                if (cameraProcessor.focusOnPoint(
+                        motionEvent.getX() / (float) view.getWidth(),
+                        motionEvent.getY() / (float) view.getHeight()
+                )) {
+                    cameraGlassSurfaceView.displayFeedbackFocus(
+                            (int) motionEvent.getX(),
+                            (int) motionEvent.getY()
+                    );
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
     public void onBackPressed() {
-        return;
+
     }
 
-    // Initialise l'image et la couleur de background
-    // de l'anamorphose cible
-    private void setTargetAnamorphImg()
-    {
-        // icone anamorphse cible
-        targetAnamorphImg = (ImageView) findViewById(R.id.target_anamorph_img);
-        targetAnamorphBg = (ImageButton) findViewById(R.id.target_anamorph_bg);
-
-        // anamorphose cible zommée
-        zoomAnamorphImg = (ImageView) findViewById(R.id.zoom_anamorph_img);
-        zoomAnamorphBg = (ImageButton) findViewById(R.id.zoom_anamorph_bg);
-
-        targetAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getDrawableImage(), null));
-        zoomAnamorphImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), currentAnamorphosis.getLargeDrawableImage(), null));
-
-        zoomAnamorphBg.setVisibility(View.INVISIBLE);
-        zoomAnamorphImg.setVisibility(View.INVISIBLE);
-    }
-
-
-    // Initialise les images de l'appareil photo et du bouton d'annulation + du background
-    private void setToolImages()
-    {
-        // Background
-        backgroundImg = (ImageView) findViewById(R.id.camera_background);
-        backgroundImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera, null));
-        // Icône caméra
-        cameraImg = (ImageButton) findViewById(R.id.photo_icon);
-        cameraImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_pictureicon, null));
-
-        // Icône annulation
-        abandonImg = (ImageButton) findViewById(R.id.cancel_anamorph_img);
-        abandonImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.camera_cancel, null));
-    }
-
-    // Dissimuler l'anamorphose zoomée
-    private boolean HideTargetAnamorphZoom()
-    {
-        if (zoomAnamorphBg.getVisibility() == View.VISIBLE)
-        {
-            zoomAnamorphBg.setVisibility(View.INVISIBLE);
-            zoomAnamorphImg.setVisibility(View.INVISIBLE);
-            return true;
+    @Override
+    public void onClick(View view) {
+        if (view == cancelImg) {
+            cancelAnamorphosis();
+        } else if (view == littleAnamorphImg){
+            toggleLargeAnamorphosisImg();
+        } else if (view == largeAnamorphImg) {
+            toggleLargeAnamorphosisImg();
+        } else if (view == cameraImg) {
+            searchTargetAnamorphosis();
         }
-        return false;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.camera_activity_layout);
+
+        loadComponents();
+        loadTargetAnamorphosis();
+        checkForAlreadyCanceledState();
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cameraProcessor.start(this, textureView);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cameraProcessor.stop();
+    }
 }

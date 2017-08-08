@@ -42,9 +42,6 @@
             android:name=".activity.game.AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.game.CameraActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".activity.menu.JoinRoomActivity"
             android:screenOrientation="landscape" />
         <activity
@@ -54,7 +51,7 @@
             android:name=".activity.game.LeaderboardActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.test.TestCamera"
+            android:name=".activity.game.CameraActivity"
             android:screenOrientation="landscape">
         </activity>
     </application>
