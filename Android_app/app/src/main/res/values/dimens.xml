@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nextArrow_marginLeft">540dp</dimen>
     <dimen name="nextArrow_marginTop">280dp</dimen>
-    <dimen name="activity_leaderbord_marginTop_playerTable">60dp</dimen>
+    <dimen name="activity_leaderbord_marginTop_playerTable">40dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>

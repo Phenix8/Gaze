@@ -13,20 +13,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.5"
+        android:layout_weight="0"
         android:gravity="bottom"
         android:text="@string/finalScore"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/activity_leaderbord_marginTop_playerTable"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_weight="0.5">
+        android:layout_weight="1">
 
         <!-- PLAYER NAMES PANEL -->
         <RelativeLayout
@@ -143,7 +142,7 @@
         android:layout_margin="15dp"
         android:id="@+id/okImgButton"
         app:srcCompat="@drawable/backgreen"
-        android:layout_gravity="end"/>
+        android:layout_gravity="end" />
 
 
 </LinearLayout>
