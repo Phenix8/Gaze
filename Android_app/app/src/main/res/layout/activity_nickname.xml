@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_nickname"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bof.gaze.activity.menu.NicknameActivity">
+    tools:context="com.bof.gaze.activity.menu.NicknameActivity"
+    android:background="@color/nickname_bg"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:orientation="vertical">
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/changenickname"/>
+        android:background="@android:color/transparent"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/returnImgButton"
+        app:srcCompat="@drawable/backyellow" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:textAlignment="center"
-        android:id="@+id/textboxLayout">
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="@string/nickname"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:gravity="bottom"/>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:translationZ="-1dp"
-            android:paddingTop="160dp"
-            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:id="@+id/textboxBackground"
             app:srcCompat="@drawable/changenickname_textbox"/>
 
@@ -32,43 +46,24 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Player_1"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:textAlignment="center"
-            android:paddingTop="160dp"
+
             android:lines="1"
             android:ems="10"
             android:layout_gravity="center"
             android:id="@+id/nickname_editText"/>
-
-
-    </FrameLayout>
-
-    <!-- Change activity buttons -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/changeActivityLayout">
+    </RelativeLayout>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:id="@+id/returnImgButton"
-            app:srcCompat="@drawable/backyellow" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="15dp"
+            android:layout_gravity="end"
             android:background="@android:color/transparent"
             android:id="@+id/OkButton"
             app:srcCompat="@drawable/backgreen" />
 
-    </RelativeLayout>
-
-</RelativeLayout>
+</LinearLayout>
