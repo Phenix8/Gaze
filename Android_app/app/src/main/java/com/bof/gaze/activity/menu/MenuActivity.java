@@ -30,12 +30,12 @@ public class MenuActivity extends CommonGazeActivity {
     private void requestCameraPermission() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
+                Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
+                    Manifest.permission.CAMERA)) {
 
                 showInfo("You will need your camera to validate your finds :)");
 
