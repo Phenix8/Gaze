@@ -16,8 +16,8 @@ android {
         applicationId "com.ican.anamorphoses_jsdn"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 9
-        versionName "0.9"
+        versionCode 10
+        versionName "0.9.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         /*externalNativeBuild {
             cmake {

@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bof.gaze.activity.game.LeaderboardActivity">
+    tools:context="com.bof.gaze.activity.game.LeaderboardActivity"
+    android:background="@color/leaderboard_bg"
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
-    <ImageButton
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/finalscores"/>
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:gravity="bottom"
+        android:text="@string/finalScore"
+        android:textSize="30dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/activity_leaderbord_marginTop_playerTable"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="0.5">
 
         <!-- PLAYER NAMES PANEL -->
         <RelativeLayout
@@ -126,21 +136,14 @@
 
     </LinearLayout>
 
-    <!-- Change activity buttons -->
-    <FrameLayout
-        android:layout_width="match_parent"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/changeActivityLayout">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:layout_margin="15dp"
-            android:id="@+id/okImgButton"
-            app:srcCompat="@drawable/backgreen" />
-
-    </FrameLayout>
+        android:background="@android:color/transparent"
+        android:layout_margin="15dp"
+        android:id="@+id/okImgButton"
+        app:srcCompat="@drawable/backgreen"
+        android:layout_gravity="end"/>
 
 
-</RelativeLayout>
+</LinearLayout>
