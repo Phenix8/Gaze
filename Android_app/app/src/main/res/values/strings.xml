@@ -95,6 +95,12 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
-    <string name="nickname">Entrez votre nom de joueur :</string>
-    <string name="finalScore">Scores finaux :</string>
+    <string name="nickname">Enter your player name :</string>
+    <string name="finalScore">Final scores :</string>
+
+    <string name="homeTouchToPlayText">Tape to play</string>
+
+    <string name="menuEnableWifiToast">Please enable Wifi</string>
+    <string name="menuOnBackPressedToast">Press back again to quit Gaze</string>
+    <string name="menuCameraExplainationInfo">You will need your camera to validate your finds :)</string>
 </resources>

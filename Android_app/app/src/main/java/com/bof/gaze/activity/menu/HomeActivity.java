@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,18 +15,19 @@ import com.bof.gaze.R;
 
 import com.bof.gaze.detection.ObjectDetector;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements View.OnTouchListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        findViewById(R.id.activity_home).setOnTouchListener(this);
 
         ObjectDetector.getInstance().loadDetectors(this.getAssets(), "detectors");
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouch(View view, MotionEvent event) {
         SharedPreferences sharedPref = getSharedPreferences("main", Context.MODE_PRIVATE);
         String nickname = sharedPref.getString("nickname", "");
 
@@ -40,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        return super.onTouchEvent(event);
+        return false;
     }
 
     @Override

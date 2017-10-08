@@ -23,7 +23,8 @@ public class MenuActivity extends CommonGazeActivity {
 
     private static final int REQUEST_CODE = 13;
 
-    private int numberOfTouchOnGazeLogo = 0;
+    private int numberOfTouchOnGazeLogo;
+    private int numberOfTimeBackWasPressed;
 
     private ImageButton backgroundImg;
 
@@ -37,7 +38,7 @@ public class MenuActivity extends CommonGazeActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
 
-                showInfo("You will need your camera to validate your finds :)");
+                showInfo(getResources().getString(R.string.menuCameraExplainationInfo));
 
             } else {
 
@@ -90,6 +91,13 @@ public class MenuActivity extends CommonGazeActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        numberOfTimeBackWasPressed = 0;
+        numberOfTouchOnGazeLogo = 0;
+
+        super.onResume();
+    }
 
     // Assigne à l'ImageButton dont l'ID est passé en paramètre
     // une fonction de redirection vers la classe 'redirectionClass'
@@ -109,7 +117,7 @@ public class MenuActivity extends CommonGazeActivity {
 
                 if (checkForWifi) {
                     if (!Util.isWifiEnabled(wifiManager)) {
-                        showToast("Pease enable wifi");
+                        showToast(getResources().getString(R.string.menuEnableWifiToast));
                         return;
                     }
                 }
@@ -118,5 +126,15 @@ public class MenuActivity extends CommonGazeActivity {
                 startActivity(menuOptionActivity);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        numberOfTimeBackWasPressed++;
+        if (numberOfTimeBackWasPressed >= 2) {
+            finish();
+        } else {
+            showToast(getResources().getString(R.string.menuOnBackPressedToast));
+        }
     }
 }

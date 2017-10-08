@@ -17,12 +17,13 @@
         app:srcCompat="@drawable/splachscreen"
         android:background="@color/transparent"
         android:layout_gravity="center"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:clickable="false"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tape to play"
+        android:text="@string/homeTouchToPlayText"
         android:layout_gravity="center"
         android:layout_weight="0.5"
         android:textAlignment="center"
