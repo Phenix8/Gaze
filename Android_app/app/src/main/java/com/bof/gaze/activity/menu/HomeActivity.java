@@ -1,18 +1,14 @@
 package com.bof.gaze.activity.menu;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.bof.gaze.R;
-
 import com.bof.gaze.detection.ObjectDetector;
 
 public class HomeActivity extends AppCompatActivity implements View.OnTouchListener {
