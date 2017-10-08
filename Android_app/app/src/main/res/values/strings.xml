@@ -98,6 +98,10 @@
     <string name="nickname">Enter your player name :</string>
     <string name="finalScore">Final scores :</string>
 
+    <string name="joinActTitle">Join a game</string>
+    <string name="joinActStateInitialText">Searching games around...</string>
+    <string name="joinActStateBarFormat">%d room(s) found</string>
+
     <string name="homeTouchToPlayText">Tape to play</string>
 
     <string name="menuEnableWifiToast">Please enable Wifi</string>

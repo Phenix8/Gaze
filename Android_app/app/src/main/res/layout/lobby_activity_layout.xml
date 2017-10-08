@@ -7,12 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bof.gaze.activity.menu.LobbyActivity"
-    android:weightSum="1">
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/room"/>
+    android:weightSum="1"
+    android:background="@color/lobby_bg">
 
     <!-- ROOM TITLE (editable+ non-editable) -->
     <RelativeLayout

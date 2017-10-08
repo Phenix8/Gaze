@@ -11,5 +11,12 @@
     <color name="nickname_bg">#ffb7b4</color>
     <color name="leaderboard_bg">#ffb7b4</color>
     <color name="home_bg">#b9dbeb</color>
+    <color name="lobby_bg">#fffbc3</color>
+    <color name="join_act_bg">#b4ffc5</color>
     <color name="black">#000000</color>
+    <color name="grey">#646464</color>
+
+    <color name="color_preloader_start">#000000</color>
+    <color name="color_preloader_center">#000000</color>
+    <color name="color_preloader_end">#ffffff</color>
 </resources>

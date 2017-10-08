@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bof.gaze.R;
 import com.bof.gaze.network.Common;
@@ -21,6 +22,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class JoinRoomActivity extends AppCompatActivity
         implements RoomFinder.RoomListChangeListener, AdapterView.OnItemClickListener {
@@ -28,8 +30,8 @@ public class JoinRoomActivity extends AppCompatActivity
     RoomFinder finder;
     ListView gameList;
     ArrayAdapter adapter;
-    Button joinButton;
     ArrayList<Room> games = new ArrayList<>();
+    TextView stateBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class JoinRoomActivity extends AppCompatActivity
         gameList.setAdapter(adapter);
         gameList.setOnItemClickListener(this);
 
+        stateBar = (TextView) findViewById(R.id.join_act_state_bar);
+
         finder.addRoomListChangeListener(this);
     }
 
@@ -96,6 +100,13 @@ public class JoinRoomActivity extends AppCompatActivity
                 adapter.clear();
                 adapter.addAll(games);
                 adapter.notifyDataSetChanged();
+                stateBar.setText(
+                    String.format(
+                        Locale.ENGLISH,
+                        getResources().getString(R.string.joinActStateBarFormat),
+                        games.size()
+                    )
+                );
             }
         });
     }
