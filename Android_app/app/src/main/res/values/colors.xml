@@ -10,6 +10,6 @@
     <color name="transparent">#00000000</color>
     <color name="nickname_bg">#ffb7b4</color>
     <color name="leaderboard_bg">#ffb7b4</color>
-
-
+    <color name="home_bg">#b9dbeb</color>
+    <color name="black">#000000</color>
 </resources>
