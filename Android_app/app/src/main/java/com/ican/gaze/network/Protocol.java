@@ -20,7 +20,7 @@ public class Protocol {
     public static final String INSTRUCTION_END = "\n";
 
     public static final String PLAYERS_INSTRUCTION_TYPE =           "PLAYERS";
-    public static final String PLAYER_ID_INSTRUCTION_TYPE =        "ID";
+    public static final String PLAYER_ID_INSTRUCTION_TYPE =         "ID";
     public static final String QUIT_INSTRUCTION_TYPE =              "QUIT";
     public static final String CONNECT_INSTRUCTION_TYPE =           "CONNECT";
     public static final String DISCONNECT_INSTRUCTION_TYPE =        "DISCONNECT";
@@ -31,6 +31,7 @@ public class Protocol {
     public static final String NOT_READY_INSTRUCTION_TYPE =         "NOTREADY";
     public static final String ALREADY_STARTED_INSTRUCTION_TYPE =   "GAME-STARTED";
     public static final String DEATHMATCH_INSTRUCTION_TYPE =        "DEATHMATCH";
+    public static final String ROOM_NAME_INSTRUCTION_TYPE =         "ROOM-NAME";
 
     public static final String QUIT_INSTRUCTION =
             QUIT_INSTRUCTION_TYPE + INSTRUCTION_END;
@@ -186,5 +187,27 @@ public class Protocol {
                 DATA_SEPARATOR,
                 anamorphId,
                 INSTRUCTION_END);
+    }
+
+    public static String buildRoomNameInstruction(
+            String roomName) {
+        try {
+            return String.format(
+                    "%s%s%s%s",
+                    ROOM_NAME_INSTRUCTION_TYPE,
+                    INSTRUCTION_SEPARATOR,
+                    URLEncoder.encode(roomName, "UTF-8"),
+                    INSTRUCTION_END);
+        } catch (UnsupportedEncodingException e) {
+            return INSTRUCTION_END;
+        }
+    }
+
+    public static String parseRoomNameInstruction(String instructionData) {
+        try {
+            return URLDecoder.decode(instructionData, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 }
