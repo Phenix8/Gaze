@@ -19,21 +19,31 @@ public class Protocol {
     public static final String DATA_SEPARATOR = ":";
     public static final String INSTRUCTION_END = "\n";
 
+    /**
+     * Server's instructions, sent to clients.
+     */
     public static final String PLAYERS_INSTRUCTION_TYPE =           "PLAYERS";
-    public static final String PLAYER_ID_INSTRUCTION_TYPE =        "ID";
-    public static final String QUIT_INSTRUCTION_TYPE =              "QUIT";
-    public static final String CONNECT_INSTRUCTION_TYPE =           "CONNECT";
-    public static final String DISCONNECT_INSTRUCTION_TYPE =        "DISCONNECT";
+    public static final String PLAYER_ID_INSTRUCTION_TYPE =         "ID";
     public static final String START_INSTRUCTION_TYPE =             "START";
     public static final String FINISHED_INSTRUCTION_TYPE =          "FINISHED";
-    public static final String SCORE_INSTRUCTION_TYPE =             "SCORE";
-    public static final String READY_INSTRUCTION_TYPE =             "READY";
     public static final String NOT_READY_INSTRUCTION_TYPE =         "NOTREADY";
     public static final String ALREADY_STARTED_INSTRUCTION_TYPE =   "GAME-STARTED";
     public static final String DEATHMATCH_INSTRUCTION_TYPE =        "DEATHMATCH";
+    public static final String SERVER_STOPPED_INSTRUCTION =         "SERVER-STOPPED";
+
+    /**
+     * Client's messages, sent to server.
+     */
+    public static final String START_MESSAGE_TYPE =             "START";
+    public static final String QUIT_MESSAGE_TYPE =              "QUIT";
+    public static final String CONNECT_MESSAGE_TYPE =           "CONNECT";
+    public static final String DISCONNECT_MESSAGE_TYPE =        "DISCONNECT";
+    public static final String FINISHED_MESSAGE_TYPE =          "FINISHED";
+    public static final String SCORE_MESSAGE_TYPE =             "SCORE";
+    public static final String READY_MESSAGE_TYPE =             "READY";
 
     public static final String QUIT_INSTRUCTION =
-            QUIT_INSTRUCTION_TYPE + INSTRUCTION_END;
+            QUIT_MESSAGE_TYPE + INSTRUCTION_END;
 
     public static String parseInstructionType(String instruction) {
         return instruction.split(INSTRUCTION_SEPARATOR)[0];
@@ -107,7 +117,7 @@ public class Protocol {
     public static String buildConnectInstruction(String playerName) {
         String str = null;
         try {
-            str = String.format("%s %s%s", CONNECT_INSTRUCTION_TYPE, URLEncoder.encode(playerName, "UTF-8"), INSTRUCTION_END);
+            str = String.format("%s %s%s", CONNECT_MESSAGE_TYPE, URLEncoder.encode(playerName, "UTF-8"), INSTRUCTION_END);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -125,7 +135,7 @@ public class Protocol {
     }
 
     public static String buildDisconnectInstruction(String playerName) {
-        return String.format("%s %s%s", DISCONNECT_INSTRUCTION_TYPE, playerName, INSTRUCTION_END);
+        return String.format("%s %s%s", DISCONNECT_MESSAGE_TYPE, playerName, INSTRUCTION_END);
     }
 
     public static String buildQuitInstruction() {
@@ -147,7 +157,7 @@ public class Protocol {
     public static String buildReadyInstruction(String playerId) {
         return String.format(
                 "%s%s%s%s",
-                READY_INSTRUCTION_TYPE,
+                READY_MESSAGE_TYPE,
                 INSTRUCTION_SEPARATOR,
                 playerId,
                 INSTRUCTION_END
@@ -169,7 +179,7 @@ public class Protocol {
     }
 
     public static String buildScoreInstruction(int score) {
-        StringBuffer str = new StringBuffer(SCORE_INSTRUCTION_TYPE);
+        StringBuffer str = new StringBuffer(SCORE_MESSAGE_TYPE);
         str.append(INSTRUCTION_SEPARATOR).append(score).append(INSTRUCTION_END);
         return str.toString();
     }
@@ -186,5 +196,9 @@ public class Protocol {
                 DATA_SEPARATOR,
                 anamorphId,
                 INSTRUCTION_END);
+    }
+
+    public static String buildServerStoppedInstruction() {
+        return String.format("%s%s", SERVER_STOPPED_INSTRUCTION, INSTRUCTION_END);
     }
 }

@@ -47,7 +47,8 @@ public class Client extends Thread implements Serializable {
             GAME_STARTED,
             GAME_ENDED,
             DEATH_MATCH,
-            ERROR_OCCURED
+            ERROR_OCCURED,
+            SERVER_STOPPED
         }
 
         void onGameEvent(GameEventType type, Object data);
@@ -214,6 +215,11 @@ public class Client extends Thread implements Serializable {
 
                     case Protocol.FINISHED_INSTRUCTION_TYPE:
                         sendInstruction(Protocol.buildScoreInstruction(score));
+                    break;
+
+                    case Protocol.SERVER_STOPPED_INSTRUCTION:
+                        connected = false;
+                        notifyListener(GameEventListener.GameEventType.SERVER_STOPPED, null);
                     break;
                 }
             }

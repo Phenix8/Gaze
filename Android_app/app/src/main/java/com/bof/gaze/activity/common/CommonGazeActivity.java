@@ -25,6 +25,10 @@ public class CommonGazeActivity extends AppCompatActivity {
         ((GazeApplication) getApplication()).startServer(synch, roomName, multicastAddr);
     }
 
+    protected void stopServer() {
+        ((GazeApplication) getApplication()).stopServer();
+    }
+
     protected void showToast(String text, int duration) {
         Toast.makeText(this, text, duration).show();
     }

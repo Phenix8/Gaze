@@ -166,11 +166,6 @@ public class CameraActivity extends CommonGameActivity
     }
 
     @Override
-    public void onBackPressed() {
-
-    }
-
-    @Override
     public void onClick(View view) {
         if (view == cancelImg) {
             cancelAnamorphosis();

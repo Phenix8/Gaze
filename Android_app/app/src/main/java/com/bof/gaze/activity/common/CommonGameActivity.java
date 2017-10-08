@@ -1,10 +1,12 @@
 package com.bof.gaze.activity.common;
 
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.bof.gaze.activity.game.DeathMatchAnnounceActivity;
 import com.bof.gaze.activity.game.LeaderboardActivity;
 import com.bof.gaze.activity.menu.MenuActivity;
+import com.bof.gaze.application.GazeApplication;
 import com.bof.gaze.model.Player;
 import com.bof.gaze.network.Client;
 
@@ -16,11 +18,24 @@ import java.util.ArrayList;
 
 public class CommonGameActivity extends CommonGazeActivity implements Client.GameEventListener {
 
+    protected boolean isServerStarted() {
+        return ((GazeApplication) this.getApplication()).isServerStarted();
+    }
+
+    protected boolean isGameHost() {
+        return ((GazeApplication) this.getApplication()).isHost();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         getGameClient().setGameEventListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     @Override
@@ -45,7 +60,16 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
                 Exception e = (Exception) data;
                 showError(e.getLocalizedMessage());
                 e.printStackTrace();
-                startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+                Intent intent2 = new Intent(this, MenuActivity.class);
+                intent2.setFlags(intent2.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent2);
+                break;
+
+            case SERVER_STOPPED:
+                showToast("Server was stopped", Toast.LENGTH_LONG);
+                Intent intent3 = new Intent(this, MenuActivity.class);
+                intent3.setFlags(intent3.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent3);
                 break;
         }
     }

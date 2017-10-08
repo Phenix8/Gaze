@@ -29,6 +29,10 @@ public class Server extends ServerBase {
 
     private HashMap<ClientHandler, Player> players = new HashMap<>();
 
+    /**
+     * Choisi une anamorphose de difficulté moyenne.
+     * @return L'identifiant de l'anamorphose sous form de chaine de caractères.
+     */
     private String chooseMediumAnamorph() {
         return String.format(
                 Locale.ENGLISH,
@@ -37,6 +41,11 @@ public class Server extends ServerBase {
         );
     }
 
+    /**
+     * Retrouve le Handler associé à un joueur.
+     * @param player Le joueur en question.
+     * @return L'objet ClientHandler correspondant à ce joueur.
+     */
     private ClientHandler getHandler(Player player) {
         for (HashMap.Entry<ClientHandler, Player> entry : players.entrySet()) {
             if (entry.getValue() == player) {
@@ -46,6 +55,11 @@ public class Server extends ServerBase {
         return null;
     }
 
+    /**
+     * Donne la liste des joueurs triée par scores si tous les
+     * scores des joueurs sont renseignés.
+     * @return La liste triée des joueur sous forme d'ArrayList.
+     */
     private ArrayList<Player> sortPlayersByScore() {
         for (Player player : players.values()) {
             if (player.getScore() == -1) {
@@ -62,6 +76,10 @@ public class Server extends ServerBase {
         return sortedPlayers;
     }
 
+    /**
+     * Tell if all player are ready.
+     * @return
+     */
     public boolean areAllPlayerReady() {
         for (Player player : players.values()) {
             if (!player.isReady()) {
@@ -71,6 +89,12 @@ public class Server extends ServerBase {
         return true;
     }
 
+    /**
+     * Create a new player from his name and add it to the list of players.
+     * @param handler The ClientHandler managing the connection.
+     * @param name The name of the player.
+     * @return The id of the player, or null if the game is already started.
+     */
     public String addPlayer(ClientHandler handler, String name) {
         if (gameState != GameState.LOBBY) {
             return null;
@@ -91,10 +115,26 @@ public class Server extends ServerBase {
         }
     }
 
+    /**
+     * Share all players informations with clients.
+     */
     private void sendPlayerList() {
         sendMessageToAll(Protocol.buildPlayerListInstruction(players.values()));
     }
 
+    /**
+     * When the server is stopped for various reason.
+     */
+    @Override
+    protected void onServerStopped() {
+        sendMessageToAll(Protocol.buildServerStoppedInstruction());
+    }
+
+    /**
+     * When a new message is received.
+     * @param handler The handler associated to the transmitter of this message.
+     * @param message The message received.
+     */
     @Override
     public void onMessageReceived(ClientHandler handler, String message) {
         if (message == null) {
@@ -102,7 +142,7 @@ public class Server extends ServerBase {
         }
 
         switch (Protocol.parseInstructionType(message)) {
-            case Protocol.CONNECT_INSTRUCTION_TYPE:
+            case Protocol.CONNECT_MESSAGE_TYPE:
                 String name = Protocol.parseConnectInstructionData(Protocol.parseInstructionData(message));
                 String playerId = addPlayer(handler, name);
                 if (playerId == null) {
@@ -113,13 +153,16 @@ public class Server extends ServerBase {
                 }
             break;
 
-            case Protocol.READY_INSTRUCTION_TYPE:
+            //A player change it state ready/not ready
+            case Protocol.READY_MESSAGE_TYPE:
                 Player player = players.get(handler);
                 player.setReady(!player.isReady());
                 sendPlayerList();
             break;
 
-            case Protocol.START_INSTRUCTION_TYPE:
+            //The host of the game ask to start the game.
+            //Protocol.NOTREADY instruction is returned if not all players are ready.
+            case Protocol.START_MESSAGE_TYPE:
                 if (areAllPlayerReady()) {
                     this.gameState = GameState.MAIN_GAME;
                     sendMessageToAll(Protocol.buildStartInstruction());
@@ -128,7 +171,10 @@ public class Server extends ServerBase {
                 }
             break;
 
-            case Protocol.FINISHED_INSTRUCTION_TYPE:
+            //When a player found all his anamorphosis.
+            //If two players are in DeathMatch, we add 1 point to the winner
+            //(transmitter of this message), otherwise advertise other players the Game is finshed.
+            case Protocol.FINISHED_MESSAGE_TYPE:
                 if (gameState == GameState.DEATH_MATCH) {
                     Player p = players.get(handler);
                     p.setScore(p.getScore()+1);
@@ -143,7 +189,11 @@ public class Server extends ServerBase {
                 }
             break;
 
-            case Protocol.SCORE_INSTRUCTION_TYPE:
+            //A player send its score after server sent Protocol.FINISHED instruction,
+            //all will do that.
+            //If to players are equals, we launch a DeathMatch, else we share the final list of players
+            //with scores.
+            case Protocol.SCORE_MESSAGE_TYPE:
                 try {
                     int score = Integer.parseInt(Protocol.parseInstructionData(message));
                     players.get(handler).setScore(score);
@@ -174,6 +224,10 @@ public class Server extends ServerBase {
         }
     }
 
+    /**
+     * When a client is disconected for various reason.
+     * @param handler The Handler in charge of the connection
+     */
     @Override
     public void onClientDisconnected(ClientHandler handler) {
         if (players.containsKey(handler)) {
@@ -186,6 +240,13 @@ public class Server extends ServerBase {
         }
     }
 
+    /**
+     * Build a new server.
+     * @param roomNotifier The UDP room broadcaster.
+     * @param anamorphDictionary The register of anamorphosis.
+     * @param tcpPort The tcp port on wich the server will wait for new connections.
+     * @param maxPlayer The maximum amount of player.
+     */
     public Server(RoomNotifier roomNotifier, AnamorphDictionary anamorphDictionary, int tcpPort, int maxPlayer) {
         super(roomNotifier, tcpPort, maxPlayer);
         this.gameState = GameState.LOBBY;

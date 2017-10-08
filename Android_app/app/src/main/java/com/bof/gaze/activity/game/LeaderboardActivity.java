@@ -1,16 +1,19 @@
 package com.bof.gaze.activity.game;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.bof.gaze.R;
+import com.bof.gaze.activity.common.CommonGameActivity;
+import com.bof.gaze.activity.menu.MenuActivity;
 import com.bof.gaze.model.Player;
 
 import java.util.Collection;
 
 
-public class LeaderboardActivity extends AppCompatActivity {
+public class LeaderboardActivity extends CommonGameActivity {
         //implements Client.GameEventListener, AdapterView.OnItemClickListener {
 
     private TextView[] tvPlayerNames = new TextView[4];
@@ -55,5 +58,15 @@ public class LeaderboardActivity extends AppCompatActivity {
             tvPlayerScores[i].setText(String.valueOf(p.getScore()));
             i++;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.isGameHost()) {
+            stopServer();
+        }
+        Intent intent = new Intent(this, MenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 }

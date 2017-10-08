@@ -45,6 +45,19 @@ public class GazeApplication extends Application {
         server.startListening(synch);
     }
 
+    public void stopServer() {
+        server.stopListening();
+        server = null;
+    }
+
+    public boolean isServerStarted() {
+        return server != null;
+    }
+
+    public boolean isHost() {
+        return isServerStarted();
+    }
+
     public AnamorphDictionary getAnamorphDictionary() {
         return anamorphDictionary;
     }

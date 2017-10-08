@@ -67,11 +67,6 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
     }
 
     @Override
-    public void onBackPressed() {
-        return;
-    }
-
-    @Override
     public void onClick(View view) {
         currentAnamorphosis = null;
 

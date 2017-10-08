@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by root on 12/04/2017.
@@ -30,11 +31,11 @@ ServerBase extends Thread
 
     private int tcpPort;
 
-    private boolean listening = true;
+    private boolean listening;
 
     private int maxPlayer;
 
-    private ArrayList<ClientHandler> client = new ArrayList<>();
+    private ArrayList<ClientHandler> clients = new ArrayList<>();
 
     public ServerBase(RoomNotifier roomNotifier, int tcpPort, int maxPlayer) {
         this.roomNotifier = roomNotifier;
@@ -43,30 +44,42 @@ ServerBase extends Thread
     }
 
     public void startListening(ServerStateCallback callback) {
+        if (this.listening) {
+            throw new IllegalStateException("Server is already started.");
+        }
         this.callback = callback;
+        this.listening = true;
         this.start();
     }
 
     public void stopListening() {
+        if (!this.listening) {
+            throw new IllegalStateException("Server is not running.");
+        }
         this.listening = false;
+        onServerStopped();
+        for (ClientHandler client : clients) {
+            client.close();
+        }
     }
 
     public void sendMessageToAll(String message) {
-        for (ClientHandler client : this.client) {
+        for (ClientHandler client : this.clients) {
             client.sendMessage(message);
         }
     }
 
+    protected abstract void onServerStopped();
+
     @Override
     public void run() {
         ServerSocket listeningSocket = null;
-
         try {
             listeningSocket = new ServerSocket(tcpPort);
             listeningSocket.setSoTimeout(1000);
             roomNotifier.startNotifying();
 
-            while (listening && client.size() < maxPlayer) {
+            while (listening && clients.size() < maxPlayer) {
                 try {
                     if (callback != null) {
                         callback.onServerStarted();
@@ -77,7 +90,7 @@ ServerBase extends Thread
 
                     ClientHandler client = new ClientHandler(socketClient);
                     client.addListener(this);
-                    this.client.add(client);
+                    this.clients.add(client);
                     client.start();
                 } catch (SocketTimeoutException e) {
 
