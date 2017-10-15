@@ -16,19 +16,23 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"/>
 
+    <!-- Discard button -->
     <ImageView
         android:id="@+id/camera_act_cancel_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:src="@drawable/camera_cancel"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginEnd="20dp"/>
 
+    <!-- Anamorphosis image -->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp">
 
         <ImageView
@@ -46,6 +50,7 @@
 
     </RelativeLayout>
 
+    <!-- Camera picture icon -->
     <ImageView
         android:id="@+id/camera_act_camera_img"
         android:layout_width="wrap_content"
@@ -55,6 +60,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="20dp"/>
 
+    <!-- Zoomed anamorphosis image -->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,5 +80,13 @@
             android:layout_centerInParent="true" />
 
     </RelativeLayout>
+
+    <!-- Player scores listView -->
+    <ListView
+        android:id="@+id/playerScoresListview"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content">
+
+    </ListView>
 
 </RelativeLayout>

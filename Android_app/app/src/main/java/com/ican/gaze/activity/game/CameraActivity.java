@@ -1,21 +1,31 @@
 package com.ican.gaze.activity.game;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ican.gaze.R;
 import com.ican.gaze.activity.common.CommonGameActivity;
+import com.ican.gaze.model.Player;
 import com.ican.gaze.view.AutoFitTextureView;
 import com.ican.gaze.camera.CameraProcessor;
 import com.ican.gaze.model.Anamorphosis;
 import com.ican.gaze.view.CameraGlassSurfaceView;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +43,41 @@ public class CameraActivity extends CommonGameActivity
     private boolean canCancel = true;
 
     private CameraProcessor cameraProcessor = new CameraProcessor(this);
+
+    // Adapter to fill (Image + text) the player scores list
+    private ArrayAdapter<Player> adapter;
+
+    private class CustomAdapter extends ArrayAdapter<Player> {
+        CustomAdapter(Context context, ArrayList<Player> players) {
+            super(context, 0, players);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+            Player player = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.camera_player_score_item, parent, false);
+            }
+            TextView txtPlayerScore = convertView.findViewById(R.id.camera_J_score_txt);
+            ImageView imgPlayerScore = convertView.findViewById(R.id.camera_J_score_txt);
+
+            if (player == null) {
+                return convertView;
+            }
+            txtPlayerScore.setText(player.getScore());
+
+            // The current player case
+            if (player.getPlayerId().equals(getGameClient().getPlayerId()))
+                imgPlayerScore.setImageResource(R.drawable.camera_player_score);
+            else
+                imgPlayerScore.setImageResource(R.drawable.camera_other_player_score);
+
+            return convertView;
+        }
+    }
 
     private void loadComponents() {
         cancelImg = (ImageView) findViewById(R.id.camera_act_cancel_img);
@@ -188,6 +233,10 @@ public class CameraActivity extends CommonGameActivity
         loadComponents();
         loadTargetAnamorphosis();
         checkForAlreadyCanceledState();
+
+        ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
+        adapter = new CameraActivity.CustomAdapter(this, new ArrayList<Player>());
+        playerList.setAdapter(adapter);
     }
 
 

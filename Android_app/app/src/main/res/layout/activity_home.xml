@@ -20,4 +20,28 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/splachscreen" />
 
+    <LinearLayout
+        android:id="@+id/homePermissionLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/homePermissionTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="The permission is required to play"/>
+        <Button
+            android:id="@+id/homePermissionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
 </RelativeLayout>
