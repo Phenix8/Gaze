@@ -140,6 +140,8 @@ public class Client extends Thread implements Serializable {
         return this.playerId;
     }
 
+    public int getNbFoundAnamorphosis() { return this.nbFoundAnamorphosis; };
+
     private void notifyListener(GameEventListener.GameEventType type, Object data) {
         mutex.lock();
             if (listener != null) {
