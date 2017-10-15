@@ -113,7 +113,6 @@ public class JoinRoomActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        LobbyActivity.isRoomAdmin = false;
         Intent intent = new Intent(this, LobbyActivity.class);
         intent.putExtra("serverAddress", ((Room)adapter.getItem(position)).getAddress());
         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);

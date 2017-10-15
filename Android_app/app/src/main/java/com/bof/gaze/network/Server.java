@@ -221,6 +221,13 @@ public class Server extends ServerBase {
 
                 }
             break;
+
+            case Protocol.ROOM_NAME_MESSAGE_TYPE:
+                //Only host can change room name
+                if (handler.isHost()) {
+                    sendMessageToAll(message);
+                }
+            break;
         }
     }
 

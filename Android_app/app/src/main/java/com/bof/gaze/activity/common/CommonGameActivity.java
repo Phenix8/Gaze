@@ -22,10 +22,6 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
         return ((GazeApplication) this.getApplication()).isServerStarted();
     }
 
-    protected boolean isGameHost() {
-        return ((GazeApplication) this.getApplication()).isHost();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();

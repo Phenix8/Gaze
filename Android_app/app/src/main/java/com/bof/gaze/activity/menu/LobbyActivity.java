@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -35,9 +37,9 @@ public class LobbyActivity extends CommonGazeActivity
 
     private ArrayAdapter<Player> adapter;
 
-    public static boolean isRoomAdmin;
-
     private InetAddress serverAddress = null;
+
+    private TextView titleView;
 
     private class CustomAdapter extends ArrayAdapter<Player> {
         CustomAdapter(Context context, ArrayList<Player> players) {
@@ -164,7 +166,7 @@ public class LobbyActivity extends CommonGazeActivity
     }
 
     @Override
-    public void onGameEvent(GameEventType type, Object data) {
+    public void onGameEvent(GameEventType type, final Object data) {
         final GameEventType t = type;
         final Object d = data;
         final Client.GameEventListener self = this;
@@ -178,9 +180,11 @@ public class LobbyActivity extends CommonGazeActivity
                     adapter.notifyDataSetChanged();
                 } else if (t == GameEventType.GAME_STARTED) {
                     Intent intent =
-                        new Intent(getApplicationContext(),
-                            AnamorphosisChoiceActivity.class);
+                            new Intent(getApplicationContext(),
+                                    AnamorphosisChoiceActivity.class);
                     startActivity(intent);
+                } else if (t == GameEventType.ROOM_NAME_CHANGED) {
+                    titleView.setText((String) data);
                 } else if (t == GameEventType.ERROR_OCCURED) {
                     Log.d("anamorph", "Error occured");
                     if (d instanceof Exception) {
@@ -204,17 +208,37 @@ public class LobbyActivity extends CommonGazeActivity
         EditText titleEdit = (EditText) findViewById(R.id.editable_roomTitle_txt);
         ImageView titleBackground = (ImageView) findViewById(R.id.editable_roomTitle_bg);
 
-        TextView titleView = (TextView) findViewById(R.id.nonEditable_roomTitle);
+        titleView = (TextView) findViewById(R.id.nonEditable_roomTitle);
 
         // Assignation du nom de salle depuis le réseau si le joueur n'est pas admin
-        if (!isRoomAdmin) {
+        if (!isGameHost()) {
             titleView.setText("");
         }
 
-        titleEdit.setVisibility(isRoomAdmin ? View.VISIBLE : View.INVISIBLE);
-        titleBackground.setVisibility(isRoomAdmin ? View.VISIBLE : View.INVISIBLE);
-        titleView.setVisibility(isRoomAdmin ? View.INVISIBLE : View.VISIBLE);
+        titleEdit.setVisibility(isGameHost() ? View.VISIBLE : View.INVISIBLE);
+        titleBackground.setVisibility(isGameHost() ? View.VISIBLE : View.INVISIBLE);
+        titleView.setVisibility(isGameHost() ? View.INVISIBLE : View.VISIBLE);
 
+        titleEdit.setOnEditorActionListener(
+            new EditText.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                            actionId == EditorInfo.IME_ACTION_DONE ||
+                            event.getAction() == KeyEvent.ACTION_DOWN &&
+                                    event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                        if (!event.isShiftPressed()) {
+                            try {
+                                getGameClient().sendRoomName(v.getText().toString());
+                            } catch (IOException e) {
+                                showToast("Server doesn't respond");
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            });
     }
 
     @Override

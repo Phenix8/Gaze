@@ -1,5 +1,6 @@
 package com.bof.gaze.network;
 
+import java.net.InetAddress;
 import java.net.Socket;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
@@ -58,6 +59,10 @@ public class ClientHandler extends Thread {
 
     public void removeListener(ClientHandlerListener listener) {
         listeners.remove(listener);
+    }
+
+    public boolean isHost() {
+        return sock.getInetAddress() == InetAddress.getLoopbackAddress();
     }
 
     public void close(){

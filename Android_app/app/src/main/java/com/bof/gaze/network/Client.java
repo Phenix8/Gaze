@@ -48,7 +48,8 @@ public class Client extends Thread implements Serializable {
             GAME_ENDED,
             DEATH_MATCH,
             ERROR_OCCURED,
-            SERVER_STOPPED
+            SERVER_STOPPED,
+            ROOM_NAME_CHANGED
         }
 
         void onGameEvent(GameEventType type, Object data);
@@ -92,6 +93,10 @@ public class Client extends Thread implements Serializable {
         sendInstruction(
                 Protocol.buildConnectInstruction(playerName)
         );
+    }
+
+    public void sendRoomName(String roomName) throws IOException {
+        sendInstruction(Protocol.buildRoomNameInstruction(roomName));
     }
 
     public void toggleReady()throws IOException {
@@ -220,6 +225,14 @@ public class Client extends Thread implements Serializable {
                     case Protocol.SERVER_STOPPED_INSTRUCTION:
                         connected = false;
                         notifyListener(GameEventListener.GameEventType.SERVER_STOPPED, null);
+                    break;
+
+                    case Protocol.ROOM_NAME_INSTRUCTION_TYPE:
+                        notifyListener(GameEventListener.GameEventType.ROOM_NAME_CHANGED,
+                            Protocol.parseRoomNameInstruction(
+                                Protocol.parseInstructionData(message)
+                            )
+                        );
                     break;
                 }
             }

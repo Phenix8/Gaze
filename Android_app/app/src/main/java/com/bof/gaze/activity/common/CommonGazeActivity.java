@@ -29,6 +29,10 @@ public class CommonGazeActivity extends AppCompatActivity {
         ((GazeApplication) getApplication()).stopServer();
     }
 
+    protected boolean isGameHost() {
+        return ((GazeApplication) this.getApplication()).isHost();
+    }
+
     protected void showToast(String text, int duration) {
         Toast.makeText(this, text, duration).show();
     }
