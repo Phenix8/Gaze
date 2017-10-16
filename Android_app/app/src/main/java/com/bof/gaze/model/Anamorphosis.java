@@ -93,6 +93,12 @@ public class Anamorphosis implements Serializable {
         return values[difficulty.ordinal()];
     }
 
+
+    public static int getValueFromDifficulty(Difficulty difficulty)
+    {
+        return values[difficulty.ordinal()];
+    }
+
     /**
      * Contructeur complement renseigne.
      * @param drawableImage
@@ -107,4 +113,5 @@ public class Anamorphosis implements Serializable {
         this.difficulty = difficulty;
         this.detectorName = detectorName;
     }
+
 }

@@ -9,12 +9,22 @@ public class Player implements Serializable {
     private int score;
     private boolean ready;
     private String playerId;
+    private int nbFoundAnamorphosis;
 
     public Player(String name, int score, boolean ready, String playerId) {
         this.name = name;
         this.score = score;
         this.ready = ready;
         this.playerId = playerId;
+        this.nbFoundAnamorphosis = 0;
+    }
+
+    public Player(String name, int score, boolean ready, String playerId, int nbFoundAnamorphosis) {
+        this.name = name;
+        this.score = score;
+        this.ready = ready;
+        this.playerId = playerId;
+        this.nbFoundAnamorphosis = nbFoundAnamorphosis;
     }
 
     public String getName() {
@@ -33,6 +43,8 @@ public class Player implements Serializable {
         return playerId;
     }
 
+    public int getNbFoundAnamorphosis() { return nbFoundAnamorphosis;}
+
     public void setName(String name) {
         this.name = name;
     }
@@ -48,6 +60,8 @@ public class Player implements Serializable {
     public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
+
+    public void setNbFoundAnamorphosis(int nbFoundAnamorphosis) { this.nbFoundAnamorphosis = nbFoundAnamorphosis; }
 
     @Override
     public String toString() {

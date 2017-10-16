@@ -1,5 +1,6 @@
 package com.bof.gaze.network;
 
+import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.model.Player;
 
 import java.io.UnsupportedEncodingException;
@@ -33,19 +34,20 @@ public class Protocol {
     public static final String ALREADY_STARTED_INSTRUCTION_TYPE =   "GAME-STARTED";
     public static final String DEATHMATCH_INSTRUCTION_TYPE =        "DEATHMATCH";
     public static final String SERVER_STOPPED_INSTRUCTION =         "SERVER-STOPPED";
-    public static final String ROOM_NAME_INSTRUCTION_TYPE =     "ROOM-NAME";
+    public static final String ROOM_NAME_INSTRUCTION_TYPE =         "ROOM-NAME";
 
     /**
      * Client's messages, sent to server.
      */
-    public static final String START_MESSAGE_TYPE =             "START";
-    public static final String QUIT_MESSAGE_TYPE =              "QUIT";
-    public static final String CONNECT_MESSAGE_TYPE =           "CONNECT";
-    public static final String DISCONNECT_MESSAGE_TYPE =        "DISCONNECT";
-    public static final String FINISHED_MESSAGE_TYPE =          "FINISHED";
-    public static final String SCORE_MESSAGE_TYPE =             "SCORE";
-    public static final String READY_MESSAGE_TYPE =             "READY";
-    public static final String ROOM_NAME_MESSAGE_TYPE =         "ROOM-NAME";
+    public static final String START_MESSAGE_TYPE =                 "START";
+    public static final String QUIT_MESSAGE_TYPE =                  "QUIT";
+    public static final String CONNECT_MESSAGE_TYPE =               "CONNECT";
+    public static final String DISCONNECT_MESSAGE_TYPE =            "DISCONNECT";
+    public static final String FINISHED_MESSAGE_TYPE =              "FINISHED";
+    public static final String SCORE_MESSAGE_TYPE =                 "SCORE";
+    public static final String READY_MESSAGE_TYPE =                 "READY";
+    public static final String ROOM_NAME_MESSAGE_TYPE =             "ROOM-NAME";
+    public static final String ANAMORPHOSIS_FOUND_MESSAGE_TYPE =    "ANAM-FOUND";
 
     public static final String QUIT_INSTRUCTION =
             QUIT_MESSAGE_TYPE + INSTRUCTION_END;
@@ -75,7 +77,9 @@ public class Protocol {
                     .append(",")
                     .append(player.getScore())
                     .append(",")
-                    .append(player.isReady());
+                    .append(player.isReady())
+                    .append(",")
+                    .append(player.getNbFoundAnamorphosis());
             } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
         }
         str.insert(0, INSTRUCTION_SEPARATOR);
@@ -94,7 +98,8 @@ public class Protocol {
                                 URLDecoder.decode(infos[1], "UTF-8"),
                                 Integer.parseInt(infos[2]),
                                 Boolean.parseBoolean(infos[3]),
-                                infos[0]
+                                infos[0],
+                                Integer.parseInt(infos[4])
                         )
                 );
             } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
@@ -227,5 +232,14 @@ public class Protocol {
         } catch (UnsupportedEncodingException e) {
             return "";
         }
+    }
+
+    public static String buildAnamorphosisFoundMessage(Anamorphosis anam) {
+        return String.format("%s %d%s", ANAMORPHOSIS_FOUND_MESSAGE_TYPE, anam.getDifficulty().ordinal(), INSTRUCTION_END);
+    }
+
+    public static Anamorphosis.Difficulty parseAnamorphosisFoundMessage(String instructionData)
+            throws NumberFormatException{
+        return Anamorphosis.Difficulty.values()[Integer.parseInt(instructionData)];
     }
 }

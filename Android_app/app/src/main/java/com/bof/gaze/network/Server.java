@@ -228,6 +228,15 @@ public class Server extends ServerBase {
                     sendMessageToAll(message);
                 }
             break;
+
+            // When a player found an anmorphosis (update of score + the number of found anamorphosis)
+            case Protocol.ANAMORPHOSIS_FOUND_MESSAGE_TYPE:
+                Player p = players.get(handler);
+                p.setNbFoundAnamorphosis((p.getNbFoundAnamorphosis() + 1));
+                Anamorphosis.Difficulty anamDifficulty = Protocol.parseAnamorphosisFoundMessage(Protocol.parseInstructionData(message));
+                p.setScore(p.getScore() + Anamorphosis.getValueFromDifficulty(anamDifficulty));
+                sendPlayerList();
+                break;
         }
     }
 
