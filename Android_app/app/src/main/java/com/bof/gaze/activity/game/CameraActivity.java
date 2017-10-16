@@ -257,6 +257,10 @@ public class CameraActivity extends CommonGameActivity
         //
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
         adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
+        //
+        //TODO : Use CommonGameActivity.setPlayerAdapter(ArrayAdapter adapter);
+        //Given array adapter will be synchronized with the server player list.
+        //
         adapter.addAll(getGameClient().getPlayerList());
         adapter.notifyDataSetChanged();
         playerList.setAdapter(adapter);

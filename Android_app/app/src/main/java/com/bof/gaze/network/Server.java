@@ -20,7 +20,8 @@ public class Server extends ServerBase {
     private enum GameState {
         LOBBY,
         MAIN_GAME,
-        DEATH_MATCH
+        DEATH_MATCH,
+        ENDED
     }
 
     private GameState gameState;
@@ -171,57 +172,6 @@ public class Server extends ServerBase {
                 }
             break;
 
-            //When a player found all his anamorphosis.
-            //If two players are in DeathMatch, we add 1 point to the winner
-            //(transmitter of this message), otherwise advertise other players the Game is finshed.
-            case Protocol.FINISHED_MESSAGE_TYPE:
-                if (gameState == GameState.DEATH_MATCH) {
-                    Player p = players.get(handler);
-                    p.setScore(p.getScore()+1);
-                    sendMessageToAll(
-                            Protocol.buildPlayerListInstruction(
-                                    players.values()));
-                } else {
-                    for (Player p : players.values()) {
-                        p.setScore(-1);
-                    }
-                    sendMessageToAll(Protocol.buildFinishedInstruction());
-                }
-            break;
-
-            //A player send its score after server sent Protocol.FINISHED instruction,
-            //all will do that.
-            //If to players are equals, we launch a DeathMatch, else we share the final list of players
-            //with scores.
-            case Protocol.SCORE_MESSAGE_TYPE:
-                try {
-                    int score = Integer.parseInt(Protocol.parseInstructionData(message));
-                    players.get(handler).setScore(score);
-                    ArrayList<Player> sortedPlayer = sortPlayersByScore();
-                    if (sortedPlayer == null) {
-                        return;
-                    }
-                    if (sortedPlayer.get(0) == sortedPlayer.get(1)) {
-                        gameState = GameState.DEATH_MATCH;
-                        sendMessageToAll(
-                                Protocol.buildDeathMatchInstruction(
-                                        sortedPlayer.get(0).getPlayerId(),
-                                        sortedPlayer.get(1).getPlayerId(),
-                                        chooseMediumAnamorph()
-                                )
-                        );
-                    } else {
-                        sendMessageToAll(
-                            Protocol.buildPlayerListInstruction(
-                                sortedPlayer
-                            )
-                        );
-                    }
-                } catch (NumberFormatException e) {
-
-                }
-            break;
-
             case Protocol.ROOM_NAME_MESSAGE_TYPE:
                 //Only host can change room name
                 if (handler.isHost()) {
@@ -231,11 +181,42 @@ public class Server extends ServerBase {
 
             // When a player found an anmorphosis (update of score + the number of found anamorphosis)
             case Protocol.ANAMORPHOSIS_FOUND_MESSAGE_TYPE:
-                Player p = players.get(handler);
-                p.setNbFoundAnamorphosis((p.getNbFoundAnamorphosis() + 1));
+                Player currentPlayer = players.get(handler);
+                currentPlayer.setNbFoundAnamorphosis((currentPlayer.getNbFoundAnamorphosis() + 1));
                 Anamorphosis.Difficulty anamDifficulty = Protocol.parseAnamorphosisFoundMessage(Protocol.parseInstructionData(message));
-                p.setScore(p.getScore() + Anamorphosis.getValueFromDifficulty(anamDifficulty));
-                sendPlayerList();
+                currentPlayer.setScore(currentPlayer.getScore() + Anamorphosis.getValueFromDifficulty(anamDifficulty));
+
+                if (gameState == GameState.DEATH_MATCH) {
+                    sendPlayerList();
+                    gameState = gameState.ENDED;
+                } else if (gameState == GameState.MAIN_GAME) {
+                    //If the player have found 4 anamorphosis the game is stopped
+                    if (currentPlayer.getNbFoundAnamorphosis() == 4) {
+                        //Check if any players are equals
+                        ArrayList<Player> players = sortPlayersByScore();
+                        ArrayList<Player> equalsPlayers = new ArrayList<>();
+                        equalsPlayers.add(players.get(0));
+                        for (int i=1; i<players.size(); i++) {
+                            if (players.get(0).getScore() != equalsPlayers.get(i).getScore()) {
+                                break;
+                            }
+                            equalsPlayers.add(players.get(i));
+                        }
+                        //Then DEATH MATCH instruction is sent.
+                        if (equalsPlayers.size() > 1) {
+                            gameState = GameState.ENDED.DEATH_MATCH;
+                            sendMessageToAll(
+                                Protocol.buildDeathMatchInstruction(
+                                    equalsPlayers,
+                                    chooseMediumAnamorph()
+                                )
+                            );
+                        } else { //Otherwise, we send the final players list
+                           sendPlayerList();
+                            gameState = GameState.ENDED;
+                        }
+                      }
+                }
                 break;
         }
     }

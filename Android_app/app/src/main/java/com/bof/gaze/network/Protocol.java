@@ -117,11 +117,13 @@ public class Protocol {
     public static String parseDeathMatchInstruction(String instructionData, String playerId) {
         String[] parts = instructionData.split(DATA_SEPARATOR);
 
-        if (playerId.equals(parts[0]) || playerId.equals(parts[1])) {
-            return parts[2];
-        } else {
-            return null;
+        for (int i=1; i<parts.length; i++) {
+            if (parts.equals(playerId)) {
+                return parts[1];
+            }
         }
+
+        return null;
     }
 
     public static String buildConnectInstruction(String playerName) {
@@ -195,17 +197,20 @@ public class Protocol {
     }
 
     public static String buildDeathMatchInstruction(
-            String playerId1, String playerId2, String anamorphId) {
-        return String.format(
-                "%s%s%s%s%s%s%s%s",
-                DEATHMATCH_INSTRUCTION_TYPE,
-                INSTRUCTION_SEPARATOR,
-                playerId1,
-                DATA_SEPARATOR,
-                playerId2,
-                DATA_SEPARATOR,
-                anamorphId,
-                INSTRUCTION_END);
+            List<Player> equalsPlayers, String anamorphId) {
+
+        StringBuffer str = new StringBuffer();
+        str.append(DEATHMATCH_INSTRUCTION_TYPE);
+        str.append(INSTRUCTION_SEPARATOR);
+        str.append(anamorphId);
+
+        for (Player p : equalsPlayers) {
+            str.append(DATA_SEPARATOR);
+            str.append(p.getPlayerId());
+        }
+
+        str.append(INSTRUCTION_END);
+        return str.toString();
     }
 
     public static String buildServerStoppedInstruction() {
