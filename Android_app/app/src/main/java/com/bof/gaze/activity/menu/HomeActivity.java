@@ -59,6 +59,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
 
         if (nickname.isEmpty()) {
             Intent intent = new Intent(getApplicationContext(), NicknameActivity.class);
+            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         }
         else
