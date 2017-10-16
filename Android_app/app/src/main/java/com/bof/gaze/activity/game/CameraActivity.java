@@ -20,19 +20,22 @@ import android.widget.TextView;
 import com.bof.gaze.R;
 import com.bof.gaze.activity.common.CommonGameActivity;
 import com.bof.gaze.model.Player;
+import com.bof.gaze.network.Client;
 import com.bof.gaze.view.AutoFitTextureView;
 import com.bof.gaze.camera.CameraProcessor;
 import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.view.CameraGlassSurfaceView;
 
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.bof.gaze.detection.ObjectDetector;
 
 public class CameraActivity extends CommonGameActivity
-        implements View.OnClickListener, CameraProcessor.CameraProcessorListener, View.OnTouchListener {
+        implements View.OnClickListener, CameraProcessor.CameraProcessorListener, View.OnTouchListener, Client.GameEventListener {
 
     private ImageView cancelImg, littleAnamorphImg, largeAnamorphImg, cameraImg;
     private CameraGlassSurfaceView cameraGlassSurfaceView;
@@ -48,8 +51,8 @@ public class CameraActivity extends CommonGameActivity
     private ArrayAdapter<Player> adapter;
 
     private class CustomAdapter extends ArrayAdapter<Player> {
-        CustomAdapter(Context context, ArrayList<Player> players) {
-            super(context, 0, players);
+        CustomAdapter(Context context, int resource, ArrayList<Player> players) {
+            super(context, resource, players);
         }
 
         @NonNull
@@ -58,25 +61,37 @@ public class CameraActivity extends CommonGameActivity
 
             Player player = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
-            if (convertView == null) {
+            if (convertView == null)
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.camera_player_score_item, parent, false);
-            }
-            TextView txtPlayerScore = convertView.findViewById(R.id.camera_J_score_txt);
-            ImageView imgPlayerScore = convertView.findViewById(R.id.camera_J_score_txt);
 
-            if (player == null) {
+            if (player == null)
                 return convertView;
-            }
-            txtPlayerScore.setText(player.getScore());
+
+            TextView txtPlayerScore = convertView.findViewById(R.id.camera_J_score_txt);
+            ImageView imgPlayerScore = convertView.findViewById(R.id.camera_J_score_img);
+
+            txtPlayerScore.setText(String.valueOf(player.getScore()));
 
             // The current player case
-            if (player.getPlayerId().equals(getGameClient().getPlayerId()))
+            //if (player.getPlayerId().equals(getGameClient().getPlayerId()))
+            if (player.getPlayerId().equals("99"))
+            {
+                updateFoundAnamorphosisImg(convertView, player);
                 imgPlayerScore.setImageResource(R.drawable.camera_player_score);
+            }
             else
                 imgPlayerScore.setImageResource(R.drawable.camera_other_player_score);
 
             return convertView;
         }
+    }
+
+    private void updateFoundAnamorphosisImg(View convertView, Player player)
+    {
+        convertView.findViewById(R.id.camera_player_anam1_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 0) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam2_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 1) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam3_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 2) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam4_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 3) ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void loadComponents() {
@@ -232,8 +247,18 @@ public class CameraActivity extends CommonGameActivity
         loadTargetAnamorphosis();
         checkForAlreadyCanceledState();
 
+        // TEST
+        ArrayList<Player> playerListTest = new ArrayList<Player>();
+        playerListTest.add(new Player("Test 1", 2, true, "99"));
+        playerListTest.add(new Player("Test 2", 0, true, "100"));
+        playerListTest.add(new Player("Test 3", 12, true, "101"));
+        playerListTest.add(new Player("Ron", 4, true, "102"));
+
+        //
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
-        adapter = new CameraActivity.CustomAdapter(this, new ArrayList<Player>());
+        adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
+        adapter.addAll(getGameClient().getPlayerList());
+        adapter.notifyDataSetChanged();
         playerList.setAdapter(adapter);
     }
 

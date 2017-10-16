@@ -246,10 +246,4 @@ public class LobbyActivity extends CommonGazeActivity
         super.onPause();
     }
 
-    // Vérifie si chaque joueur et prêt et met à jour l'UI
-    // le cas échéant
-    private void CheckReadyPlayerStates()
-    {
-
-    }
 }

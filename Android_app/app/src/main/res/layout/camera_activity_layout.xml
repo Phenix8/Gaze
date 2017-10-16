@@ -84,8 +84,10 @@
     <!-- Player scores listView -->
     <ListView
         android:id="@+id/playerScoresListview"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content">
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_centerVertical="true">
 
     </ListView>
 
