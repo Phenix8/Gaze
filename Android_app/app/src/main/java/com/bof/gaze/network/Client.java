@@ -110,9 +110,7 @@ public class Client extends Thread implements Serializable {
     public void setFound(Anamorphosis a) throws IOException {
         this.score += a.getValue();
         this.nbFoundAnamorphosis++;
-        if (nbFoundAnamorphosis >= 4) {
-            annouceAllFound();
-        }
+        sendInstruction(Protocol.buildAnamorphosisFoundMessage(a));
     }
 
     public void startGame() throws IOException {
