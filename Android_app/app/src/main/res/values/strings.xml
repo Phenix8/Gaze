@@ -107,4 +107,5 @@
     <string name="menuEnableWifiToast">Please enable Wifi</string>
     <string name="menuOnBackPressedToast">Press back again to quit Gaze</string>
     <string name="menuCameraExplainationInfo">You will need your camera to validate your finds :)</string>
+    <string name="homeCameraPermission">The permission is required to play</string>
 </resources>
