@@ -90,8 +90,6 @@ public class LobbyActivity extends CommonGazeActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_activity_layout);
 
-        SetEditableRoomTitle();
-
         ///////////////////////////
         // IMAGE BUTTON "Return" //
         ///////////////////////////
@@ -102,9 +100,8 @@ public class LobbyActivity extends CommonGazeActivity
         {
             @Override
             public void onClick (View v){
-            // retour
-            Log.i("Finish", "Finish nickname activity");
-            finish();
+            stopServer();
+            startActivity(new Intent(getApplicationContext(), MenuActivity.class));
         }
         });
 
@@ -163,6 +160,8 @@ public class LobbyActivity extends CommonGazeActivity
 
         adapter.addAll(getGameClient().getPlayerList());
         adapter.notifyDataSetChanged();
+
+        SetEditableRoomTitle();
     }
 
     @Override
@@ -223,17 +222,11 @@ public class LobbyActivity extends CommonGazeActivity
             new EditText.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                            actionId == EditorInfo.IME_ACTION_DONE ||
-                            event.getAction() == KeyEvent.ACTION_DOWN &&
-                                    event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                        if (!event.isShiftPressed()) {
-                            try {
-                                getGameClient().sendRoomName(v.getText().toString());
-                            } catch (IOException e) {
-                                showToast("Server doesn't respond");
-                            }
-                            return true;
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        try {
+                            getGameClient().sendRoomName(v.getText().toString());
+                        } catch (IOException e) {
+                            showToast("Server doesn't respond");
                         }
                     }
                     return false;

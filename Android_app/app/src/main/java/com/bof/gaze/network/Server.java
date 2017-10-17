@@ -1,5 +1,7 @@
 package com.bof.gaze.network;
 
+import android.util.Log;
+
 import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.model.AnamorphDictionary;
 import com.bof.gaze.model.Player;
@@ -100,7 +102,7 @@ public class Server extends ServerBase {
         if (gameState != GameState.LOBBY) {
             return null;
         }
-        Player newPlayer = new Player(name, -1, false, UUID.randomUUID().toString());
+        Player newPlayer = new Player(name, 0, false, UUID.randomUUID().toString());
         players.put(handler, newPlayer);
         return newPlayer.getPlayerId();
     }
@@ -141,6 +143,8 @@ public class Server extends ServerBase {
         if (message == null) {
             return;
         }
+
+        Log.d("Server", String.format("Received %s", message));
 
         switch (Protocol.parseInstructionType(message)) {
             case Protocol.CONNECT_MESSAGE_TYPE:
