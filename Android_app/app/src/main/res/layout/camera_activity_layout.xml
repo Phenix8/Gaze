@@ -27,7 +27,7 @@
         android:layout_marginEnd="20dp"/>
 
     <!-- Anamorphosis image -->
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -46,9 +46,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/camera_little_anamorph_bg"
+            android:layout_gravity="center"
             android:layout_centerInParent="true" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
     <!-- Camera picture icon -->
     <ImageView
@@ -61,7 +62,7 @@
         android:layout_marginEnd="20dp"/>
 
     <!-- Zoomed anamorphosis image -->
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -77,9 +78,10 @@
             android:id="@+id/camera_act_large_anamorph_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_centerInParent="true" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
     <!-- Player scores listView -->
     <ListView

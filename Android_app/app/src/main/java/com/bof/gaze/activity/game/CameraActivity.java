@@ -73,8 +73,8 @@ public class CameraActivity extends CommonGameActivity
             txtPlayerScore.setText(String.valueOf(player.getScore()));
 
             // The current player case
-            //if (player.getPlayerId().equals(getGameClient().getPlayerId()))
-            if (player.getPlayerId().equals("99"))
+            if (player.getPlayerId().equals(getGameClient().getPlayerId()))
+            //if (player.getPlayerId().equals("99"))
             {
                 updateFoundAnamorphosisImg(convertView, player);
                 imgPlayerScore.setImageResource(R.drawable.camera_player_score);
@@ -88,10 +88,10 @@ public class CameraActivity extends CommonGameActivity
 
     private void updateFoundAnamorphosisImg(View convertView, Player player)
     {
-        convertView.findViewById(R.id.camera_player_anam1_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 0) ? View.VISIBLE : View.INVISIBLE);
-        convertView.findViewById(R.id.camera_player_anam2_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 1) ? View.VISIBLE : View.INVISIBLE);
-        convertView.findViewById(R.id.camera_player_anam3_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 2) ? View.VISIBLE : View.INVISIBLE);
-        convertView.findViewById(R.id.camera_player_anam4_img).setVisibility( (getGameClient().getNbFoundAnamorphosis() > 3) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam1_img).setVisibility( (player.getNbFoundAnamorphosis() > 0) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam2_img).setVisibility( (player.getNbFoundAnamorphosis() > 1) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam3_img).setVisibility( (player.getNbFoundAnamorphosis() > 2) ? View.VISIBLE : View.INVISIBLE);
+        convertView.findViewById(R.id.camera_player_anam4_img).setVisibility( (player.getNbFoundAnamorphosis() > 3) ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void loadComponents() {
@@ -249,19 +249,20 @@ public class CameraActivity extends CommonGameActivity
 
         // TEST
         ArrayList<Player> playerListTest = new ArrayList<Player>();
+        /*
         playerListTest.add(new Player("Test 1", 2, true, "99"));
         playerListTest.add(new Player("Test 2", 0, true, "100"));
         playerListTest.add(new Player("Test 3", 12, true, "101"));
         playerListTest.add(new Player("Ron", 4, true, "102"));
+        */
 
-        //
+        // Player scores list
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
         adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
-        //
-        //TODO : Use CommonGameActivity.setPlayerAdapter(ArrayAdapter adapter);
+
         //Given array adapter will be synchronized with the server player list.
-        //
-        adapter.addAll(getGameClient().getPlayerList());
+        setPlayerAdapter(adapter);
+        //adapter.addAll(getGameClient().getPlayerList());
         adapter.notifyDataSetChanged();
         playerList.setAdapter(adapter);
     }
