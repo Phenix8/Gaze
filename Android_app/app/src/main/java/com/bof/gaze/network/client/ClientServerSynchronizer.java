@@ -1,4 +1,6 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.client;
+
+import com.bof.gaze.network.server.ServerBase;
 
 import java.net.InetAddress;
 

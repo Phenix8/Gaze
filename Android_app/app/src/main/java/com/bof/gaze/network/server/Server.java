@@ -1,10 +1,11 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.server;
 
 import android.util.Log;
 
 import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.model.AnamorphDictionary;
 import com.bof.gaze.model.Player;
+import com.bof.gaze.network.client.ClientHandler;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -122,7 +123,7 @@ public class Server extends ServerBase {
      * Share all players informations with clients.
      */
     private void sendPlayerList() {
-        sendMessageToAll(Protocol.buildPlayerListInstruction(players.values()));
+        sendMessageToAll(Protocol.buildPlayersInstruction(players.values()));
     }
 
     /**
@@ -191,7 +192,9 @@ public class Server extends ServerBase {
                 currentPlayer.setScore(currentPlayer.getScore() + Anamorphosis.getValueFromDifficulty(anamDifficulty));
 
                 if (gameState == GameState.DEATH_MATCH) {
-                    sendPlayerList();
+                    sendMessageToAll(
+                            Protocol.buildFinishedInstruction(sortPlayersByScore())
+                    );
                     gameState = gameState.ENDED;
                 } else if (gameState == GameState.MAIN_GAME) {
                     //If the player have found 4 anamorphosis the game is stopped
@@ -208,7 +211,7 @@ public class Server extends ServerBase {
                         }
                         //Then DEATH MATCH instruction is sent.
                         if (equalsPlayers.size() > 1) {
-                            gameState = GameState.ENDED.DEATH_MATCH;
+                            gameState = GameState.DEATH_MATCH;
                             sendMessageToAll(
                                 Protocol.buildDeathMatchInstruction(
                                     equalsPlayers,
@@ -216,10 +219,14 @@ public class Server extends ServerBase {
                                 )
                             );
                         } else { //Otherwise, we send the final players list
-                           sendPlayerList();
+                           sendMessageToAll(
+                                   Protocol.buildFinishedInstruction(players)
+                           );
                             gameState = GameState.ENDED;
                         }
-                      }
+                      } else {
+                        sendPlayerList();
+                    }
                 }
                 break;
         }

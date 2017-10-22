@@ -104,6 +104,8 @@
 
     <string name="homeTouchToPlayText">Tape to play</string>
 
+    <string name="anamorphosis_act_title">Choose an anamorphosis :</string>
+
     <string name="menuEnableWifiToast">Please enable Wifi</string>
     <string name="menuOnBackPressedToast">Press back again to quit Gaze</string>
     <string name="menuCameraExplainationInfo">You will need your camera to validate your finds :)</string>

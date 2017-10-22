@@ -1,19 +1,21 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.client;
 
 import android.util.Log;
 
 import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.model.Player;
+import com.bof.gaze.network.Common;
+import com.bof.gaze.network.server.Protocol;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -103,10 +105,6 @@ public class Client extends Thread implements Serializable {
         sendInstruction(Protocol.buildReadyInstruction(playerId));
     }
 
-    private void annouceAllFound() throws IOException {
-        sendInstruction(Protocol.buildFinishedInstruction());
-    }
-
     public void setFound(Anamorphosis a) throws IOException {
         this.score += a.getValue();
         this.nbFoundAnamorphosis++;
@@ -179,12 +177,8 @@ public class Client extends Thread implements Serializable {
 
                 switch (instructionType) {
                     case Protocol.PLAYERS_INSTRUCTION_TYPE:
-                        players = Protocol.parsePlayerListInstructionData(Protocol.parseInstructionData(message));
-                            if (lobby) {
-                                notifyListener(GameEventListener.GameEventType.PLAYER_LIST_CHANGED, players);
-                            } else {
-                                notifyListener(GameEventListener.GameEventType.GAME_ENDED, players);
-                            }
+                        players = Protocol.parsePlayerListData(Protocol.parseInstructionData(message));
+                        notifyListener(GameEventListener.GameEventType.PLAYER_LIST_CHANGED, players);
                     break;
 
                     case Protocol.PLAYER_ID_INSTRUCTION_TYPE:
@@ -219,7 +213,8 @@ public class Client extends Thread implements Serializable {
                     break;
 
                     case Protocol.FINISHED_INSTRUCTION_TYPE:
-                        sendInstruction(Protocol.buildScoreInstruction(score));
+                        players = Protocol.parsePlayerListData(Protocol.parseInstructionData(message));
+                        notifyListener(GameEventListener.GameEventType.GAME_ENDED, players);
                     break;
 
                     case Protocol.SERVER_STOPPED_INSTRUCTION:

@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_anamorphose_choice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bof.gaze.activity.game.AnamorphosisChoiceActivity">
+    android:background="@color/anamorphosis_choice_act_bg"
+    android:orientation="vertical">
 
-    <ImageButton
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/choose"/>
-
-    <!-- Selector -->
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/selectorLayout">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/anamorphose_selector"
-            android:visibility="invisible"
-            android:id="@+id/anamorphoseSelector" />
-
-    </FrameLayout>
+        android:layout_height="90dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/anamorphosis_act_title"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:layout_weight="0.2"/>
 
     <!-- Difficulty anamorphosis -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
-
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="0.8">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:gravity="center">
 
             <!-- EASY -->
@@ -169,4 +159,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

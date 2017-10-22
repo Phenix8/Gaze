@@ -2,12 +2,12 @@ package com.bof.gaze.application;
 
 import android.app.Application;
 
-import com.bof.gaze.network.Server;
-import com.bof.gaze.network.Client;
-import com.bof.gaze.network.ClientServerSynchronizer;
+import com.bof.gaze.network.server.Server;
+import com.bof.gaze.network.client.Client;
+import com.bof.gaze.network.client.ClientServerSynchronizer;
 import com.bof.gaze.network.Common;
-import com.bof.gaze.network.RoomNotifier;
-import com.bof.gaze.network.ServerBase;
+import com.bof.gaze.network.server.RoomNotifier;
+import com.bof.gaze.network.server.ServerBase;
 import com.bof.gaze.model.AnamorphDictionary;
 
 import java.net.InetAddress;

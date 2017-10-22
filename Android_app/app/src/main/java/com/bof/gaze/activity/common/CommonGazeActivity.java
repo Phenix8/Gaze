@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.bof.gaze.application.GazeApplication;
-import com.bof.gaze.network.Client;
-import com.bof.gaze.network.ClientServerSynchronizer;
+import com.bof.gaze.network.client.Client;
+import com.bof.gaze.network.client.ClientServerSynchronizer;
 import com.bof.gaze.model.AnamorphDictionary;
 
 import java.net.InetAddress;

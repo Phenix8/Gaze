@@ -53,7 +53,8 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.bof.gaze.activity.game.CameraActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:configChanges="orientation">
         </activity>
     </application>
 

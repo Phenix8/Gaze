@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.bof.gaze.R;
 import com.bof.gaze.activity.common.CommonGameActivity;
 import com.bof.gaze.model.Player;
-import com.bof.gaze.network.Client;
+import com.bof.gaze.network.client.Client;
 import com.bof.gaze.view.AutoFitTextureView;
 import com.bof.gaze.camera.CameraProcessor;
 import com.bof.gaze.model.Anamorphosis;
@@ -28,7 +28,6 @@ import com.bof.gaze.view.CameraGlassSurfaceView;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -270,13 +269,17 @@ public class CameraActivity extends CommonGameActivity
 
     @Override
     protected void onResume() {
+        Log.d("CameraActivity", "onResume() start");
         super.onResume();
         cameraProcessor.start(this, textureView);
+        Log.d("CameraActivity", "onResume() end");
     }
 
     @Override
     protected void onPause() {
+        Log.d("CameraActivity", "onPause() start");
         super.onPause();
         cameraProcessor.stop();
+        Log.d("CameraActivity", "onPause() end");
     }
 }

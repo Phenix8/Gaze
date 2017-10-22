@@ -23,8 +23,8 @@ import com.bof.gaze.R;
 import com.bof.gaze.activity.common.CommonGazeActivity;
 import com.bof.gaze.activity.game.AnamorphosisChoiceActivity;
 import com.bof.gaze.model.Player;
-import com.bof.gaze.network.Client;
-import com.bof.gaze.network.ClientServerSynchronizer;
+import com.bof.gaze.network.client.Client;
+import com.bof.gaze.network.client.ClientServerSynchronizer;
 import com.bof.gaze.network.Util;
 
 import java.io.IOException;

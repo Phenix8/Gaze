@@ -1,4 +1,4 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

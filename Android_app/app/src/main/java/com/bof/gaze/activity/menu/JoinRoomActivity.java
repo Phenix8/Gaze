@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bof.gaze.R;
 import com.bof.gaze.network.Common;
 import com.bof.gaze.model.Room;
-import com.bof.gaze.network.RoomFinder;
+import com.bof.gaze.network.client.RoomFinder;
 import com.bof.gaze.network.Util;
 
 import java.net.InetAddress;

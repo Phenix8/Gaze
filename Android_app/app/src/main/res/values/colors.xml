@@ -15,6 +15,7 @@
     <color name="join_act_bg">#b4ffc5</color>
     <color name="black">#000000</color>
     <color name="grey">#646464</color>
+    <color name="anamorphosis_choice_act_bg">#a6d5eb</color>
 
     <color name="color_preloader_start">#000000</color>
     <color name="color_preloader_center">#000000</color>

@@ -1,6 +1,8 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.server;
 
 import android.util.Log;
+
+import com.bof.gaze.network.client.ClientHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by root on 12/04/2017.

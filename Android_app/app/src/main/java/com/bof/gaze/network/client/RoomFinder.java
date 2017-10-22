@@ -1,4 +1,4 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.client;
 
 import com.bof.gaze.model.Room;
 

@@ -98,12 +98,13 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
 
         @Override
         public void onDisconnected(@NonNull CameraDevice cameraDevice) {
-
+            unlockCamera();
         }
 
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int i) {
             listener.onError("Error accessing camera.");
+            unlockCamera();
         }
     };
 
@@ -294,10 +295,12 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
                 acquired = true;
             } catch (InterruptedException e) {}
         }
+        Log.d("CameraProcessor", "locked camera");
     }
 
     private void unlockCamera() {
         cameraOpenCloseLock.release();
+        Log.d("CameraProcessor", "unlocked camera");
     }
 
     private void openCamera(Context context) throws CameraAccessException {
@@ -316,57 +319,49 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
             listener.onError("Access to camera denied, please check application's permissions");
             return;
         }
-
         lockCamera();
         cameraManager.openCamera(cameraId, cameraStateCallback, handler);
     }
 
     private void closeCamera() {
-        boolean acquired = false;
-        try {
-            while (!acquired) {
-                try {
-                    cameraOpenCloseLock.acquire();
-                    acquired = true;
-                } catch (InterruptedException e) {
-                }
-            }
-            if (null != captureSession) {
-                captureSession.close();
-                captureSession = null;
-            }
-            if (null != camera) {
-                camera.close();
-                camera = null;
-            }
-            if (null != imageReader) {
-                imageReader.close();
-                imageReader = null;
-            }
-        } finally {
-            cameraOpenCloseLock.release();
+        if (null != captureSession) {
+            captureSession.close();
+            captureSession = null;
+        }
+        if (null != camera) {
+            camera.close();
+            camera = null;
+        }
+        if (null != imageReader) {
+            imageReader.close();
+            imageReader = null;
         }
     }
 
     public void start(Context context, AutoFitTextureView textureView) {
-        this.context = context;
-        this.textureView = textureView;
-        startBackgroundHandler();
 
         try {
+            this.context = context;
+            this.textureView = textureView;
+            startBackgroundHandler();
+
             if (textureView.isAvailable()) {
                 openCamera(context);
-            } else {
-                textureView.setSurfaceTextureListener(this);
             }
+            textureView.setSurfaceTextureListener(this);
         } catch (CameraAccessException e) {
             listener.onError("Error accessing camera.");
         }
     }
 
     public void stop() {
-        closeCamera();
-        stopBackgroundHandler();
+        try {
+            lockCamera();
+            closeCamera();
+            stopBackgroundHandler();
+        } finally {
+            unlockCamera();
+        }
     }
 
     /**
@@ -544,7 +539,6 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-        //stop();
         return false;
     }
 

@@ -9,7 +9,7 @@ import com.bof.gaze.activity.game.LeaderboardActivity;
 import com.bof.gaze.activity.menu.MenuActivity;
 import com.bof.gaze.application.GazeApplication;
 import com.bof.gaze.model.Player;
-import com.bof.gaze.network.Client;
+import com.bof.gaze.network.client.Client;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.bof.gaze.network;
+package com.bof.gaze.network.server;
 
 import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.model.Player;
@@ -64,7 +64,7 @@ public class Protocol {
         return "";
     }
 
-    public static String buildPlayerListInstruction(Collection<Player> players) {
+    private static String buildPlayerListInstruction(String instructionType, Collection<Player> players) {
         StringBuffer str = new StringBuffer();
         for (Player player : players) {
             if (str.length() > 0) {
@@ -83,12 +83,20 @@ public class Protocol {
             } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
         }
         str.insert(0, INSTRUCTION_SEPARATOR);
-        str.insert(0, PLAYERS_INSTRUCTION_TYPE);
+        str.insert(0, instructionType);
         str.append(INSTRUCTION_END);
         return str.toString();
     }
 
-    public static List<Player> parsePlayerListInstructionData(String playerListData) {
+    public static  String buildPlayersInstruction(Collection<Player> players) {
+        return buildPlayerListInstruction(PLAYERS_INSTRUCTION_TYPE, players);
+    }
+
+    public static String buildFinishedInstruction(Collection<Player> players) {
+        return buildPlayerListInstruction(FINISHED_INSTRUCTION_TYPE, players);
+    }
+
+    public static List<Player> parsePlayerListData(String playerListData) {
         ArrayList<Player> players = new ArrayList<>();
         for(String playerInfos : playerListData.split(":")) {
             String[] infos = playerInfos.split(",");
@@ -162,10 +170,6 @@ public class Protocol {
         return String.format("%s%s", START_INSTRUCTION_TYPE, INSTRUCTION_END);
     }
 
-    public static String buildFinishedInstruction() {
-        return String.format("%s%s", FINISHED_INSTRUCTION_TYPE, INSTRUCTION_END);
-    }
-
     public static String buildReadyInstruction(String playerId) {
         return String.format(
                 "%s%s%s%s",
@@ -188,12 +192,6 @@ public class Protocol {
                 playerId,
                 INSTRUCTION_END
         );
-    }
-
-    public static String buildScoreInstruction(int score) {
-        StringBuffer str = new StringBuffer(SCORE_MESSAGE_TYPE);
-        str.append(INSTRUCTION_SEPARATOR).append(score).append(INSTRUCTION_END);
-        return str.toString();
     }
 
     public static String buildDeathMatchInstruction(
