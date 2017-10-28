@@ -23,7 +23,12 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
     private ArrayAdapter<Player> playerAdapter = null;
 
     protected void setPlayerAdapter(ArrayAdapter<Player> adapter) {
+        if (adapter == null) {
+            throw new IllegalArgumentException("Given adapter is null.");
+        }
+
         this.playerAdapter = adapter;
+        playerAdapter.clear();
         playerAdapter.addAll(getGameClient().getPlayerList());
     }
 
