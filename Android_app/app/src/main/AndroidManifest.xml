@@ -54,7 +54,7 @@
         <activity
             android:name="com.bof.gaze.activity.game.CameraActivity"
             android:screenOrientation="landscape"
-            android:configChanges="orientation">
+            android:configChanges="orientation|screenSize">
         </activity>
     </application>
 
