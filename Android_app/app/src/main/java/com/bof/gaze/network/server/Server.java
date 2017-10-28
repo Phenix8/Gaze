@@ -235,7 +235,7 @@ public class Server extends ServerBase {
                         ArrayList<Player> equalsPlayers = new ArrayList<>();
                         equalsPlayers.add(players.get(0));
                         for (int i=1; i<players.size(); i++) {
-                            if (players.get(0).getScore() != equalsPlayers.get(i).getScore()) {
+                            if (players.get(i).getScore() != equalsPlayers.get(i-1).getScore()) {
                                 break;
                             }
                             equalsPlayers.add(players.get(i));

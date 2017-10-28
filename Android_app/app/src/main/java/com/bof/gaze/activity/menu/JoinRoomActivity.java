@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -70,6 +71,14 @@ public class JoinRoomActivity extends AppCompatActivity
         stateBar = (TextView) findViewById(R.id.join_act_state_bar);
 
         finder.addRoomListChangeListener(this);
+
+        ImageView backButton = (ImageView) findViewById(R.id.join_act_back_btn);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

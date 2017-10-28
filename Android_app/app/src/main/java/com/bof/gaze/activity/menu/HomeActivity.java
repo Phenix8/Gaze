@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
         else
         {
             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(intent.getFlags());
             startActivity(intent);
         }
 

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:layout_margin="15dp"
-        android:id="@+id/returnImgButton"
+        android:id="@+id/join_act_back_btn"
         app:srcCompat="@drawable/backred" />
 
     <TextView

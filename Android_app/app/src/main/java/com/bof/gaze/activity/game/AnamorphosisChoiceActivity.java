@@ -81,6 +81,7 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
         Intent intent = new Intent(this, CameraActivity.class);
         intent.putExtra("anamorphosis", currentAnamorphosis);
         intent.putExtra("alreadyCanceled", alreadyCanceled);
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivityForResult(intent, Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE);
     }
 
@@ -101,6 +102,12 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
 
                     case RESULT_CANCELED:
                         alreadyCanceled = true;
+                        break;
+
+                    case RESULT_GAME_ENDED:
+                        Intent intent = new Intent(getApplicationContext(), LeaderboardActivity.class);
+                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
                         break;
                 }
             }

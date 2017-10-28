@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.bof.gaze.activity.game.AnamorphosisChoiceActivity;
 import com.bof.gaze.activity.game.DeathMatchAnnounceActivity;
 import com.bof.gaze.activity.game.LeaderboardActivity;
 import com.bof.gaze.activity.menu.MenuActivity;
@@ -19,6 +20,8 @@ import java.util.List;
  */
 
 public class CommonGameActivity extends CommonGazeActivity implements Client.GameEventListener {
+
+    protected static final int RESULT_GAME_ENDED = 92;
 
     private ArrayAdapter<Player> playerAdapter = null;
 
@@ -52,10 +55,14 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
     public void onGameEvent(Client.GameEventListener.GameEventType type, final Object data) {
         switch (type) {
             case GAME_ENDED:
-                Intent intent = new Intent(this, LeaderboardActivity.class);
-                intent.putExtra("playersList", (ArrayList<Player>)data);
-                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
+                //Keeps choice activity from staying in history.
+                if (this instanceof AnamorphosisChoiceActivity) {
+                    Intent intent = new Intent(this, LeaderboardActivity.class);
+                    intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                } else {
+                    setResult(RESULT_GAME_ENDED);
+                }
                 break;
 
             case DEATH_MATCH:

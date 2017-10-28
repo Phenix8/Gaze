@@ -140,7 +140,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:layout_margin="15dp"
-        android:id="@+id/okImgButton"
+        android:id="@+id/leaderboard_act_back_button"
         app:srcCompat="@drawable/backgreen"
         android:layout_gravity="end" />
 

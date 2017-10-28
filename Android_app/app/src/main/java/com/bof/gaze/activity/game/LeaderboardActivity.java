@@ -3,6 +3,8 @@ package com.bof.gaze.activity.game;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bof.gaze.R;
@@ -34,8 +36,18 @@ public class LeaderboardActivity extends CommonGameActivity {
         tvPlayerScores[2] = (TextView) findViewById(R.id.score_player3);
         tvPlayerScores[3] = (TextView) findViewById(R.id.score_player4);
 
-        Collection<Player> players = (Collection<Player>) getIntent().getSerializableExtra("playersList");
+        Collection<Player> players = getGameClient().getPlayerList();
         loadPlayerScores(players);
+
+        ImageView backButton = (ImageView) findViewById(R.id.leaderboard_act_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
     }
 
 
