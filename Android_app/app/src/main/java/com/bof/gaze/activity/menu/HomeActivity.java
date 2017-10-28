@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +24,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
 
     private TextView permissionTxt;
     private Button permissionBtn;
-    private LinearLayout permissionPopup;
+    private FrameLayout permissionPopup;
 
     int WIFI_PERMISSIONS_REQUEST = 1, CAMERA_PERMISSIONS_REQUEST = 2;
 
@@ -35,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
 
         // Permission pop-up
         permissionTxt = (TextView) findViewById(R.id.homePermissionTxt);
-        permissionPopup = (LinearLayout) findViewById(R.id.homePermissionLayout);
+        permissionPopup = (FrameLayout) findViewById(R.id.homePermissionLayout);
 
         permissionBtn = (Button) findViewById(R.id.homePermissionBtn);
         permissionBtn.setOnClickListener(new View.OnClickListener() {

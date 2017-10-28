@@ -30,7 +30,7 @@
         android:textSize="30dp"
         android:textColor="@color/black"/>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/homePermissionLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,6 +52,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"/>
 
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
