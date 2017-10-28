@@ -50,6 +50,8 @@ public class CameraActivity extends CommonGameActivity
 
     private CameraProcessor cameraProcessor = new CameraProcessor(this);
 
+    ArrayList<Player> playerListTest = new ArrayList<Player>();
+
     // Adapter to fill (Image + text) the player scores list
     private ArrayAdapter<Player> adapter;
 
@@ -215,6 +217,9 @@ public class CameraActivity extends CommonGameActivity
             cameraGlassSurfaceView.displayFeedbackFound();
             playFoundSound();
             // TEST
+
+            //playerListTest.get(0).setNbFoundAnamorphosis(playerListTest.get(0).getNbFoundAnamorphosis()+1);
+            //playerListTest.get(0).setScore(playerListTest.get(0).getScore()+3);
             /*
             try {
                 getGameClient().setFound(new Anamorphosis(0,0, Anamorphosis.Difficulty.HARD, "Exception"));
@@ -273,24 +278,23 @@ public class CameraActivity extends CommonGameActivity
         loadTargetAnamorphosis();
         checkForAlreadyCanceledState();
 
-        ArrayList<Player> playerListTest = new ArrayList<Player>();
-
         // TEST
-/*
+        /*
         playerListTest.add(new Player("Loyld", 0, true, "99"));
         playerListTest.add(new Player("Sabine", 0, true, "100"));
         playerListTest.add(new Player("Fouine", 0, true, "101"));
-*/
+        playerListTest.add(new Player("JF Coppé", 0, true, "102"));
+        */
         //
 
         // Player scores list
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
         //adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
-
+        adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, (ArrayList<Player>) getGameClient().getPlayerList());
         //Given array adapter will be synchronized with the server player list.
         setPlayerAdapter(adapter);
-        adapter.addAll(getGameClient().getPlayerList());
-        adapter.notifyDataSetChanged();
+        // adapter.addAll(getGameClient().getPlayerList());
+        // adapter.notifyDataSetChanged();
         playerList.setAdapter(adapter);
     }
 
