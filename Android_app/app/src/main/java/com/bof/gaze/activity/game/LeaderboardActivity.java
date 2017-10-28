@@ -3,6 +3,8 @@ package com.bof.gaze.activity.game;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bof.gaze.R;
@@ -18,6 +20,8 @@ public class LeaderboardActivity extends CommonGameActivity {
 
     private TextView[] tvPlayerNames = new TextView[4];
     private TextView[] tvPlayerScores = new TextView[4];
+
+    private ImageButton nextButton = (ImageButton) findViewById(R.id.okImgButton);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,13 @@ public class LeaderboardActivity extends CommonGameActivity {
 
         Collection<Player> players = (Collection<Player>) getIntent().getSerializableExtra("playersList");
         loadPlayerScores(players);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+            }
+        });
     }
 
 
