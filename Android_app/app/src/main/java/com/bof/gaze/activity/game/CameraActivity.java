@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,12 +23,14 @@ import com.bof.gaze.R;
 import com.bof.gaze.activity.common.CommonGameActivity;
 import com.bof.gaze.model.Player;
 import com.bof.gaze.network.client.Client;
+import com.bof.gaze.network.server.Protocol;
 import com.bof.gaze.view.AutoFitTextureView;
 import com.bof.gaze.camera.CameraProcessor;
 import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.view.CameraGlassSurfaceView;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -175,6 +179,20 @@ public class CameraActivity extends CommonGameActivity
         }, 30000);
     }
 
+    // Play the sound of a found anamorphosis depending on the number of already found anamorphosis (0 to 3)
+    private void playFoundSound()
+    {
+        int imageId, nbAnamorphosis = getGameClient().getNbFoundAnamorphosis();
+
+        if (nbAnamorphosis == 3)            imageId = R.raw.anam_valid4;
+        else if (nbAnamorphosis == 2)       imageId = R.raw.anam_valid3;
+        else if (nbAnamorphosis == 1)       imageId = R.raw.anam_valid2;
+        else                                imageId = R.raw.anam_valid1;
+
+        MediaPlayer mp = MediaPlayer.create(this, imageId);
+        mp.start();
+    }
+
     @Override
     public void onError(String error) {
         showError(error);
@@ -195,6 +213,15 @@ public class CameraActivity extends CommonGameActivity
             showToast("An error occured");
         } else if (result > 0) {
             cameraGlassSurfaceView.displayFeedbackFound();
+            playFoundSound();
+            // TEST
+            /*
+            try {
+                getGameClient().setFound(new Anamorphosis(0,0, Anamorphosis.Difficulty.HARD, "Exception"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            */
             setResult(RESULT_OK);
             finish();
         } else {
@@ -246,26 +273,26 @@ public class CameraActivity extends CommonGameActivity
         loadTargetAnamorphosis();
         checkForAlreadyCanceledState();
 
-        // TEST
         ArrayList<Player> playerListTest = new ArrayList<Player>();
-        /*
-        playerListTest.add(new Player("Test 1", 2, true, "99"));
-        playerListTest.add(new Player("Test 2", 0, true, "100"));
-        playerListTest.add(new Player("Test 3", 12, true, "101"));
-        playerListTest.add(new Player("Ron", 4, true, "102"));
-        */
+
+        // TEST
+/*
+        playerListTest.add(new Player("Loyld", 0, true, "99"));
+        playerListTest.add(new Player("Sabine", 0, true, "100"));
+        playerListTest.add(new Player("Fouine", 0, true, "101"));
+*/
+        //
 
         // Player scores list
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
-        adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
+        //adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
 
         //Given array adapter will be synchronized with the server player list.
         setPlayerAdapter(adapter);
-        //adapter.addAll(getGameClient().getPlayerList());
+        adapter.addAll(getGameClient().getPlayerList());
         adapter.notifyDataSetChanged();
         playerList.setAdapter(adapter);
     }
-
 
     @Override
     protected void onResume() {

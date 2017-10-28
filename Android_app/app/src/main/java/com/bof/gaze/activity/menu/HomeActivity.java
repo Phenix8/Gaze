@@ -52,7 +52,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onTouch(View view, MotionEvent event) {
 
-        CheckForPersmissions();
+        if (!CheckForPersmissions())
+            return true;
 
         SharedPreferences sharedPref = getSharedPreferences("main", Context.MODE_PRIVATE);
         String nickname = sharedPref.getString("nickname", "");
@@ -73,8 +74,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     // Vérification of WIFI and CAMERA permissions
-    public void CheckForPersmissions()
+    public boolean CheckForPersmissions()
     {
+        boolean result = false;
+
         // Permission to use the "WiFi" component
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_WIFI_STATE)!= PackageManager.PERMISSION_GRANTED)
         {
@@ -87,6 +90,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
             else
                 SystemPermissionRequest(false);
         }
+        else
+            result = true;
 
         // Permission to use the "Camera" component
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED)
@@ -99,7 +104,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
             }
             else
                 SystemPermissionRequest(true);
+            return false;
         }
+        else
+            result &= true;
+
+        return result;
     }
 
     private void SystemPermissionRequest(boolean isForCamera)
