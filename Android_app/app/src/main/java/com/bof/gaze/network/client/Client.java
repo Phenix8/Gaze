@@ -12,14 +12,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Client extends Thread implements Serializable {
+public class Client implements Runnable {
 
     private static String TAG = "Client";
 
@@ -31,9 +30,11 @@ public class Client extends Thread implements Serializable {
     private BufferedReader in;
     private InetAddress serverAddress;
 
-    private boolean connected = false;
-
     private GameEventListener listener = null;
+
+    private boolean reconnecting;
+    private boolean running;
+    private Thread thread = null;
 
     private String playerId = null;
     private int score = 0;
@@ -57,11 +58,26 @@ public class Client extends Thread implements Serializable {
         void onGameEvent(GameEventType type, Object data);
     }
 
-    public void connectServer(String playerName, InetAddress serverAddress) {
+    public synchronized void connectServer(String playerName, InetAddress serverAddress) {
+        if (this.thread != null) {
+            throw new IllegalStateException("Client is already running.");
+        }
+
         this.playerName = playerName;
         this.serverAddress = serverAddress;
-        this.connected = true;
-        this.start();
+        this.running = true;
+        this.reconnecting = false;
+        this.thread = new Thread(this);
+        this.thread.start();
+    }
+
+    private void joinThread() {
+        while (this.thread != null) {
+            try {
+                this.thread.join();
+                this.thread = null;
+            } catch (InterruptedException e) {}
+        }
     }
 
     private void configureStreams(Socket socket)
@@ -75,11 +91,15 @@ public class Client extends Thread implements Serializable {
 
     private void sendInstruction(final String instruction)
         throws IOException {
+        if (out == null) {
+            return;
+        }
+
         Thread t = new Thread() {
             @Override
             public void run() {
                 try {
-                    out.write(String.format("%s\n", instruction));
+                    out.write(instruction);
                     out.flush();
                 } catch (IOException e) {
                     notifyListener(GameEventListener.GameEventType.ERROR_OCCURED, e);
@@ -88,6 +108,12 @@ public class Client extends Thread implements Serializable {
             }
         };
         t.start();
+        while (t != null) {
+            try {
+                t.join();
+                t = null;
+            } catch (InterruptedException e) {}
+        }
     }
 
     private void sendPlayerName()
@@ -120,12 +146,7 @@ public class Client extends Thread implements Serializable {
         try {
             sendInstruction(Protocol.buildQuitInstruction());
         } catch (IOException e) {};
-        connected = false;
-        while (!threadJoined)
-        try {
-            this.wait();
-            threadJoined = true;
-        } catch (InterruptedException e) {}
+        running = false;
     }
 
     public List<Player> getPlayerList() {
@@ -144,22 +165,18 @@ public class Client extends Thread implements Serializable {
 
     public int getNbFoundAnamorphosis() { return this.nbFoundAnamorphosis; };
 
-    private void notifyListener(GameEventListener.GameEventType type, Object data) {
-        mutex.lock();
-            if (listener != null) {
-                listener.onGameEvent(type, data);
-            }
-        mutex.unlock();
+    private synchronized void notifyListener(GameEventListener.GameEventType type, Object data) {
+        if (listener != null) {
+            listener.onGameEvent(type, data);
+        }
     }
 
-    public void setGameEventListener(GameEventListener listener) {
-        mutex.lock();
-            this.listener = listener;
-        mutex.unlock();
+    public synchronized void setGameEventListener(GameEventListener listener) {
+        this.listener = listener;
     }
 
     public boolean isConnected() {
-        return connected;
+        return out != null;
     }
 
     @Override
@@ -167,9 +184,16 @@ public class Client extends Thread implements Serializable {
         try {
             this.socketServer = new Socket(this.serverAddress, Common.TCP_PORT);
             configureStreams(this.socketServer);
-            sendPlayerName();
 
-            while (connected) {
+            if (reconnecting) {
+                sendInstruction(Protocol.buildReconnectMessageType(playerId));
+            } else {
+                sendPlayerName();
+            }
+
+            reconnecting = false;
+
+            while (running) {
                 String message = in.readLine();
                 Log.d(TAG, String.format("received : %s", message));
 
@@ -218,7 +242,7 @@ public class Client extends Thread implements Serializable {
                     break;
 
                     case Protocol.SERVER_STOPPED_INSTRUCTION:
-                        connected = false;
+                        running = false;
                         notifyListener(GameEventListener.GameEventType.SERVER_STOPPED, null);
                     break;
 
@@ -233,12 +257,21 @@ public class Client extends Thread implements Serializable {
             }
         } catch (Exception e) {
             notifyListener(GameEventListener.GameEventType.ERROR_OCCURED, e);
+            reconnecting = true;
         } finally {
             try {
                 if (socketServer != null) {
                     socketServer.close();
                 }
             } catch (IOException e) {}
+            out = null;
+            if (reconnecting) {
+                try {
+                    Thread.sleep(3000);
+                    this.thread = new Thread(this);
+                    this.thread.start();
+                } catch (InterruptedException e) {}
+            }
         }
     }
 }

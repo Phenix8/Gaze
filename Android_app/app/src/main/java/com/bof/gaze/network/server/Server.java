@@ -59,6 +59,15 @@ public class Server extends ServerBase {
         return null;
     }
 
+    private ClientHandler getHandler(String playerId) {
+        for (HashMap.Entry<ClientHandler, Player> entry : players.entrySet()) {
+            if (entry.getValue().getPlayerId().equals(playerId)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     /**
      * Donne la liste des joueurs triée par scores si tous les
      * scores des joueurs sont renseignés.
@@ -147,7 +156,16 @@ public class Server extends ServerBase {
 
         Log.d("Server", String.format("Received %s", message));
 
-        switch (Protocol.parseInstructionType(message)) {
+        String instructionType = Protocol.parseInstructionType(message);
+        Player player = players.get(handler);
+
+        if (player == null) {
+            if (!instructionType.equals(Protocol.CONNECT_INSTRUCTION_TYPE)
+                    && !instructionType.equals(Protocol.RECONNECT_MESSAGE_TYPE))
+                return;
+        }
+
+        switch (instructionType) {
             case Protocol.CONNECT_MESSAGE_TYPE:
                 String name = Protocol.parseConnectInstructionData(Protocol.parseInstructionData(message));
                 String playerId = addPlayer(handler, name);
@@ -159,9 +177,23 @@ public class Server extends ServerBase {
                 }
             break;
 
+            case Protocol.RECONNECT_MESSAGE_TYPE:
+                String id = Protocol.parsePlayerIdInstruction(
+                        Protocol.parseInstructionData(message)
+                );
+                ClientHandler h = getHandler(id);
+                if (h != null) {
+                    Player p = players.get(h);
+                    players.remove(h);
+                    players.put(handler, p);
+                    handler.sendMessage(Protocol.buildPlayerIDInstruction(id));
+                } else {
+                    handler.sendMessage(Protocol.ALREADY_STARTED_INSTRUCTION_TYPE);
+                }
+            break;
+
             //A player change it state ready/not ready
             case Protocol.READY_MESSAGE_TYPE:
-                Player player = players.get(handler);
                 player.setReady(!player.isReady());
                 sendPlayerList();
             break;
@@ -186,19 +218,18 @@ public class Server extends ServerBase {
 
             // When a player found an anmorphosis (update of score + the number of found anamorphosis)
             case Protocol.ANAMORPHOSIS_FOUND_MESSAGE_TYPE:
-                Player currentPlayer = players.get(handler);
-                currentPlayer.setNbFoundAnamorphosis((currentPlayer.getNbFoundAnamorphosis() + 1));
+                player.setNbFoundAnamorphosis((player.getNbFoundAnamorphosis() + 1));
                 Anamorphosis.Difficulty anamDifficulty = Protocol.parseAnamorphosisFoundMessage(Protocol.parseInstructionData(message));
-                currentPlayer.setScore(currentPlayer.getScore() + Anamorphosis.getValueFromDifficulty(anamDifficulty));
+                player.setScore(player.getScore() + Anamorphosis.getValueFromDifficulty(anamDifficulty));
 
                 if (gameState == GameState.DEATH_MATCH) {
                     sendMessageToAll(
                             Protocol.buildFinishedInstruction(sortPlayersByScore())
                     );
-                    gameState = gameState.ENDED;
+                    gameState = GameState.ENDED;
                 } else if (gameState == GameState.MAIN_GAME) {
                     //If the player have found 4 anamorphosis the game is stopped
-                    if (currentPlayer.getNbFoundAnamorphosis() == 4) {
+                    if (player.getNbFoundAnamorphosis() == 4) {
                         //Check if any players are equals
                         ArrayList<Player> players = sortPlayersByScore();
                         ArrayList<Player> equalsPlayers = new ArrayList<>();

@@ -56,8 +56,8 @@ public class CameraActivity extends CommonGameActivity
     private ArrayAdapter<Player> adapter;
 
     private class CustomAdapter extends ArrayAdapter<Player> {
-        CustomAdapter(Context context, int resource, ArrayList<Player> players) {
-            super(context, resource, players);
+        CustomAdapter(Context context, int resource) {
+            super(context, resource);
         }
 
         @NonNull
@@ -77,15 +77,12 @@ public class CameraActivity extends CommonGameActivity
 
             txtPlayerScore.setText(String.valueOf(player.getScore()));
 
-            // The current player case
-            if (player.getPlayerId().equals(getGameClient().getPlayerId()))
-            //if (player.getPlayerId().equals("99"))
-            {
-                updateFoundAnamorphosisImg(convertView, player);
-                imgPlayerScore.setImageResource(R.drawable.camera_player_score);
-            }
-            else
-                imgPlayerScore.setImageResource(R.drawable.camera_other_player_score);
+            imgPlayerScore.setImageResource(
+                player.getPlayerId().equals(getGameClient().getPlayerId()) ?
+                        R.drawable.camera_player_score : R.drawable.camera_other_player_score
+            );
+
+            updateFoundAnamorphosisImg(convertView, player);
 
             return convertView;
         }
@@ -216,17 +213,6 @@ public class CameraActivity extends CommonGameActivity
         } else if (result > 0) {
             cameraGlassSurfaceView.displayFeedbackFound();
             playFoundSound();
-            // TEST
-
-            //playerListTest.get(0).setNbFoundAnamorphosis(playerListTest.get(0).getNbFoundAnamorphosis()+1);
-            //playerListTest.get(0).setScore(playerListTest.get(0).getScore()+3);
-            /*
-            try {
-                getGameClient().setFound(new Anamorphosis(0,0, Anamorphosis.Difficulty.HARD, "Exception"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            */
             setResult(RESULT_OK);
             finish();
         } else {
@@ -289,12 +275,8 @@ public class CameraActivity extends CommonGameActivity
 
         // Player scores list
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
-        //adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, playerListTest);
-        adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item, (ArrayList<Player>) getGameClient().getPlayerList());
-        //Given array adapter will be synchronized with the server player list.
+        adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item);
         setPlayerAdapter(adapter);
-        // adapter.addAll(getGameClient().getPlayerList());
-        // adapter.notifyDataSetChanged();
         playerList.setAdapter(adapter);
     }
 

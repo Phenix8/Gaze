@@ -28,8 +28,8 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
         }
 
         this.playerAdapter = adapter;
-        if (this.playerAdapter.getCount() == 0)
-            this.playerAdapter.addAll(getGameClient().getPlayerList());
+        this.playerAdapter.clear();
+        this.playerAdapter.addAll(getGameClient().getPlayerList());
     }
 
     protected boolean isServerStarted() {

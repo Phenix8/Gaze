@@ -80,7 +80,7 @@ ServerBase extends Thread
             listeningSocket.setSoTimeout(1000);
             roomNotifier.startNotifying();
 
-            while (listening && clients.size() < maxPlayer) {
+            while (listening) {
                 try {
                     if (callback != null) {
                         callback.onServerStarted();

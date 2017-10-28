@@ -48,6 +48,7 @@ public class Protocol {
     public static final String READY_MESSAGE_TYPE =                 "READY";
     public static final String ROOM_NAME_MESSAGE_TYPE =             "ROOM-NAME";
     public static final String ANAMORPHOSIS_FOUND_MESSAGE_TYPE =    "ANAM-FOUND";
+    public static final String RECONNECT_MESSAGE_TYPE =             "RECONNECT";
 
     public static final String QUIT_INSTRUCTION =
             QUIT_MESSAGE_TYPE + INSTRUCTION_END;
@@ -244,5 +245,13 @@ public class Protocol {
     public static Anamorphosis.Difficulty parseAnamorphosisFoundMessage(String instructionData)
             throws NumberFormatException{
         return Anamorphosis.Difficulty.values()[Integer.parseInt(instructionData)];
+    }
+
+    public static String buildReconnectMessageType(String playerId) {
+        return String.format("%s%s%s%s", RECONNECT_MESSAGE_TYPE, INSTRUCTION_SEPARATOR, playerId, INSTRUCTION_END);
+    }
+
+    public static String parsePlayerIdInstruction(String instructionData) {
+        return instructionData;
     }
 }
