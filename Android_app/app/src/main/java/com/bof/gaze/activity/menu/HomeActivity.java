@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_home);
         findViewById(R.id.activity_home).setOnTouchListener(this);
 
+        /*
         // Permission pop-up
         permissionTxt = (TextView) findViewById(R.id.homePermissionTxt);
         permissionPopup = (FrameLayout) findViewById(R.id.homePermissionLayout);
@@ -46,15 +47,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
                 SystemPermissionRequest(permissionBtn.getText() == "Enable Camera");
             }
         });
+        */
 
         ObjectDetector.getInstance().loadDetectors(this.getAssets(), "detectors");
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-
-        if (!CheckForPersmissions())
-            return true;
 
         SharedPreferences sharedPref = getSharedPreferences("main", Context.MODE_PRIVATE);
         String nickname = sharedPref.getString("nickname", "");
@@ -77,6 +76,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
     // Vérification of WIFI and CAMERA permissions
     public boolean CheckForPersmissions()
     {
+
         boolean result = false;
 
         // Permission to use the "WiFi" component

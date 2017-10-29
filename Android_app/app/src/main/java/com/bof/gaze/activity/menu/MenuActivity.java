@@ -112,6 +112,7 @@ public class MenuActivity extends CommonGazeActivity {
                     if (ContextCompat.checkSelfPermission(self, Manifest.permission.CAMERA)
                             != PackageManager.PERMISSION_GRANTED) {
                         requestCameraPermission();
+                        return;
                     }
                 }
 

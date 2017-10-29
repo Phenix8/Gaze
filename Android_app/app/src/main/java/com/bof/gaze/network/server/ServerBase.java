@@ -28,7 +28,7 @@ ServerBase extends Thread
 
     private static String TAG = "ServerBase";
 
-    private RoomNotifier roomNotifier;
+    protected RoomNotifier roomNotifier;
 
     private int tcpPort;
 

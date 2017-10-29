@@ -30,28 +30,4 @@
         android:textSize="30dp"
         android:textColor="@color/black"/>
 
-    <FrameLayout
-        android:id="@+id/homePermissionLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:visibility="invisible">
-
-        <TextView
-            android:id="@+id/homePermissionTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/homeCameraPermission"/>
-        <Button
-            android:id="@+id/homePermissionBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"/>
-
-    </FrameLayout>
-
 </LinearLayout>

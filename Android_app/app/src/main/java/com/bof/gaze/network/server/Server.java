@@ -212,6 +212,11 @@ public class Server extends ServerBase {
             case Protocol.ROOM_NAME_MESSAGE_TYPE:
                 //Only host can change room name
                 if (handler.isHost()) {
+                    roomNotifier.setRoomName(
+                            Protocol.parseRoomNameInstruction(
+                                    Protocol.parseInstructionData(message)
+                            )
+                    );
                     sendMessageToAll(message);
                 }
             break;

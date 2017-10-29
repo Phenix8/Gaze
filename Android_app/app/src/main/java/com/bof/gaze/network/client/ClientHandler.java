@@ -62,7 +62,7 @@ public class ClientHandler extends Thread {
     }
 
     public boolean isHost() {
-        return sock.getInetAddress() == InetAddress.getLoopbackAddress();
+        return sock.getInetAddress().equals(InetAddress.getLoopbackAddress());
     }
 
     public void close(){

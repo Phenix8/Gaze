@@ -14,7 +14,10 @@ import java.net.URLEncoder;
 
 public class RoomNotifier extends Thread implements Serializable {
 
-    private String broadcastMessage;
+    private String broadcast;
+
+    private String message;
+    private String roomName;
 
     private InetAddress broadcastAddr;
     private int udpPort;
@@ -23,14 +26,27 @@ public class RoomNotifier extends Thread implements Serializable {
 
     private long notifyingInterval = 1000;
 
-    public RoomNotifier(String broadcastMessage, String roomName, InetAddress broadcastAddr, int udpPort) {
+    public RoomNotifier(String message, String roomName, InetAddress broadcastAddr, int udpPort) {
+        this.message = message;
+        this.roomName = roomName;
+
+        this.broadcastAddr = broadcastAddr;
+        this.udpPort = udpPort;
+
+        updateBroadcast();
+    }
+
+    private void updateBroadcast() {
         try {
-            this.broadcastMessage = String.format("%s:%s\n", broadcastMessage, URLEncoder.encode(roomName, "UTF-8"));
-            this.broadcastAddr = broadcastAddr;
-            this.udpPort = udpPort;
+            this.broadcast = String.format("%s:%s\n", message, URLEncoder.encode(roomName, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+        updateBroadcast();
     }
 
     public void setNotifyingInterval(long millis) {
@@ -59,15 +75,16 @@ public class RoomNotifier extends Thread implements Serializable {
         try {
             socket = new DatagramSocket(udpPort);
             socket.setBroadcast(true);
+
+            while (notifying) {
             DatagramPacket packet =
                     new DatagramPacket(
-                        broadcastMessage.getBytes(),
-                        broadcastMessage.length(),
+                        broadcast.getBytes(),
+                        broadcast.length(),
                         broadcastAddr,
                         udpPort
                     );
 
-            while (notifying) {
                 socket.send(packet);
                 try {
                     Thread.sleep(notifyingInterval);

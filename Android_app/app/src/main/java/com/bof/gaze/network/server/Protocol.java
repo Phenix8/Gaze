@@ -226,6 +226,7 @@ public class Protocol {
                     URLEncoder.encode(roomName, "UTF-8"),
                     INSTRUCTION_END);
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
             return INSTRUCTION_END;
         }
     }

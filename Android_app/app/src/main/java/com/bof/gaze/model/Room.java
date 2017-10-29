@@ -26,6 +26,6 @@ public class Room {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", this.getName(), this.getAddress().toString());
+        return String.format("%s", this.getName());
     }
 }
