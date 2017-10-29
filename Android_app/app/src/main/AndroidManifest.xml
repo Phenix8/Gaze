@@ -44,7 +44,8 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.bof.gaze.activity.menu.JoinRoomActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name="com.bof.gaze.activity.menu.LoadingActivity"
             android:screenOrientation="landscape" />

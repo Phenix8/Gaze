@@ -15,12 +15,14 @@ import java.util.HashMap;
  * Created by root on 13/04/2017.
  */
 
-public class RoomFinder extends Thread {
+public class RoomFinder implements Runnable {
 
     private String broadcastMessage;
     private InetAddress broadcastAddr;
     private int udpPort;
     private boolean listening;
+
+    private Thread thread;
 
     private HashMap<InetAddress, Room> rooms = new HashMap<>();
 
@@ -52,16 +54,16 @@ public class RoomFinder extends Thread {
 
     public void startListening() {
         listening = true;
-        this.start();
+        this.thread = new Thread(this);
+        this.thread.start();
     }
 
     public void stopListening() {
-        boolean threadJoined = false;
         listening = false;
-        while (!threadJoined){
+        while (this.thread != null){
             try {
-                this.join();
-                threadJoined = true;
+                this.thread.join();
+                this.thread = null;
             } catch (InterruptedException e) {}
         }
     }
