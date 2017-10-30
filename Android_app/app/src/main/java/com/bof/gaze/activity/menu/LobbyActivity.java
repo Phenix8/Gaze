@@ -188,7 +188,7 @@ public class LobbyActivity extends CommonGazeActivity
                     Log.d("anamorph", "Error occured");
                     if (d instanceof Exception) {
                         ((Exception) d).printStackTrace();
-                        showError(((Exception) d).getLocalizedMessage());
+                        showToast("A network error occured");
                     } else if (d instanceof String) {
                         showToast((String) d);
                     } else {
@@ -205,14 +205,11 @@ public class LobbyActivity extends CommonGazeActivity
     private void SetEditableRoomTitle()
     {
         EditText titleEdit = (EditText) findViewById(R.id.editable_roomTitle_txt);
+        titleEdit.setText(getGameClient().getRoomName());
         ImageView titleBackground = (ImageView) findViewById(R.id.editable_roomTitle_bg);
 
         titleView = (TextView) findViewById(R.id.nonEditable_roomTitle);
-
-        // Assignation du nom de salle depuis le réseau si le joueur n'est pas admin
-        if (!isGameHost()) {
-            titleView.setText("");
-        }
+        titleView.setText(getGameClient().getRoomName());
 
         titleEdit.setVisibility(isGameHost() ? View.VISIBLE : View.INVISIBLE);
         titleBackground.setVisibility(isGameHost() ? View.VISIBLE : View.INVISIBLE);

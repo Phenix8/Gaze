@@ -173,8 +173,18 @@ public class Server extends ServerBase {
                     handler.sendMessage(Protocol.buildAlreadyStartedInstruction());
                 } else {
                     handler.sendMessage(Protocol.buildPlayerIDInstruction(playerId));
+                    handler.sendMessage(
+                            Protocol.buildRoomNameInstruction(
+                                    roomNotifier.getRoomName()
+                            )
+                    );
                     sendPlayerList();
                 }
+            break;
+
+            case Protocol.DISCONNECT_INSTRUCTION_TYPE:
+                players.remove(handler);
+                sendPlayerList();
             break;
 
             case Protocol.RECONNECT_MESSAGE_TYPE:
@@ -212,12 +222,11 @@ public class Server extends ServerBase {
             case Protocol.ROOM_NAME_MESSAGE_TYPE:
                 //Only host can change room name
                 if (handler.isHost()) {
-                    roomNotifier.setRoomName(
-                            Protocol.parseRoomNameInstruction(
-                                    Protocol.parseInstructionData(message)
-                            )
+                    String roomName = Protocol.parseRoomNameInstruction(
+                            Protocol.parseInstructionData(message)
                     );
-                    sendMessageToAll(message);
+                    roomNotifier.setRoomName(roomName);
+                    sendMessageToAll(Protocol.buildRoomNameInstruction(roomName));
                 }
             break;
 
@@ -275,12 +284,8 @@ public class Server extends ServerBase {
     @Override
     public void onClientDisconnected(ClientHandler handler) {
         if (players.containsKey(handler)) {
-            Player player = players.remove(handler);
-            if (gameState == GameState.LOBBY) {
-                sendPlayerList();
-            } else {
-                sendMessageToAll(Protocol.buildDisconnectInstruction(player.getName()));
-            }
+            //Player player = players.remove(handler);
+            sendPlayerList();
         }
     }
 

@@ -49,6 +49,10 @@ public class RoomNotifier extends Thread implements Serializable {
         updateBroadcast();
     }
 
+    public String getRoomName() {
+        return roomName;
+    }
+
     public void setNotifyingInterval(long millis) {
         this.notifyingInterval = millis;
     }

@@ -220,11 +220,10 @@ public class Protocol {
             String roomName) {
         try {
             return String.format(
-                    "%s%s%s%s",
+                    "%s%s%s\n",
                     ROOM_NAME_INSTRUCTION_TYPE,
                     INSTRUCTION_SEPARATOR,
-                    URLEncoder.encode(roomName, "UTF-8"),
-                    INSTRUCTION_END);
+                    URLEncoder.encode(roomName, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return INSTRUCTION_END;
