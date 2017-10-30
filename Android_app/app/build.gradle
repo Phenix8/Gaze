@@ -13,10 +13,10 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
-        applicationId "com.ican.anamorphoses_jsdn"
+        applicationId "com.bof.gaze"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 11
+        versionCode 12
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         /*externalNativeBuild {
