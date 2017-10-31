@@ -210,7 +210,6 @@ public class CameraActivity extends CommonGameActivity
                                 targetAnamorphosis.getDetectorName(),
                                 4
                         );
-
         if (result == -1) {
             showToast("An error occured");
         } else if (result > 0) {

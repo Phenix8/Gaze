@@ -43,7 +43,7 @@ public class LeaderboardActivity extends CommonGameActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -73,11 +73,12 @@ public class LeaderboardActivity extends CommonGameActivity {
 
     @Override
     public void onBackPressed() {
-        if (this.isGameHost()) {
+        //TODO handle server stop to make it  possible to restart a game.
+        /*if (this.isGameHost()) {
             stopServer();
-        }
+        }*/
         Intent intent = new Intent(this, MenuActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

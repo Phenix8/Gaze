@@ -25,7 +25,7 @@ public class AnamorphDictionary {
 		all.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, Anamorphosis.Difficulty.EASY, "triangle.svm"));
 		all.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, Anamorphosis.Difficulty.EASY, "pentagone.svm"));
 		all.add(new Anamorphosis(R.drawable.anamorphosis_15_s, R.drawable.anamorphosis_15_l, Anamorphosis.Difficulty.EASY, "quille.svm"));
-		all.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, Anamorphosis.Difficulty.EASY, "sablier2.svm"));
+		//all.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, Anamorphosis.Difficulty.EASY, "sablier2.svm"));
 		//all.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, Anamorphosis.Difficulty.EASY, "trefle.svm"));
 
 		all.add(new Anamorphosis(R.drawable.anamorphosis_9_s, R.drawable.anamorphosis_9_l, Anamorphosis.Difficulty.MEDIUM, "3rond.svm"));
@@ -39,7 +39,7 @@ public class AnamorphDictionary {
 		all.add(new Anamorphosis(R.drawable.anamorphosis_16_s, R.drawable.anamorphosis_16_l, Anamorphosis.Difficulty.HARD, "etoile.svm"));
 		all.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, Anamorphosis.Difficulty.HARD, "carre.svm"));
 		all.add(new Anamorphosis(R.drawable.anamorphosis_12_s, R.drawable.anamorphosis_12_l, Anamorphosis.Difficulty.HARD, "escalier.svm"));
-		all.add(new Anamorphosis(R.drawable.anamorphosis_17_s, R.drawable.anamorphosis_17_l, Anamorphosis.Difficulty.HARD, "L.svm"));
+		//all.add(new Anamorphosis(R.drawable.anamorphosis_17_s, R.drawable.anamorphosis_17_l, Anamorphosis.Difficulty.HARD, "L.svm"));
 		//all.add(new Anamorphosis(R.drawable.anamorphosis_14_s, R.drawable.anamorphosis_14_l, Anamorphosis.Difficulty.HARD, "choufleur.svm"));
 		//all.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, Anamorphosis.Difficulty.HARD, "tripik.svm"));
 

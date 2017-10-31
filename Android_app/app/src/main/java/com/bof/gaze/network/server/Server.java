@@ -243,7 +243,7 @@ public class Server extends ServerBase {
                     gameState = GameState.ENDED;
                 } else if (gameState == GameState.MAIN_GAME) {
                     //If the player have found 4 anamorphosis the game is stopped
-                    if (player.getNbFoundAnamorphosis() == 4) {
+                    if (player.getNbFoundAnamorphosis() >= 4) {
                         //Check if any players are equals
                         ArrayList<Player> players = sortPlayersByScore();
                         ArrayList<Player> equalsPlayers = new ArrayList<>();

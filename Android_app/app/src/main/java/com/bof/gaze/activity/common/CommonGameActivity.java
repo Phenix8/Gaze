@@ -21,8 +21,6 @@ import java.util.List;
 
 public class CommonGameActivity extends CommonGazeActivity implements Client.GameEventListener {
 
-    protected static final int RESULT_GAME_ENDED = 92;
-
     private ArrayAdapter<Player> playerAdapter = null;
 
     protected void setPlayerAdapter(ArrayAdapter<Player> adapter) {
@@ -55,14 +53,10 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
     public void onGameEvent(Client.GameEventListener.GameEventType type, final Object data) {
         switch (type) {
             case GAME_ENDED:
-                //Keeps choice activity from staying in history.
-                if (this instanceof AnamorphosisChoiceActivity) {
-                    Intent intent = new Intent(this, LeaderboardActivity.class);
-                    intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
-                } else {
-                    setResult(RESULT_GAME_ENDED);
-                }
+                Intent intent = new Intent(this, LeaderboardActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
                 break;
 
             case DEATH_MATCH:
