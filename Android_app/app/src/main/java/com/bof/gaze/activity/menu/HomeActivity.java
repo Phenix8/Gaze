@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
         });
         */
 
-        ObjectDetector.getInstance().loadDetectors(this.getAssets(), "detectors");
+        ObjectDetector.getInstance().loadDetectors(this.getAssets(), "detectors/default");
     }
 
     @Override

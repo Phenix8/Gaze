@@ -34,6 +34,10 @@
             android:name="com.bof.gaze.activity.menu.MenuActivity"
             android:screenOrientation="landscape" />
         <activity
+            android:name="com.bof.gaze.activity.menu.ChangeBoardActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
             android:name="com.bof.gaze.activity.menu.LobbyActivity"
             android:screenOrientation="landscape" />
         <activity

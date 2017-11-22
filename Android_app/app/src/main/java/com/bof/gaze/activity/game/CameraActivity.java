@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RawRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,28 +16,23 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bof.gaze.R;
 import com.bof.gaze.activity.common.CommonGameActivity;
+import com.bof.gaze.camera.CameraProcessor;
+import com.bof.gaze.detection.ObjectDetector;
+import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.model.Player;
 import com.bof.gaze.network.client.Client;
-import com.bof.gaze.network.server.Protocol;
 import com.bof.gaze.view.AutoFitTextureView;
-import com.bof.gaze.camera.CameraProcessor;
-import com.bof.gaze.model.Anamorphosis;
 import com.bof.gaze.view.CameraGlassSurfaceView;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.bof.gaze.detection.ObjectDetector;
 
 public class CameraActivity extends CommonGameActivity
         implements View.OnClickListener, CameraProcessor.CameraProcessorListener, View.OnTouchListener, Client.GameEventListener {

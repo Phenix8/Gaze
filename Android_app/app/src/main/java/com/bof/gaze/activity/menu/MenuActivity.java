@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.bof.gaze.R;
 import com.bof.gaze.activity.common.CommonGazeActivity;
@@ -27,6 +28,8 @@ public class MenuActivity extends CommonGazeActivity {
     private int numberOfTimeBackWasPressed;
 
     private ImageButton backgroundImg;
+
+    private final Context self = this;
 
     private void requestCameraPermission() {
         // Here, thisActivity is the current activity
@@ -61,15 +64,34 @@ public class MenuActivity extends CommonGazeActivity {
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
+        final LinearLayout debugOptionsLayout = (LinearLayout) findViewById(R.id.menu_act_debug_layout);
+        debugOptionsLayout.setVisibility(View.INVISIBLE);
+
         // Boutton de débug pour commencer directement une partie
         final Button debugButton = (Button) findViewById(R.id.Debug_game_button);
-        debugButton.setVisibility(View.INVISIBLE);
         debugButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(self, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestCameraPermission();
+                    return;
+                }
+
                 Intent intent = new Intent(getApplicationContext(), AnamorphosisChoiceActivity.class);
                 intent.putExtra("debug", true);
                 startActivity(intent);
+                debugOptionsLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        final Button changeBoardButton = (Button) findViewById(R.id.menu_act_change_board_btn);
+        changeBoardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChangeBoardActivity.class);
+                startActivity(intent);
+                debugOptionsLayout.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -79,7 +101,7 @@ public class MenuActivity extends CommonGazeActivity {
             public void onClick(View view) {
                 numberOfTouchOnGazeLogo++;
                 if (numberOfTouchOnGazeLogo >= 10) {
-                    debugButton.setVisibility(View.VISIBLE);
+                    debugOptionsLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -103,7 +125,6 @@ public class MenuActivity extends CommonGazeActivity {
     // une fonction de redirection vers la classe 'redirectionClass'
     private void AssignImageButtonRedirection(int id, final Class redirectionClass, final boolean checkForWifi, final boolean checkForCamera)
     {
-        final Context self = this;
         ImageButton currentButton = (ImageButton) findViewById(id);
         currentButton.setOnClickListener(new View.OnClickListener() {
             @Override

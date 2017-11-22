@@ -19,11 +19,6 @@
 
 #define DEBUG 1
 
-#define R_COEF 0.333f
-#define G_COEF 0.333f
-#define B_COEF 0.333f
-
-
 #define  LOG_TAG    "DlibW"
 
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
@@ -79,10 +74,6 @@ jint loadDetectors(JNIEnv *env, jobject obj, jobject assetManager, jstring detec
     Detector d;
     char completeFileName[100];
     const char *currentFileName = NULL;
-
-    if (detectors.size() > 0) {
-        return 0;
-    }
 
     AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
 
