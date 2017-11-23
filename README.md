@@ -2,7 +2,7 @@
 
 # Gaze #
 
-Gaze is a digital social game : you have to use your smartphone to find shapes on a physical board.
+Gaze is a digital board game : you have to use your smartphone to find shapes on a physical board.
 
 ## Privacy ##
 
