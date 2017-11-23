@@ -10,6 +10,6 @@ Not any personnal data are transmitted to the Gaze's team.
 
 ## Mentions ##
 
-Gaze use the very great [Dlib](http://dlib.net/, "Dlib") library for shape recognition task.
+Gaze use the very great [Dlib](http://dlib.net/, "Dlib") library for shape recognition tasks.
 
 ![Gaze board](/images/board.jpg)
