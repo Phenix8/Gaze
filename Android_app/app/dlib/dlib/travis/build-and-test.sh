@@ -12,7 +12,12 @@ if [ "$VARIANT" = "test" ]; then
 fi
 if [ "$VARIANT" = "examples" ]; then
   ../cmake/bin/cmake ../examples -DCMAKE_BUILD_TYPE=Release
-  ../cmake/bin/cmake --build . -- -j 2
+  ../cmake/bin/cmake --build . -- -j 1
 fi
 
-cd ..
+if [ "$VARIANT" = "python-api" ]; then
+  ../cmake/bin/cmake ../tools/python -DCMAKE_BUILD_TYPE=Release
+  ../cmake/bin/cmake --build . --target install -- -j 2
+
+  ../python_examples/svm_rank.py
+fi

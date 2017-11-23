@@ -10,6 +10,8 @@ add_definitions(-DDLIB_USE_CUDA)
 
 include(find_cudnn.txt)
 
-include_directories(${cudnn_include})
-
-cuda_add_library(cudnn_test STATIC ../../dnn/cudnn_dlibapi.cpp ${cudnn} )
+if (cudnn_include AND cudnn)
+   include_directories(${cudnn_include})
+   cuda_add_library(cudnn_test STATIC ../../dnn/cudnn_dlibapi.cpp ${cudnn} )
+   enable_cpp11_for_target(cudnn_test)
+endif()
