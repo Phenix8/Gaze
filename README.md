@@ -1,4 +1,4 @@
-![Gaze logo](/images/logo.png)
+<img align="center" src="images/logo.png" alt="Gaze logo">
 
 Gaze is a digital board game : you have to use your smartphone to find shapes on a physical board.
 
