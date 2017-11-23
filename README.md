@@ -1,4 +1,4 @@
-<div style="text-align:center"><img src ="/images/logo.png" alt="Gaze logo"/></div>
+<p align="center"><img src ="/images/logo.png" alt="Gaze logo"/></p>
 
 Gaze is a digital board game : you have to use your smartphone to find shapes on a physical board.
 
