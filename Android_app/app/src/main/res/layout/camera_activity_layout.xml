@@ -36,6 +36,7 @@
         android:layout_marginBottom="20dp">
 
         <ImageView
+            android:id="@+id/camera_act_little_anamorph_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/camera_little_anamorph_bg"
@@ -69,9 +70,10 @@
         android:visibility="invisible">
 
         <ImageView
+            android:id="@+id/camera_act_large_anamorph_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/camera_large_anamorhp_bg"
+            android:src="@drawable/camera_large_anamorph_bg"
             android:layout_centerInParent="true" />
 
         <ImageView
@@ -79,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:translationZ="5dp"
             android:layout_centerInParent="true" />
 
     </FrameLayout>

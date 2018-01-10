@@ -31,13 +31,15 @@ import com.bof.gaze.view.AutoFitTextureView;
 import com.bof.gaze.view.CameraGlassSurfaceView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class CameraActivity extends CommonGameActivity
         implements View.OnClickListener, CameraProcessor.CameraProcessorListener, View.OnTouchListener, Client.GameEventListener {
 
-    private ImageView cancelImg, littleAnamorphImg, largeAnamorphImg, cameraImg;
+    private ImageView cancelImg, littleAnamorphImg, littleAnamorphBg, largeAnamorphImg, largeAnamophBg, cameraImg;
     private CameraGlassSurfaceView cameraGlassSurfaceView;
     private AutoFitTextureView textureView;
 
@@ -46,6 +48,10 @@ public class CameraActivity extends CommonGameActivity
     private boolean canCancel = true;
 
     private CameraProcessor cameraProcessor = new CameraProcessor(this);
+
+    // 5 seconds before a hint is available
+    private long hintActivationDelay = 5000;
+    private Calendar startActivityDate;
 
     ArrayList<Player> playerListTest = new ArrayList<Player>();
 
@@ -100,8 +106,12 @@ public class CameraActivity extends CommonGameActivity
         littleAnamorphImg = (ImageView) findViewById(R.id.camera_act_little_anamorph_img);
         littleAnamorphImg.setOnClickListener(this);
 
+        littleAnamorphBg = (ImageView) findViewById(R.id.camera_act_little_anamorph_bg);
+
         largeAnamorphImg = (ImageView) findViewById(R.id.camera_act_large_anamorph_img);
         largeAnamorphImg.setOnClickListener(this);
+
+        largeAnamophBg = (ImageView) findViewById(R.id.camera_act_large_anamorph_bg);
 
         cameraImg = (ImageView) findViewById(R.id.camera_act_camera_img);
         cameraImg.setOnClickListener(this);
@@ -177,9 +187,39 @@ public class CameraActivity extends CommonGameActivity
         }, 30000);
     }
 
-    // Play the sound of a found anamorphosis depending on the number of already found anamorphosis (0 to 3)
-    private void playFoundSound()
+    // Check if the delay to display a hint is passed, and display it if it is the case
+    private void checkHintAvailability()
     {
+        if (startActivityDate.getTimeInMillis() + hintActivationDelay > Calendar.getInstance().getTimeInMillis())
+            return;
+
+        // DEBUG
+
+        if(targetAnamorphosis.getHint() == Anamorphosis.HintType.BLUE ||targetAnamorphosis.getHint() == Anamorphosis.HintType.GREEN_BLUE)
+        {
+            littleAnamorphBg.setImageResource(R.drawable.camera_little_anamorph_b_bg);
+            largeAnamophBg.setImageResource(R.drawable.camera_large_anamorph_b_bg);
+        }
+        else if(targetAnamorphosis.getHint() == Anamorphosis.HintType.RED || targetAnamorphosis.getHint() == Anamorphosis.HintType.GREEN_RED)
+        {
+            littleAnamorphBg.setImageResource(R.drawable.camera_little_anamorph_r_bg);
+            largeAnamophBg.setImageResource(R.drawable.camera_large_anamorph_r_bg);
+        }
+        else if(targetAnamorphosis.getHint() == Anamorphosis.HintType.GREEN)
+        {
+            littleAnamorphBg.setImageResource(R.drawable.camera_little_anamorph_g_bg);
+            largeAnamophBg.setImageResource(R.drawable.camera_large_anamorph_g_bg);
+        }
+        else if(targetAnamorphosis.getHint() == Anamorphosis.HintType.YELLOW || targetAnamorphosis.getHint() == Anamorphosis.HintType.YELLOW_RED)
+        {
+            littleAnamorphBg.setImageResource(R.drawable.camera_little_anamorph_y_bg);
+            largeAnamophBg.setImageResource(R.drawable.camera_large_anamorph_y_bg);
+        }
+        littleAnamorphImg.setImageResource(targetAnamorphosis.getDrawableImage());
+    }
+
+    // Play the sound of a found anamorphosis depending on the number of already found anamorphosis (0 to 3)
+    private void playFoundSound() {
         int imageId, nbAnamorphosis = getGameClient().getNbFoundAnamorphosis();
 
         if (nbAnamorphosis == 3)            imageId = R.raw.anam_valid4;
@@ -237,6 +277,8 @@ public class CameraActivity extends CommonGameActivity
             }
         }
 
+        checkHintAvailability();
+
         return true;
     }
 
@@ -267,20 +309,13 @@ public class CameraActivity extends CommonGameActivity
         loadTargetAnamorphosis();
         checkForAlreadyCanceledState();
 
-        // TEST
-        /*
-        playerListTest.add(new Player("Loyld", 0, true, "99"));
-        playerListTest.add(new Player("Sabine", 0, true, "100"));
-        playerListTest.add(new Player("Fouine", 0, true, "101"));
-        playerListTest.add(new Player("JF Coppé", 0, true, "102"));
-        */
-        //
-
         // Player scores list
         ListView playerList = (ListView) findViewById(R.id.playerScoresListview);
         adapter = new CameraActivity.CustomAdapter(this, R.layout.camera_player_score_item);
         setPlayerAdapter(adapter);
         playerList.setAdapter(adapter);
+
+        this.startActivityDate = Calendar.getInstance();
     }
 
     @Override

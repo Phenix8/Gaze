@@ -59,7 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        app:srcCompat="@drawable/camera_large_anamorhp_bg"/>
+                        app:srcCompat="@drawable/camera_large_anamorph_bg"/>
 
                 </RelativeLayout>
 
@@ -96,7 +96,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/camera_large_anamorhp_bg"
+                        app:srcCompat="@drawable/camera_large_anamorph_bg"
                         android:background="@android:color/transparent"
                         android:id="@+id/mediumImgButton"
                         android:layout_weight="1" />
@@ -137,7 +137,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/camera_large_anamorhp_bg"
+                        app:srcCompat="@drawable/camera_large_anamorph_bg"
                         android:background="@android:color/transparent"
                         android:id="@+id/hardImgButton"
                         android:layout_weight="1" />
