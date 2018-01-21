@@ -121,6 +121,7 @@ public class JoinRoomActivity extends CommonGazeActivity
                 numberOfTouchOnStateBar++;
                 if (numberOfTouchOnStateBar >= 10) {
                     ipPromptDialogueBuilder.show();
+                    numberOfTouchOnStateBar = 0;
                 }
             }
         });
