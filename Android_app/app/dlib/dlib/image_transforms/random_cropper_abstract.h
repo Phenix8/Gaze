@@ -35,8 +35,9 @@ namespace dlib
                 - #get_chip_dims() == chip_dims(300,300)
                 - #get_randomly_flip() == true
                 - #get_max_rotation_degrees() == 30
-                - #get_min_object_height() == 0.25
-                - #get_max_object_height() == 0.7
+                - #get_min_object_length_long_dim() == 70 
+                - #get_min_object_length_short_dim() == 30
+                - #get_max_object_size() == 0.7
                 - #get_background_crops_fraction() == 0.5
                 - #get_translate_amount() == 0.1
         !*/
@@ -143,46 +144,59 @@ namespace dlib
                 - #get_max_rotation_degrees() == std::abs(value)
         !*/
 
-        double get_min_object_height (
-        ) const;
-        /*!
-            ensures
-                - When a chip is extracted around an object, the chip will be sized so that
-                  the object's height is at least get_min_object_height() * 100 percent of the
-                  chip height.  E.g. if the chip is HEIGHT pixels tall then the object will
-                  be at least HEIGHT*get_min_object_height() pixels tall.  This also means
-                  that if get_min_object_height() >1 then the object will be only partially
-                  visible in the crop since it will be too big to fit.  
-        !*/
-
-        void set_min_object_height (
-            double value
-        );
-        /*!
-            requires
-                - 0 < value 
-            ensures
-                - #get_min_object_height() == value
-        !*/
-
-        double get_max_object_height (
+        long get_min_object_length_long_dim (
         ) const; 
         /*!
             ensures
                 - When a chip is extracted around an object, the chip will be sized so that
-                  the object's height is at most get_max_object_height() * 100 percent of the
-                  chip height.  E.g. if the chip is HEIGHT pixels tall then the object will
-                  be at most HEIGHT*get_max_object_height() pixels tall. 
+                  the longest edge of the object (i.e. either its height or width,
+                  whichever is longer) is at least #get_min_object_length_long_dim() pixels
+                  in length.  When we say "object" here we are referring specifically to
+                  the rectangle in the mmod_rect output by the cropper.
         !*/
 
-        void set_max_object_height (
+        long get_min_object_length_short_dim (
+        ) const;
+        /*!
+            ensures
+                - When a chip is extracted around an object, the chip will be sized so that
+                  the shortest edge of the object (i.e. either its height or width,
+                  whichever is shorter) is at least #get_min_object_length_short_dim()
+                  pixels in length.  When we say "object" here we are referring
+                  specifically to the rectangle in the mmod_rect output by the cropper.
+        !*/
+
+        void set_min_object_size (
+            long long_dim,
+            long short_dim
+        ); 
+        /*!
+            requires
+                - 0 < short_dim <= long_dim
+            ensures
+                - #get_min_object_length_short_dim() == short_dim
+                - #get_min_object_length_long_dim() == long_dim
+        !*/
+
+        double get_max_object_size (
+        ) const; 
+        /*!
+            ensures
+                - When a chip is extracted around an object, the chip will be sized so that
+                  both the object's height and width are at most get_max_object_size() *
+                  the chip's height and width, respectively.  E.g. if the chip is 640x480
+                  pixels in size then the object will be at most 480*get_max_object_size()
+                  pixels tall and 640*get_max_object_size() pixels wide. 
+        !*/
+
+        void set_max_object_size (
             double value
         ); 
         /*!
             requires
                 - 0 < value 
             ensures
-                - #get_max_object_height() == value
+                - #get_max_object_size() == value
         !*/
 
         template <
@@ -294,6 +308,19 @@ namespace dlib
                 - #crop_rects.size() <= rects.size()
         !*/
     };
+
+// ----------------------------------------------------------------------------------------
+
+    std::ostream& operator<< (
+        std::ostream& out,
+        const random_cropper& item
+    );
+    /*!
+        ensures
+            - Prints the state of all the parameters of item to out.
+    !*/
+
+// ----------------------------------------------------------------------------------------
 
 }
 

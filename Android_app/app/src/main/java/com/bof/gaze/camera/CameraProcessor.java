@@ -460,6 +460,12 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
     }
 
     public void captureImage() {
+        //If capture session has not been created
+        //(Example : access denied to camera
+        if (captureSession == null) {
+            return;
+        }
+
         Log.d(TAG, "Capturing image...");
         lockCamera();
         Log.d(TAG, "Capturing image : locked camera");

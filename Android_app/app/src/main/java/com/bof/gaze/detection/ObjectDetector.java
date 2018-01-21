@@ -18,7 +18,7 @@ public class ObjectDetector {
     }
 
     private ObjectDetector() {
-        System.loadLibrary("dlib");
+        //System.loadLibrary("dlib");
         System.loadLibrary("dlib-wrapper");
     }
 
