@@ -59,7 +59,7 @@ public class Protocol {
 
     public static String parseInstructionData(String instruction) {
         String[] parts = instruction.split(" ");
-        if (parts.length > 0) {
+        if (parts.length > 1) {
             return parts[1];
         }
         return "";
