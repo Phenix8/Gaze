@@ -42,6 +42,9 @@ public class LeaderboardActivity extends CommonGameActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isGameHost()) {
+                    stopServer();
+                }
                 Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                 intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -74,9 +77,10 @@ public class LeaderboardActivity extends CommonGameActivity {
     @Override
     public void onBackPressed() {
         //TODO handle server stop to make it  possible to restart a game.
-        /*if (this.isGameHost()) {
+        if (this.isGameHost()) {
             stopServer();
-        }*/
+        }
+
         Intent intent = new Intent(this, MenuActivity.class);
         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

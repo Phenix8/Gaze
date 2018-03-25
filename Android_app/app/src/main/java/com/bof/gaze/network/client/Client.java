@@ -37,8 +37,6 @@ public class Client implements Runnable {
     private Thread thread = null;
 
     private String playerId = null;
-    private int score = 0;
-    private int nbFoundAnamorphosis = 0;
     private boolean lobby = true;
 
     private List<Player> players = new ArrayList<>();
@@ -59,16 +57,18 @@ public class Client implements Runnable {
     }
 
     public synchronized void connectServer(String playerName, InetAddress serverAddress) {
-        if (this.thread != null) {
-            throw new IllegalStateException("Client is already running.");
+        if (thread != null) {
+            joinThread();
         }
 
         this.playerName = playerName;
         this.serverAddress = serverAddress;
+        this.playerId = null;
         this.running = true;
         this.reconnecting = false;
         this.thread = new Thread(this);
         this.thread.start();
+        this.players = new ArrayList<>();
     }
 
     private void joinThread() {
@@ -132,8 +132,6 @@ public class Client implements Runnable {
     }
 
     public void setFound(Anamorphosis a) throws IOException {
-        this.score += a.getValue();
-        this.nbFoundAnamorphosis++;
         sendInstruction(Protocol.buildAnamorphosisFoundMessage(a));
     }
 
@@ -155,15 +153,18 @@ public class Client implements Runnable {
 
     public String getRoomName() { return roomName; }
 
-    public int getScore() {
-        return this.score;
-    }
-
     public String getPlayerId() {
         return this.playerId;
     }
 
-    public int getNbFoundAnamorphosis() { return this.nbFoundAnamorphosis; };
+    public Player getCurrentPlayer() {
+        for (Player p : players) {
+            if (p.getPlayerId().equals(this.playerId)) {
+                return p;
+            }
+        }
+        return null;
+    }
 
     private synchronized void notifyListener(GameEventListener.GameEventType type, Object data) {
         if (listener != null) {
@@ -243,6 +244,7 @@ public class Client implements Runnable {
 
                     case Protocol.SERVER_STOPPED_INSTRUCTION:
                         running = false;
+                        players.clear();
                         notifyListener(GameEventListener.GameEventType.SERVER_STOPPED, null);
                     break;
 

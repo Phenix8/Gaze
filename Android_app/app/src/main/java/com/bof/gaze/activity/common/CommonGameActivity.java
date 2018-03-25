@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.bof.gaze.activity.game.AnamorphosisChoiceActivity;
 import com.bof.gaze.activity.game.DeathMatchAnnounceActivity;
 import com.bof.gaze.activity.game.LeaderboardActivity;
 import com.bof.gaze.activity.menu.MenuActivity;
@@ -12,7 +11,6 @@ import com.bof.gaze.application.GazeApplication;
 import com.bof.gaze.model.Player;
 import com.bof.gaze.network.client.Client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,8 +78,18 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
             break;
 
             case ERROR_OCCURED:
-                Exception e = (Exception) data;
-                showError(e.getLocalizedMessage());
+                final Exception e = (Exception) data;
+                // TODO : manage error display on the next activity.
+                /*
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                showError(e.getLocalizedMessage());
+                            }
+                        }
+                );
+                */
                 e.printStackTrace();
                 Intent intent2 = new Intent(this, MenuActivity.class);
                 intent2.setFlags(intent2.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -89,7 +97,8 @@ public class CommonGameActivity extends CommonGazeActivity implements Client.Gam
                 break;
 
             case SERVER_STOPPED:
-                showToast("Server was stopped", Toast.LENGTH_LONG);
+                // TODO : manage error display on the next activity.
+                //showToast("Server was stopped", Toast.LENGTH_LONG);
                 Intent intent3 = new Intent(this, MenuActivity.class);
                 intent3.setFlags(intent3.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent3);

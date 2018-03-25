@@ -220,7 +220,7 @@ public class CameraActivity extends CommonGameActivity
 
     // Play the sound of a found anamorphosis depending on the number of already found anamorphosis (0 to 3)
     private void playFoundSound() {
-        int imageId, nbAnamorphosis = getGameClient().getNbFoundAnamorphosis();
+        int imageId, nbAnamorphosis = getGameClient().getCurrentPlayer().getNbFoundAnamorphosis();
 
         if (nbAnamorphosis == 3)            imageId = R.raw.anam_valid4;
         else if (nbAnamorphosis == 2)       imageId = R.raw.anam_valid3;

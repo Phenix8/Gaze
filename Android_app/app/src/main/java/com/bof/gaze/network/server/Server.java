@@ -141,6 +141,7 @@ public class Server extends ServerBase {
     @Override
     protected void onServerStopped() {
         sendMessageToAll(Protocol.buildServerStoppedInstruction());
+        players.clear();
     }
 
     /**

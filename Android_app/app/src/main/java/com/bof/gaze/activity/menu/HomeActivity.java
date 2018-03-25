@@ -54,7 +54,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-
         SharedPreferences sharedPref = getSharedPreferences("main", Context.MODE_PRIVATE);
         String nickname = sharedPref.getString("nickname", "");
 
