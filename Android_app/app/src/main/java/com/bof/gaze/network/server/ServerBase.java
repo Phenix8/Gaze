@@ -17,8 +17,7 @@ import java.net.SocketTimeoutException;
  */
 
 public abstract class
-ServerBase extends Thread
-    implements ClientHandler.ClientHandlerListener {
+ServerBase implements Runnable, ClientHandler.ClientHandlerListener {
 
     public interface ServerStateCallback extends Serializable {
         void onServerStarted();
@@ -34,6 +33,8 @@ ServerBase extends Thread
 
     private boolean listening;
 
+    private Thread thread;
+
     private int maxPlayer;
 
     private ArrayList<ClientHandler> clients = new ArrayList<>();
@@ -44,23 +45,26 @@ ServerBase extends Thread
         this.maxPlayer = maxPlayer;
     }
 
-    public void startListening(ServerStateCallback callback) {
+    synchronized public void startListening(ServerStateCallback callback) {
         if (this.listening) {
             throw new IllegalStateException("Server is already started.");
         }
         this.callback = callback;
+        this.thread = new Thread(this);
+        this.thread.start();
         this.listening = true;
-        this.start();
     }
 
-    public void stopListening() {
+    synchronized public void stopListening() {
         if (!this.listening) {
             throw new IllegalStateException("Server is not running.");
         }
         this.listening = false;
-        onServerStopped();
-        for (ClientHandler client : clients) {
-            client.close();
+        while (this.thread != null) {
+            try {
+                this.thread.join();
+                this.thread = null;
+            } catch (InterruptedException e) {}
         }
     }
 
@@ -96,6 +100,11 @@ ServerBase extends Thread
                 } catch (SocketTimeoutException e) {
 
                 }
+            }
+
+            onServerStopped();
+            for (ClientHandler client : clients) {
+                client.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
