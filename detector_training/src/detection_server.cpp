@@ -1,5 +1,5 @@
 #include "server.hpp"
-
+#include "presence_advertiser.hpp"
 #include "jpgd.h"
 
 #include <dlib/image_processing.h>
@@ -146,11 +146,13 @@ class FHOGDetector {
 
 			std::vector<dlib::file> files = dir.get_files();
 
+			std::cout << "-----------------" << std::endl;
 			for (const auto &file : files) {
 				dlib::deserialize(file) >> detector;
 				detectors[file.name()] = detector;
 				std::cout << "Loaded detector " << file.name() << std::endl;
 			}
+			std::cout << "-----------------" << std::endl;
 		}
 
 		std::vector<dlib::rectangle> detect(const std::string &detectorName, const dlib::matrix<dlib::rgb_pixel> &image) {
@@ -173,10 +175,37 @@ class FHOGDetector {
 		}
 };
 
-int main() {
-	FHOGDetector scanner;
-	scanner.loadDetectors("../detector");
-	Server< DetectionTask<FHOGDetector> > server(8000, &scanner);
-	server.wait();
+int main(int argc, char **argv) {
+
+	if (argc != 2) {
+		std::cout << "Usage :\r\n    " << argv[0] << " INTERFACE_NAME" << std::endl;
+		std::cout << "    " << argv[0] << " -no_broadcasting" << std::endl << std::endl;
+		std::cout << "INTERFACE_NAME is the name of your Wifi interface :" << std::endl;
+		std::cout << "  - On Linux, it is probably wlan0" << std::endl;
+		std::cout << "  - On Windows, open regedit.exe, navigate though" << std::endl;
+		std::cout << "    \\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards" << std::endl;
+		std::cout << "    find the one which is your Wifi card by looking the description of the different items, then" << std::endl;
+		std::cout << "    copy the value of the field ServiceName (it is of the form {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx})." << std::endl;
+		std::cout << "  - Otherwise use -no_broadcasting to disable the advertising of this detection server." << std::endl;
+		return 1;
+	}
+
+	try {
+		PresenceAdvertiser advertiser;
+
+		if (strncmp("-no_broadcasting", argv[1], 16) != 0) {
+			advertiser.start(argv[1], 5151, "DETECTION SERVER HERE");
+			std::cout << "Broadcasting on port 5151" << std::endl;
+		}
+
+		FHOGDetector scanner;
+		scanner.loadDetectors("../detector");
+		Server< DetectionTask<FHOGDetector> > server(8000, &scanner);
+		std::cout << "Listening on port 8000..." << std::endl;
+		server.wait();
+	} catch (const std::exception &e) {
+		std::cout << "An error occured : " << e.what() << std::endl;
+	}
+
 	return 0;
 }
