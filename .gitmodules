@@ -1,0 +1,6 @@
+[submodule "detector_training/lib/sockets"]
+	path = detector_training/lib/sockets
+	url = https://bitbucket.org/snippets/gchamberland/je9AkK/c-cross-platform-socket
+[submodule "detector_training/lib/thread_pool"]
+	path = detector_training/lib/thread_pool
+	url = https://bitbucket.org/snippets/gchamberland/Lepqex/c-thread-pool
