@@ -11,12 +11,18 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <chrono>
 
 static int nbDetection = 0;
 
 template <typename DETECTOR_TYPE>
 class DetectionTask : public PoolTask {
+	using Time = std::chrono::time_point<std::chrono::system_clock>;
+	using Duration = std::chrono::duration<float>;
+	using Clock = std::chrono::system_clock;
+
 	private:
+		Time creationTime;
 		std::string clientAddress;
 		SOCK sock;
 		DETECTOR_TYPE *detector;
@@ -83,9 +89,11 @@ class DetectionTask : public PoolTask {
 			this->clientAddress = clientAddress;
 			this->sock = sock;
 			this->detector = (DETECTOR_TYPE *) detectorPtr;
+			creationTime = Clock::now();
 		}
 
 		virtual void run() {
+
 			try {
 				int32_t detectorNameSize, imageSize;
 				std::string detectorName, imageType, imageData;
@@ -121,7 +129,8 @@ class DetectionTask : public PoolTask {
 
 				sendInt32(dets.size() > 0 ? 1 : 0);
 
-				std::cout << "Handled detection request for " << clientAddress << std::endl;
+				std::cout << "Handled detection request for " << clientAddress;
+				std::cout << " in " << Duration(Clock::now() - creationTime).count() << "s" << std::endl;
 
 			} catch (const std::exception &e) {
 				std::cout << "Error handling detection request from " << clientAddress << " : " << e.what() << std::endl;
@@ -163,8 +172,6 @@ class FHOGDetector {
     		Detector detector_copy = detectors[detectorName];
 
     		int zoomLevel = 4;
-			int newHeight = 480 * zoomLevel;
-			int newWidth = 640 * zoomLevel;
 
 			dlib::matrix<unsigned char> rsz_img(480 * zoomLevel, 640 * zoomLevel);
 
