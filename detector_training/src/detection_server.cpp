@@ -188,12 +188,12 @@ int main(int argc, char **argv) {
 		std::cout << "Usage :\r\n    " << argv[0] << " INTERFACE_NAME" << std::endl;
 		std::cout << "    " << argv[0] << " -no_broadcasting" << std::endl << std::endl;
 		std::cout << "INTERFACE_NAME is the name of your Wifi interface :" << std::endl;
-		std::cout << "  - On Linux, it is probably wlan0" << std::endl;
+		std::cout << "  - On Linux, it is probably wlan0, otherwise type ifconfig, or ip address in a terminal to find its name." << std::endl;
 		std::cout << "  - On Windows, open regedit.exe, navigate though" << std::endl;
 		std::cout << "    \\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards" << std::endl;
 		std::cout << "    find the one which is your Wifi card by looking the description of the different items, then" << std::endl;
 		std::cout << "    copy the value of the field ServiceName (it is of the form {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx})." << std::endl;
-		std::cout << "  - Otherwise use -no_broadcasting to disable the advertising of this detection server." << std::endl;
+		std::cout << "  - Finally use -no_broadcasting option to disable advertise of this detection server." << std::endl;
 		return 1;
 	}
 
@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
 		PresenceAdvertiser advertiser;
 
 		if (strncmp("-no_broadcasting", argv[1], 16) != 0) {
-			advertiser.start(argv[1], 5151, "DETECTION SERVER HERE");
+			advertiser.start(argv[1], 5151, "DETECTION SERVER HERE:8000");
 			std::cout << "Broadcasting on port 5151" << std::endl;
 		}
 
