@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <chrono>
 
-static int nbDetection = 0;
+#define CLAMP(value) value < 0 ? 0 : (value > 255 ? 255 : value)
 
 template <typename DETECTOR_TYPE>
 class DetectionTask : public PoolTask {
@@ -84,6 +84,55 @@ class DetectionTask : public PoolTask {
 			delete decompressedImage;
 		}
 
+		static void yuv420p2rgb888(
+	        size_t width, size_t height,
+	        size_t yRowStride,
+	        size_t uvPixelStride,
+	        size_t uvRowStride,
+	        const uint8_t *yData,
+	        const uint8_t *uData,
+	        const uint8_t *vData,
+	        uint8_t *rgbData
+		) {
+		    int b, g, r, yy, uu, vv, uvIndex;
+		    for (int y = 0; y < height; y++) {
+		        for (int x = 0; x < width; x++) {
+		            yy = yData[(y * yRowStride) + x];
+		            uvIndex = uvPixelStride * (x / 2) + uvRowStride * (y / 2),
+		            uu = uData[uvIndex] - 128;
+		            vv = vData[uvIndex] - 128;
+
+		            r = yy + 1.403f * vv;
+		            g = yy - 0.344f * uu - 0.714f * vv;
+		            b = yy + 1.770f * uu;
+		            *rgbData++ = CLAMP(r);
+		            *rgbData++ = CLAMP(g);
+		            *rgbData++ = CLAMP(b);
+		        }
+		    }
+		}
+
+		static void decodeYUV(
+			size_t width, size_t height,
+	        size_t yRowStride,
+	        size_t uvPixelStride,
+	        size_t uvRowStride,
+	        const uint8_t *yData,
+	        const uint8_t *uData,
+	        const uint8_t *vData,
+	        dlib::matrix<dlib::rgb_pixel> &image
+        ) {
+			image = dlib::matrix<dlib::rgb_pixel>((int)height, (int)width);
+
+			yuv420p2rgb888(
+				width, height,
+				yRowStride,
+				uvPixelStride, uvRowStride,
+				yData, uData, vData,
+				(uint8_t *) (&image(0, 0))
+			);
+		}
+
 	public:
 		DetectionTask(const SOCK sock, const std::string &clientAddress, const void *detectorPtr) {
 			this->clientAddress = clientAddress;
@@ -95,8 +144,10 @@ class DetectionTask : public PoolTask {
 		virtual void run() {
 
 			try {
-				int32_t detectorNameSize, imageSize;
-				std::string detectorName, imageType, imageData;
+				dlib::matrix<dlib::rgb_pixel> image;
+
+				int32_t detectorNameSize;
+				std::string detectorName, imageType;
 
 				detectorNameSize = readInt32();
 
@@ -104,28 +155,75 @@ class DetectionTask : public PoolTask {
 					throw std::runtime_error("Received detector name too big");
 				}
 
+				std::cout << "Detector name size : " << detectorNameSize << std::endl;
+
 				read(detectorName, detectorNameSize);
+
+				std::cout << "Detector name : " << detectorName << std::endl;
 
 				read(imageType, 3);
 
-				imageSize = readInt32();
+				std::cout << "Img type : " << imageType << std::endl;
 
-				//if annonced image size > 10 Mo
-				if (imageSize > 10485760) {
-					throw std::runtime_error("Received image size is too big");
-				}
+				if (imageType.compare("jpg") == 0) {
+					int imageSize = readInt32();
 
-				read(imageData, imageSize);
+					//if annonced image size > 10 Mo
+					if (imageSize > 10485760) {
+						throw std::runtime_error("Received image size is too big");
+					}
 
-    			dlib::matrix<dlib::rgb_pixel> image;
-
-    			if (imageType.compare("jpg") == 0) {
+					std::string imageData;
+					read(imageData, imageSize);
+    			
     				decodeJPG(imageData.c_str(), imageData.size(), image);
-    			} else {
+    			} else if (imageType.compare("yuv") == 0) {
+    				int imageWidth = readInt32();
+    				int imageHeight = readInt32();
+
+    				std::cout << imageWidth << " " << imageHeight << std::endl;
+
+    				if (imageWidth > 640 || imageHeight > 640) {
+    					throw std::runtime_error("Received image dimensions are too big");
+    				}
+
+    				int yRowStride = readInt32();
+    				int uvPixelStride = readInt32();
+    				int uvRowStride = readInt32();
+
+    				int ySize = readInt32();
+
+    				if (ySize > 10485760) {
+    					throw std::runtime_error("Received y plane size is too big");
+    				}
+
+    				std::string yData;
+    				read(yData, ySize);
+
+    				int uvSize = readInt32();
+
+    				if (uvSize > 10485760) {
+    					throw std::runtime_error("Received uv planes size is too big");
+    				}
+
+    				std::string uData, vData;
+    				read(uData, uvSize);
+    				read(vData, uvSize);
+
+    				decodeYUV(
+    					imageWidth, imageHeight,
+    					yRowStride,
+    					uvPixelStride, uvRowStride,
+    					(const uint8_t*) yData.c_str(), (const uint8_t*) uData.c_str(), (const uint8_t*) vData.c_str(), 
+						image
+					);
+				} else {
     				throw std::runtime_error("Unsupported image format");
     			}
 
 			    const std::vector<dlib::rectangle> dets = detector->detect(detectorName, image);
+
+			    std::cout << dets.size() << " shape(s) detected" << std::endl;
 
 				sendInt32(dets.size() > 0 ? 1 : 0);
 
