@@ -40,7 +40,7 @@ add_executable(deep_trainer "src/deep_trainer.cpp")
 
 #Because they use Dlib, hog_trainer and deep_trainer need to be linked against it.
 target_link_libraries(hog_trainer dlib::dlib)
-target_link_libraries(deep_trainer dlib::dlib)
+target_link_libraries(deep_trainer dlib::dlib "-static")
 
 #detection_server needs Dlib too but also different system libraries
 #according to the targetted OS (Linux or Windows).
