@@ -481,9 +481,15 @@ public class CameraProcessor implements TextureView.SurfaceTextureListener, Imag
                         requestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, null);
                         requestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                 CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                        captureSession.setRepeatingRequest(requestBuilder.build(), null, null);
+
+                        //TODO find out why captureSession is sometime null
+                        //Something, life is null
+                        if (captureSession != null) {
+                            captureSession.setRepeatingRequest(requestBuilder.build(), null, null);
+                        }
+
                         Log.d(TAG, "Capturing image : restarted preview");
-                    } catch (CameraAccessException e) {
+                    } catch (CameraAccessException | IllegalStateException e) {
                         e.printStackTrace();
                     } finally {
                         unlockCamera();
