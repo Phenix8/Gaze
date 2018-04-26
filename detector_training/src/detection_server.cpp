@@ -1,6 +1,7 @@
 #include "server.hpp"
 #include "presence_advertiser.hpp"
 #include "jpgd.h"
+//#include "network_definition.h"
 
 #include <dlib/image_processing.h>
 #include <dlib/data_io.h>
@@ -12,6 +13,7 @@
 #include <sstream>
 #include <algorithm>
 #include <chrono>
+#include <fstream>
 
 #define CLAMP(value) value < 0 ? 0 : (value > 255 ? 255 : value)
 
@@ -244,9 +246,16 @@ class FHOGDetector {
 	using Detector = dlib::object_detector<image_scanner_type>;
 	
 	private:
+		bool saveImages;
+		//test_net_type net;
 		std::map<const std::string, Detector> detectors;
+		std::map<const std::string, int> imageNameIndices;
 
 	public:
+		FHOGDetector(bool saveImages = false) {
+			this->saveImages = saveImages;		
+		}
+
 		void loadDetectors(const std::string &directoryName) {
 			Detector detector;
 			dlib::directory dir(directoryName);
@@ -262,40 +271,76 @@ class FHOGDetector {
 			std::cout << "-----------------" << std::endl;
 		}
 
+		inline bool fileExists (const std::string& name) {
+		    std::ifstream f(name.c_str());
+		    return f.good();
+		}
+
+		void saveImage(const std::string &detectorName, const dlib::matrix<dlib::rgb_pixel> &image) {
+			std::string imageNameBase = "../saved_images/sample_" + detectorName + "_";
+			std::string imageName;			
+
+			int index = 1;			
+
+			if (imageNameIndices.find(detectorName) == imageNameIndices.end()) {
+				imageName = imageNameBase + std::to_string(index);
+				while (fileExists(imageName)) {
+					index++;
+					imageName = imageNameBase + std::to_string(index);
+				}
+				imageNameIndices[detectorName] = index;
+			} else {
+				index = imageNameIndices[detectorName] + 1;
+				imageNameIndices[detectorName] = index;
+				imageName = imageNameBase + std::to_string(index);
+			}
+
+			dlib::save_jpeg(image, imageName);
+		}
+
 		std::vector<dlib::rectangle> detect(const std::string &detectorName, const dlib::matrix<dlib::rgb_pixel> &image) {
 			if (detectors.find(detectorName) == detectors.end()) {
-        		throw std::runtime_error("Unknown detector name");
-    		}
+				throw std::runtime_error("Unknown detector name");
+			}
 
-    		Detector detector_copy = detectors[detectorName];
+			if (saveImages) {
+				try {
+					saveImage(detectorName, image);		
+				} catch (...) {
+					std::cout << "Error saving image into ../saved_images : verify directory exists and is accessible." << std::endl;				
+				}	
+			}
 
-    		int zoomLevel = 4;
+	    		int zoomLevel = 4;
 
 			dlib::matrix<unsigned char> rsz_img(480 * zoomLevel, 640 * zoomLevel);
 
 			//std::cout << "Resizing image..." << std::endl;
-		    dlib::resize_image(image, rsz_img);
+			dlib::resize_image(image, rsz_img);
 
+			Detector detector_copy = detectors[detectorName];
 			return detector_copy(rsz_img);
 		}
 };
 
 int main(int argc, char **argv) {
 
-	if (argc != 2) {
-		std::cout << "Usage :\r\n    " << argv[0] << " INTERFACE_NAME" << std::endl;
-		std::cout << "    " << argv[0] << " -no_broadcasting" << std::endl << std::endl;
+	if (argc < 2) {
+		std::cout << "Usage :\r\n    " << argv[0] << " INTERFACE_NAME" << " [-save_analysed_images]" << std::endl;
+		std::cout << "    " << argv[0] << " -no_broadcasting [-save_analysed_images]" << std::endl << std::endl;
 		std::cout << "INTERFACE_NAME is the name of your Wifi interface :" << std::endl;
 		std::cout << "  - On Linux, it is probably wlan0, otherwise type ifconfig, or ip address in a terminal to find its name." << std::endl;
 		std::cout << "  - On Windows, open regedit.exe, navigate though" << std::endl;
 		std::cout << "    \\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards" << std::endl;
 		std::cout << "    find the one which is your Wifi card by looking the description of the different items, then" << std::endl;
 		std::cout << "    copy the value of the field ServiceName (it is of the form {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx})." << std::endl;
-		std::cout << "  - Finally use -no_broadcasting option to disable advertise of this detection server." << std::endl;
+		std::cout << "  - Instead use -no_broadcasting option to disable advertise of this detection server." << std::endl;
+		std::cout << std::endl << "Finally use -save_analysed_images option to save all analysed image into saved_images direcory (must exist)." << std::endl << std::endl;
 		return 1;
 	}
 
 	try {
+		bool saveImages = false;
 		PresenceAdvertiser advertiser;
 
 		if (strncmp("-no_broadcasting", argv[1], 16) != 0) {
@@ -303,7 +348,14 @@ int main(int argc, char **argv) {
 			std::cout << "Broadcasting on port 5151" << std::endl;
 		}
 
-		FHOGDetector scanner;
+		if (argc >= 2) {
+			std::cout << "Saving received images into ../saved_images" << std::endl;
+			if (strncmp("-save_analysed_images", argv[2], 21) == 0) {
+				saveImages = true;
+			}
+		}
+
+		FHOGDetector scanner(saveImages);
 		scanner.loadDetectors("../detector");
 		Server< DetectionTask<FHOGDetector> > server(8000, &scanner);
 		std::cout << "Listening on port 8000..." << std::endl;
