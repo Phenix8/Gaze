@@ -100,9 +100,11 @@ public class LobbyActivity extends CommonGazeActivity
         {
             @Override
             public void onClick (View v){
-            stopServer();
-            startActivity(new Intent(getApplicationContext(), MenuActivity.class));
-        }
+                if (isGameHost()) {
+                    stopServer();
+                }
+                startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+            }
         });
 
         getGameClient().setGameEventListener(this);
