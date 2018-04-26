@@ -81,6 +81,7 @@ public class AnamorphosisChoiceActivity extends CommonGameActivity
         Intent intent = new Intent(this, CameraActivity.class);
         intent.putExtra("anamorphosis", currentAnamorphosis);
         intent.putExtra("alreadyCanceled", alreadyCanceled);
+        intent.putExtra("debug", debugMode);
         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivityForResult(intent, Common.VALIDATE_ANAMORPHOSIS_ACTION_CODE);
     }

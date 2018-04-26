@@ -93,6 +93,10 @@ public class CameraActivity extends CommonGameActivity
 
     private void updateFoundAnamorphosisImg(View convertView, Player player)
     {
+        if (getIntent().getBooleanExtra("debug", false)) {
+            return;
+        }
+
         convertView.findViewById(R.id.camera_player_anam1_img).setVisibility( (player.getNbFoundAnamorphosis() > 0) ? View.VISIBLE : View.INVISIBLE);
         convertView.findViewById(R.id.camera_player_anam2_img).setVisibility( (player.getNbFoundAnamorphosis() > 1) ? View.VISIBLE : View.INVISIBLE);
         convertView.findViewById(R.id.camera_player_anam3_img).setVisibility( (player.getNbFoundAnamorphosis() > 2) ? View.VISIBLE : View.INVISIBLE);
@@ -220,6 +224,11 @@ public class CameraActivity extends CommonGameActivity
 
     // Play the sound of a found anamorphosis depending on the number of already found anamorphosis (0 to 3)
     private void playFoundSound() {
+        //If we are in debug mode
+        if (getIntent().getBooleanExtra("debug", false)) {
+            return;
+        }
+
         int imageId, nbAnamorphosis = getGameClient().getCurrentPlayer().getNbFoundAnamorphosis();
 
         if (nbAnamorphosis == 3)            imageId = R.raw.anam_valid4;
