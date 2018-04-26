@@ -1,0 +1,1 @@
+Images analysed by detection server will be saved here if asked.
