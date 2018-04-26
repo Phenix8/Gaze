@@ -5,32 +5,10 @@
 #include <dlib/dir_nav.h>
 #include <dlib/cmd_line_parser.h>
 
+#include "network_definition.h"
+
 using namespace std;
 using namespace dlib;
-
-
-// A 5x5 conv layer that does 2x downsampling
-template <long num_filters, typename SUBNET> using con5d = con<num_filters,5,5,2,2,SUBNET>;
-// A 3x3 conv layer that doesn't do any downsampling
-template <long num_filters, typename SUBNET> using con3  = con<num_filters,3,3,1,1,SUBNET>;
-
-// Now we can define the 8x downsampling block in terms of conv5d blocks.  We
-// also use relu and batch normalization in the standard way.
-template <typename SUBNET> using downsampler  = relu<bn_con<con5d<32, relu<bn_con<con5d<32, relu<bn_con<con5d<32,SUBNET>>>>>>>>>;
-
-// The rest of the network will be 3x3 conv layers with batch normalization and
-// relu.  So we define the 3x3 block we will use here.
-template <typename SUBNET> using rcon3  = relu<bn_con<con3<32,SUBNET>>>;
-
-// Finally, we define the entire network.   The special input_rgb_image_pyramid
-// layer causes the network to operate over a spatial pyramid, making the detector
-// scale invariant.  
-using net_type  = loss_mmod<con<1,6,6,1,1,rcon3<rcon3<rcon3<downsampler<input_rgb_image_pyramid<pyramid_down<6>>>>>>>>;
-
-using test_net_type = net_type;
-
-// ----------------------------------------------------------------------------------------
-
 
 void testDetector(
 	const string &networkFileName,
@@ -128,6 +106,8 @@ void trainDetector(
 	std::vector<matrix<rgb_pixel>> mini_batch_samples;
 	std::vector<std::vector<mmod_rect>> mini_batch_labels; 
 	random_cropper cropper;
+	cropper.set_randomly_flip(true);
+    	cropper.set_max_rotation_degrees(90);
 	dlib::rand rnd;
 
 	while(trainer.get_learning_rate() >= minLearningRate)
@@ -207,7 +187,7 @@ int main(int argc, char** argv) try
         parser.check_incompatible_options(incompatible);
 
 	parser.check_option_arg_range("w", 10, 200);
-	parser.check_option_arg_range("r", 1e-6, 1e-2);
+	parser.check_option_arg_range("r", 1e-6, 1e-1);
 	parser.check_option_arg_range("i", 10, 50000);
 	parser.check_option_arg_range("t", 1, 20);
 	parser.check_option_arg_range("u", 1, 6);
