@@ -11,7 +11,7 @@ namespace dlib
 
     namespace qopt_impl
     {
-        void fit_qp_mse(
+        void fit_quadratic_to_points_mse(
             const matrix<double>& X,
             const matrix<double,0,1>& Y,
             matrix<double>& H,
@@ -64,21 +64,21 @@ namespace dlib
 
     // ----------------------------------------------------------------------------------------
 
-        void fit_qp(
+        void fit_quadratic_to_points(
             const matrix<double>& X,
             const matrix<double,0,1>& Y,
             matrix<double>& H,
             matrix<double,0,1>& g,
             double& c
         )
-            /*!
-                requires
-                    - X.size() > 0
+        /*!
+            requires
+                - X.size() > 0
                 - X.nc() == Y.size()
-                - X.nr()+1 <= X.nc() <= (X.nr()+1)*(X.nr()+2)/2     
-                ensures
-                    - This function finds a quadratic function, Q(x), that interpolates the
-                      given set of points.  If there aren't enough points to uniquely define
+                - X.nr()+1 <= X.nc()      
+            ensures
+                - This function finds a quadratic function, Q(x), that interpolates the
+                  given set of points.  If there aren't enough points to uniquely define
                   Q(x) then the Q(x) that fits the given points with the minimum Frobenius
                   norm hessian matrix is selected. 
                 - To be precise:
@@ -87,16 +87,19 @@ namespace dlib
                         sum(squared(H))
                       such that:
                         Q(colm(X,i)) == Y(i),  for all valid i
-            !*/
+                    - If there are more points than necessary to constrain Q then the Q
+                      that best interpolates the function in the mean squared sense is
+                      found.
+        !*/
         {
             DLIB_CASSERT(X.size() > 0);
             DLIB_CASSERT(X.nc() == Y.size());
-            DLIB_CASSERT(X.nr()+1 <= X.nc());// && X.nc() <= (X.nr()+1)*(X.nr()+2)/2);
+            DLIB_CASSERT(X.nr()+1 <= X.nc());
 
 
             if (X.nc() >= (X.nr()+1)*(X.nr()+2)/2)
             {
-                fit_qp_mse(X,Y,H,g,c);
+                fit_quadratic_to_points_mse(X,Y,H,g,c);
                 return;
             }
 
@@ -125,8 +128,7 @@ namespace dlib
             //matrix<double,0,1> z = pinv(W)*r;
             lu_decomposition<decltype(W)> lu(W);
             matrix<double,0,1> z = lu.solve(r);
-            if (lu.is_singular())
-                std::cout << "WARNING, THE W MATRIX IS SINGULAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+            //if (lu.is_singular()) std::cout << "WARNING, THE W MATRIX IS SINGULAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
 
             matrix<double,0,1> lambda = rowm(z, range(0,M-1));
 
@@ -166,7 +168,9 @@ namespace dlib
             DLIB_CASSERT(x.size() > 0);
             for (size_t i = 0; i < x.size(); ++i)
                 DLIB_CASSERT(anchor.size() == x[i].size());
-            DLIB_CASSERT(anchor.size()+1 <= x.size() && x.size() <= (anchor.size()+1)*(anchor.size()+2)/2);
+
+            const long x_size = static_cast<long>(x.size());
+            DLIB_CASSERT(anchor.size()+1 <= x_size && x_size <= (anchor.size()+1)*(anchor.size()+2)/2);
 
 
             matrix<double> X(anchor.size(), x.size());
@@ -181,7 +185,7 @@ namespace dlib
             matrix<double,0,1> g;
             double c;
 
-            fit_qp(X, Y, H, g, c);
+            fit_quadratic_to_points(X, Y, H, g, c);
 
             matrix<double,0,1> p;
 
@@ -199,7 +203,7 @@ namespace dlib
 
     // ----------------------------------------------------------------------------------------
 
-        quad_interp_result pick_next_sample_quad_interp (
+        quad_interp_result pick_next_sample_using_trust_region (
             const std::vector<function_evaluation>& samples,
             double& radius,
             const matrix<double,0,1>& lower,
@@ -212,7 +216,7 @@ namespace dlib
             // their best observed value and use the QP to optimize the real variables.  So the
             // number of dimensions, as far as the QP is concerned, is the number of non-integer
             // variables.
-            long dims = 0;
+            size_t dims = 0;
             for (auto is_int : is_integer_variable)
             {
                 if (!is_int)
@@ -223,7 +227,7 @@ namespace dlib
 
             // Use enough points to fill out a quadratic model or the max available if we don't
             // have quite enough.
-            const long N = std::min((long)samples.size(), (dims+1)*(dims+2)/2); 
+            const long N = std::min(samples.size(), (dims+1)*(dims+2)/2); 
 
 
             // first find the best sample;
@@ -325,7 +329,7 @@ namespace dlib
 
     // ------------------------------------------------------------------------------------
 
-        max_upper_bound_function pick_next_sample_max_upper_bound_function (
+        max_upper_bound_function pick_next_sample_as_max_upper_bound (
             dlib::rand& rnd,
             const upper_bound_function& ub,
             const matrix<double,0,1>& lower,
@@ -368,13 +372,13 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
     function_spec::function_spec(
-        const matrix<double,0,1>& lower_, 
-        const matrix<double,0,1>& upper_
+        matrix<double,0,1> bound1, 
+        matrix<double,0,1> bound2
     ) : 
-        lower(lower_), upper(upper_)
+        lower(std::move(bound1)), upper(std::move(bound2))
     {
         DLIB_CASSERT(lower.size() == upper.size());
-        for (size_t i = 0; i < lower.size(); ++i)
+        for (long i = 0; i < lower.size(); ++i)
         {
             if (upper(i) < lower(i))
                 std::swap(lower(i), upper(i));
@@ -386,11 +390,11 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
     function_spec::function_spec(
-        const matrix<double,0,1>& lower,
-        const matrix<double,0,1>& upper, 
+        matrix<double,0,1> bound1,
+        matrix<double,0,1> bound2, 
         std::vector<bool> is_integer
     ) : 
-        function_spec(std::move(lower),std::move(upper))
+        function_spec(std::move(bound1),std::move(bound2))
     {
         is_integer_variable = std::move(is_integer);
         DLIB_CASSERT(lower.size() == (long)is_integer_variable.size());
@@ -418,10 +422,10 @@ namespace dlib
         {
             upper_bound_function tmp(ub);
 
-            // we are going to add the incomplete evals into this and assume the
-            // incomplete evals are going to take y values equal to their nearest
+            // we are going to add the outstanding evals into this and assume the
+            // outstanding evals are going to take y values equal to their nearest
             // neighbor complete evals.
-            for (auto& eval : incomplete_evals)
+            for (auto& eval : outstanding_evals)
             {
                 function_evaluation e;
                 e.x = eval.x;
@@ -455,6 +459,7 @@ namespace dlib
 
     } // end namespace gopt_impl 
 
+// ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
 
@@ -527,9 +532,9 @@ namespace dlib
         {
             std::lock_guard<std::mutex> lock(*info->m);
 
-            // remove the evaluation request from the incomplete list.
-            auto i = std::find(info->incomplete_evals.begin(), info->incomplete_evals.end(), req);
-            info->incomplete_evals.erase(i);
+            // remove the evaluation request from the outstanding list.
+            auto i = std::find(info->outstanding_evals.begin(), info->outstanding_evals.end(), req);
+            info->outstanding_evals.erase(i);
         }
     }
 
@@ -546,10 +551,10 @@ namespace dlib
         m_has_been_evaluated = true;
 
 
-        // move the evaluation from incomplete to complete
-        auto i = std::find(info->incomplete_evals.begin(), info->incomplete_evals.end(), req);
-        DLIB_CASSERT(i != info->incomplete_evals.end());
-        info->incomplete_evals.erase(i);
+        // move the evaluation from outstanding to complete
+        auto i = std::find(info->outstanding_evals.begin(), info->outstanding_evals.end(), req);
+        DLIB_CASSERT(i != info->outstanding_evals.end());
+        info->outstanding_evals.erase(i);
         info->ub.add(function_evaluation(req.x,y));
 
 
@@ -561,8 +566,8 @@ namespace dlib
             // was.
             double measured_improvement = y-req.anchor_objective_value;
             double rho = measured_improvement/std::abs(req.predicted_improvement);
-            std::cout << "rho: "<< rho << std::endl;
-            std::cout << "radius: "<< info->radius << std::endl;
+            //std::cout << "rho: "<< rho << std::endl;
+            //std::cout << "radius: "<< info->radius << std::endl;
             if (rho < 0.25)
                 info->radius *= 0.5;
             else if (rho > 0.75)
@@ -573,7 +578,7 @@ namespace dlib
         {
             if (!req.was_trust_region_generated_request && length(req.x - info->best_x) > info->radius*1.001)
             {
-                std::cout << "reset radius because of big move, " << length(req.x - info->best_x) << "  radius was " << info->radius << std::endl;
+                //std::cout << "reset radius because of big move, " << length(req.x - info->best_x) << "  radius was " << info->radius << std::endl;
                 // reset trust region radius since we made a big move.  Doing this will
                 // cause the radius to be reset to the size of the local region.
                 info->radius = 0;
@@ -583,6 +588,8 @@ namespace dlib
         }
     }
 
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
 
     global_function_search::
@@ -597,6 +604,7 @@ namespace dlib
         const std::vector<function_spec>& functions_
     )
     {
+        DLIB_CASSERT(functions_.size() > 0);
         m = std::make_shared<std::mutex>();
         functions.reserve(functions_.size());
         for (size_t i = 0; i < functions_.size(); ++i)
@@ -613,12 +621,20 @@ namespace dlib
     ) : 
         global_function_search(functions_) 
     {
+        DLIB_CASSERT(functions_.size() > 0);
         DLIB_CASSERT(functions_.size() == initial_function_evals.size());
         DLIB_CASSERT(relative_noise_magnitude >= 0);
         relative_noise_magnitude = relative_noise_magnitude_;
         for (size_t i = 0; i < initial_function_evals.size(); ++i)
         {
             functions[i]->ub = upper_bound_function(initial_function_evals[i], relative_noise_magnitude);
+
+            if (initial_function_evals.size() != 0)
+            {
+                auto best = max_scoring_element(initial_function_evals[i], [](const function_evaluation& e) { return e.y; }).first;
+                functions[i]->best_objective_value = best.y;
+                functions[i]->best_x = best.x;
+            }
         }
     }
 
@@ -695,18 +711,35 @@ namespace dlib
         for (auto& info : functions)
         {
             const long dims = info->spec.lower.size();
-            if (info->ub.num_points() < std::max<long>(3,dims))
+            // If this is the very beginning of the optimization process
+            if (info->ub.num_points()+info->outstanding_evals.size() < 1)
+            {
+                outstanding_function_eval_request new_req;
+                new_req.request_id = next_request_id++;
+                // Pick the point right in the center of the bounds to evaluate first since
+                // people will commonly center the bound on a location they think is good.
+                // So might as well try there first.
+                new_req.x = (info->spec.lower + info->spec.upper)/2.0;
+                for (long i = 0; i < new_req.x.size(); ++i)
+                {
+                    if (info->spec.is_integer_variable[i])
+                        new_req.x(i) = std::round(new_req.x(i));
+                }
+                info->outstanding_evals.emplace_back(new_req);
+                return function_evaluation_request(new_req,info);
+            }
+            else if (info->ub.num_points() < std::max<long>(3,dims))
             {
                 outstanding_function_eval_request new_req;
                 new_req.request_id = next_request_id++;
                 new_req.x = make_random_vector(rnd, info->spec.lower, info->spec.upper, info->spec.is_integer_variable);
-                info->incomplete_evals.emplace_back(new_req);
+                info->outstanding_evals.emplace_back(new_req);
                 return function_evaluation_request(new_req,info);
             }
         }
 
 
-        if (do_trust_region_step && !has_incomplete_trust_region_request())
+        if (do_trust_region_step && !has_outstanding_trust_region_request())
         {
             // find the currently best performing function, we will do a trust region
             // step on it.
@@ -715,9 +748,9 @@ namespace dlib
             // if we have enough points to do a trust region step
             if (info->ub.num_points() > dims+1)
             {
-                auto tmp = pick_next_sample_quad_interp(info->ub.get_points(),
+                auto tmp = pick_next_sample_using_trust_region(info->ub.get_points(),
                     info->radius, info->spec.lower, info->spec.upper, info->spec.is_integer_variable);
-                std::cout << "QP predicted improvement: "<< tmp.predicted_improvement << std::endl;
+                //std::cout << "QP predicted improvement: "<< tmp.predicted_improvement << std::endl;
                 if (tmp.predicted_improvement > min_trust_region_epsilon)
                 {
                     do_trust_region_step = false;
@@ -727,7 +760,7 @@ namespace dlib
                     new_req.was_trust_region_generated_request = true;
                     new_req.anchor_objective_value = info->best_objective_value;
                     new_req.predicted_improvement = tmp.predicted_improvement;
-                    info->incomplete_evals.emplace_back(new_req);
+                    info->outstanding_evals.emplace_back(new_req);
                     return function_evaluation_request(new_req, info);
                 }
             }
@@ -746,7 +779,7 @@ namespace dlib
             // function with the largest upper bound for evaluation.
             for (auto& info : functions)
             {
-                auto tmp = pick_next_sample_max_upper_bound_function(rnd,
+                auto tmp = pick_next_sample_as_max_upper_bound(rnd,
                     info->build_upper_bound_with_all_function_evals(), info->spec.lower, info->spec.upper,
                     info->spec.is_integer_variable,  num_random_samples);
                 if (tmp.predicted_improvement > 0 && tmp.upper_bound > best_upper_bound) 
@@ -763,7 +796,7 @@ namespace dlib
                 outstanding_function_eval_request new_req;
                 new_req.request_id = next_request_id++;
                 new_req.x = std::move(next_sample);
-                best_funct->incomplete_evals.emplace_back(new_req);
+                best_funct->outstanding_evals.emplace_back(new_req);
                 return function_evaluation_request(new_req, best_funct);
             }
         }
@@ -775,7 +808,7 @@ namespace dlib
         outstanding_function_eval_request new_req;
         new_req.request_id = next_request_id++;
         new_req.x = make_random_vector(rnd, info->spec.lower, info->spec.upper, info->spec.is_integer_variable);
-        info->incomplete_evals.emplace_back(new_req);
+        info->outstanding_evals.emplace_back(new_req);
         return function_evaluation_request(new_req, info);
 
     }
@@ -838,9 +871,13 @@ namespace dlib
     {
         DLIB_CASSERT(0 <= value);
         relative_noise_magnitude = value;
-        // recreate all the upper bound functions with the new relative noise magnitude
-        for (auto& f : functions)
-            f->ub = upper_bound_function(f->ub.get_points(), relative_noise_magnitude);
+        if (m)
+        {
+            std::lock_guard<std::mutex> lock(*m);
+            // recreate all the upper bound functions with the new relative noise magnitude
+            for (auto& f : functions)
+                f->ub = upper_bound_function(f->ub.get_points(), relative_noise_magnitude);
+        }
     }
 
 // ----------------------------------------------------------------------------------------
@@ -880,8 +917,10 @@ namespace dlib
         size_t& idx
     ) const
     {
-        auto i = std::max_element(functions.begin(), functions.end(), 
-            [](const std::shared_ptr<gopt_impl::funct_info>& a, const std::shared_ptr<gopt_impl::funct_info>& b) { return a->best_objective_value < b->best_objective_value; });
+        auto compare = [](const std::shared_ptr<gopt_impl::funct_info>& a, const std::shared_ptr<gopt_impl::funct_info>& b) 
+            { return a->best_objective_value < b->best_objective_value; };
+
+        auto i = std::max_element(functions.begin(), functions.end(), compare);
 
         idx = std::distance(functions.begin(),i);
         return *i;
@@ -890,12 +929,12 @@ namespace dlib
 // ----------------------------------------------------------------------------------------
 
     bool global_function_search::
-    has_incomplete_trust_region_request (
+    has_outstanding_trust_region_request (
     ) const 
     {
         for (auto& f : functions)
         {
-            for (auto& i : f->incomplete_evals)
+            for (auto& i : f->outstanding_evals)
             {
                 if (i.was_trust_region_generated_request)
                     return true;

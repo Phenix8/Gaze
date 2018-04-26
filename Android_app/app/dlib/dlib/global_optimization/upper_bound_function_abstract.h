@@ -35,24 +35,26 @@ namespace dlib
     {
         /*!
             WHAT THIS OBJECT REPRESENTS
-                This object represents a non-parametric function that can be used to define
-                an upper bound on some more complex and unknown function.  To describe this
-                precisely, lets assume there is a function F(x) which you are capable of
-                sampling from but otherwise know nothing about, and that you would like to
-                find an upper bounding function U(x) such that U(x) >= F(x) for any x.  It
-                would also be good if U(x)-F(x) was minimal.  I.e. we would like U(x) to be
-                a tight upper bound, not something vacuous like U(x) = infinity.
+                This object represents a piecewise linear non-parametric function that can
+                be used to define an upper bound on some more complex and unknown function.
+                To describe this precisely, lets assume there is a function F(x) which you
+                are capable of sampling from but otherwise know nothing about, and that you
+                would like to find an upper bounding function U(x) such that U(x) >= F(x)
+                for any x.  It would also be good if U(x)-F(x) was minimal.  I.e. we would
+                like U(x) to be a tight upper bound, not something vacuous like U(x) =
+                infinity.
 
                 The upper_bound_function class is a tool for creating this kind of upper
                 bounding function from a set of function_evaluations of F(x).  We do this
                 by considering only U(x) of the form:
-                    U(x) = {
+                    U = [](matrix<double,0,1> x) {
                        double min_ub = infinity;
                        for (size_t i = 0; i < POINTS.size(); ++i) {
                             function_evaluation p = POINTS[i]
-                            double local_bound = p.y + sqrt(noise_terms[i] + sqrt(trans(p.x-x)*M*(p.x-x)))
+                            double local_bound = p.y + sqrt(noise_terms[i] + trans(p.x-x)*M*(p.x-x))
                             min_ub = min(min_ub, local_bound)
                         }
+                        return min_ub;
                     }
                 Where POINTS is an array of function_evaluation instances drawn from F(x),
                 M is a diagonal matrix, and noise_terms is an array of scalars.
@@ -64,15 +66,16 @@ namespace dlib
                     min_{M,noise_terms}:  sum(squared(M)) + sum(squared(noise_terms/relative_noise_magnitude))
                     s.t.   U(POINTS[i].x) >= POINTS[i].y,  for all i 
                            noise_terms[i] >= 0
-                           diag(M) >= 0
+                           min(M) >= 0
+                           M is a diagonal matrix 
                
                 Therefore, the quadratic program finds the U(x) that always upper bounds
                 F(x) on the supplied POINTS, but is otherwise as small as possible.
 
 
 
-                The inspiration for the upper_bound_function object came from this
-                excellent paper:
+                The inspiration for the upper_bound_function object came from the AdaLIPO
+                algorithm from this excellent paper:
                     Global optimization of Lipschitz functions 
                     Malherbe, Cédric and Vayatis, Nicolas 
                     International Conference on Machine Learning - 2017
