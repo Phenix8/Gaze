@@ -100,6 +100,7 @@ public class DetectionServer {
 
         try {
             sock = new Socket(serverAddress, serverPort);
+            sock.setSoTimeout(2000);
             BufferedOutputStream out = new BufferedOutputStream(sock.getOutputStream());
             DataOutputStream writer = new DataOutputStream(out);
             WritableByteChannel byteWriter = Channels.newChannel(out);
@@ -149,6 +150,7 @@ public class DetectionServer {
             return result;
 
         } catch (IOException e) {
+            serverAddress = null;
             throw new Exception("Network error", e);
         } finally {
             try {
