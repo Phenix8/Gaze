@@ -7,19 +7,13 @@
     <string name="title_activity_draw">drawActivity</string>
     <string name="rules_content">
         Gaze is an hybrid game : a mix between a video game and a board game.
-
         The goal is to find anamorphic shapes on a physical board.
-        Once you find a shape you validate it by taking a picture, <b>the game will recognize if it is the right shape</b>.\n\n
-
-        Gaze was designed to be a multiplayer game, but if you are alone you can still play.
-
+        Once you find a shape you validate it by taking a picture, <b>the game will recognize if it is the right shape</b>.\n
+        \nGaze was designed to be a multiplayer game, but if you are alone you can still play.
         Application will propose you 3 shapes : an easy, a medium and a hard. You will have to chose one of them.
-
-        The more difficult a shape is announced, the more difficult it is to be found, but it will give you more points.\n\n
-
-        Once you choose one, it's up to you : find it on the board, and validate it by taking a picture !\n\n
-
-        The first player who find 4 shape make the game stop, and the player who have the most of points win !
+        The more difficult a shape is announced, the more difficult it is to be found, but it will give you more points.\n
+        \nNow it&quot;s up to you : <b>find it on the board, and validate it by taking a picture.</b>\n
+        \nThe <b>first player who find 4 shapes make the game stop</b>, and the <b>player who have the most of points win</b> !
     </string>
     <string name="action_settings">Settings</string>
     <string name="nickname">Enter your player name :</string>
