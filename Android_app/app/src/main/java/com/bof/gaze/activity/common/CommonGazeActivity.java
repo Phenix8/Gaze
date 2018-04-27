@@ -1,7 +1,11 @@
 package com.bof.gaze.activity.common;
 
 import android.app.AlertDialog;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bof.gaze.application.GazeApplication;
@@ -16,6 +20,15 @@ import java.net.InetAddress;
  */
 
 public class CommonGazeActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
 
     protected Client getGameClient() {
         return ((GazeApplication) getApplication()).getGameClient();
