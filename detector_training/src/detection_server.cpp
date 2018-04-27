@@ -5,6 +5,7 @@
 
 #include <dlib/image_processing.h>
 #include <dlib/data_io.h>
+#include <dlib/dir_nav.h>
 #include <dlib/cmd_line_parser.h>
 
 #include <map>
@@ -258,17 +259,21 @@ class FHOGDetector {
 
 		void loadDetectors(const std::string &directoryName) {
 			Detector detector;
-			dlib::directory dir(directoryName);
+			try {
+				dlib::directory dir(directoryName);
 
-			std::vector<dlib::file> files = dir.get_files();
+				std::vector<dlib::file> files = dir.get_files();
 
-			std::cout << "-----------------" << std::endl;
-			for (const auto &file : files) {
-				dlib::deserialize(file) >> detector;
-				detectors[file.name()] = detector;
-				std::cout << "Loaded detector " << file.name() << std::endl;
+				std::cout << "-----------------" << std::endl;
+				for (const auto &file : files) {
+					dlib::deserialize(file) >> detector;
+					detectors[file.name()] = detector;
+					std::cout << "Loaded detector " << file.name() << std::endl;
+				}
+				std::cout << "-----------------" << std::endl;
+			} catch (const dlib::directory::dir_not_found &e) {
+				std::cout << "Can't find ../detector folder" << std::endl;
 			}
-			std::cout << "-----------------" << std::endl;
 		}
 
 		inline bool fileExists (const std::string& name) {
@@ -348,7 +353,7 @@ int main(int argc, char **argv) {
 			std::cout << "Broadcasting on port 5151" << std::endl;
 		}
 
-		if (argc >= 2) {
+		if (argc > 2) {
 			std::cout << "Saving received images into ../saved_images" << std::endl;
 			if (strncmp("-save_analysed_images", argv[2], 21) == 0) {
 				saveImages = true;
