@@ -6,16 +6,19 @@
     <color name="control_background">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="red">#FF0000</color>
-    <color name="menu_bg">#b4ffc5</color>
     <color name="transparent">#00000000</color>
-    <color name="nickname_bg">#ffb7b4</color>
-    <color name="leaderboard_bg">#ffb7b4</color>
-    <color name="home_bg">#b9dbeb</color>
-    <color name="lobby_bg">#fffbc3</color>
-    <color name="join_act_bg">#b4ffc5</color>
     <color name="black">#000000</color>
     <color name="grey">#646464</color>
-    <color name="anamorphosis_choice_act_bg">#a6d5eb</color>
+
+    <color name="default_bg_color">#a6d5eb</color>
+
+    <color name="menu_bg">@color/default_bg_color</color>
+    <color name="nickname_bg">@color/default_bg_color</color>
+    <color name="leaderboard_bg">@color/default_bg_color</color>
+    <color name="home_bg">@color/default_bg_color</color>
+    <color name="lobby_bg">@color/default_bg_color</color>
+    <color name="join_act_bg">@color/default_bg_color</color>
+    <color name="anamorphosis_choice_act_bg">@color/default_bg_color</color>
 
     <color name="color_preloader_start">#000000</color>
     <color name="color_preloader_center">#000000</color>
