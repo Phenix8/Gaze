@@ -23,7 +23,7 @@
     <string name="joinActStateInitialText">Searching games around...</string>
     <string name="joinActStateBarFormat">%d room(s) found</string>
 
-    <string name="homeTouchToPlayText">Tape to play</string>
+    <string name="homeTouchToPlayText">Tap to play</string>
 
     <string name="anamorphosis_act_title">Choose an anamorphosis :</string>
 
