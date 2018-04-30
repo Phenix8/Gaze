@@ -288,16 +288,16 @@ class FHOGDetector {
 			int index = 1;			
 
 			if (imageNameIndices.find(detectorName) == imageNameIndices.end()) {
-				imageName = imageNameBase + std::to_string(index);
+				imageName = imageNameBase + std::to_string(index) + ".jpg";
 				while (fileExists(imageName)) {
 					index++;
-					imageName = imageNameBase + std::to_string(index);
+					imageName = imageNameBase + std::to_string(index) + ".jpg";
 				}
 				imageNameIndices[detectorName] = index;
 			} else {
 				index = imageNameIndices[detectorName] + 1;
 				imageNameIndices[detectorName] = index;
-				imageName = imageNameBase + std::to_string(index);
+				imageName = imageNameBase + std::to_string(index) + ".jpg";
 			}
 
 			dlib::save_jpeg(image, imageName);
