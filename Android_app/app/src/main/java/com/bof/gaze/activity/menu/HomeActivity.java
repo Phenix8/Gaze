@@ -63,8 +63,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnTouchListe
         String nickname = sharedPref.getString("nickname", "");
 
         if (nickname.isEmpty()) {
-            Intent intent = new Intent(getApplicationContext(), NicknameActivity.class);
-            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            Intent intent = new Intent(getApplicationContext(), TutorialActivity.class);
+            intent.putExtra("isFirstLaunch", true);
             startActivity(intent);
         }
         else

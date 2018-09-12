@@ -34,14 +34,17 @@
         android:layout_marginTop="75dp">
 
         <TextView
+            android:id="@+id/RulesContent_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/rules_content"
-            android:padding="15dp"
             android:gravity="left"
-            android:id="@+id/RulesContent_txt"
+            android:lineSpacingExtra="4sp"
             android:maxLines="30"
-            android:scrollbars="vertical"/>
+            android:padding="20dp"
+            android:scrollbars="vertical"
+            android:text="@string/rules_content"
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 

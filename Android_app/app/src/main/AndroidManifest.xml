@@ -11,16 +11,16 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:name="com.bof.gaze.application.GazeApplication"
+        android:name=".application.GazeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.bof.gaze.activity.menu.HomeActivity"
-            android:screenOrientation="landscape"
-            android:noHistory="true">
+            android:name=".activity.menu.HomeActivity"
+            android:noHistory="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,39 +28,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bof.gaze.activity.menu.NicknameActivity"
+            android:name=".activity.menu.NicknameActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.menu.MenuActivity"
+            android:name=".activity.menu.MenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.menu.ChangeBoardActivity"
-            android:screenOrientation="landscape">
-        </activity>
+            android:name=".activity.menu.ChangeBoardActivity"
+            android:screenOrientation="landscape"/>
         <activity
-            android:name="com.bof.gaze.activity.menu.LobbyActivity"
+            android:name=".activity.menu.LobbyActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.menu.RulesMenuActivity"
+            android:name=".activity.menu.RulesMenuActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.game.AnamorphosisChoiceActivity"
+            android:name=".activity.game.AnamorphosisChoiceActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.menu.JoinRoomActivity"
-            android:screenOrientation="landscape"
-            android:configChanges="orientation|screenSize"/>
-        <activity
-            android:name="com.bof.gaze.activity.menu.LoadingActivity"
+            android:name=".activity.menu.JoinRoomActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.game.LeaderboardActivity"
+            android:name=".activity.menu.LoadingActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.bof.gaze.activity.game.CameraActivity"
-            android:screenOrientation="landscape"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:name=".activity.game.LeaderboardActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity.game.CameraActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".activity.menu.TutorialActivity"
+            android:screenOrientation="landscape" />
+
     </application>
 
 </manifest>

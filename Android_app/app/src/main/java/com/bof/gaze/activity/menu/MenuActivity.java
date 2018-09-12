@@ -108,7 +108,7 @@ public class MenuActivity extends CommonGazeActivity {
 
         AssignImageButtonRedirection(R.id.createGameButton, LobbyActivity.class, true, true);
         AssignImageButtonRedirection(R.id.joinGameButton, JoinRoomActivity.class, true, true);
-        AssignImageButtonRedirection(R.id.rulesButton, RulesMenuActivity.class, false, false);
+        AssignImageButtonRedirection(R.id.rulesButton, TutorialActivity.class, false, false);
         AssignImageButtonRedirection(R.id.highscoresButton, NicknameActivity.class, false, false);
 
     }
@@ -143,8 +143,11 @@ public class MenuActivity extends CommonGazeActivity {
                         return;
                     }
                 }
-
                 Intent menuOptionActivity = new Intent(getApplicationContext(), redirectionClass);
+
+                if (redirectionClass.getName() == "TutorialActivity")
+                    menuOptionActivity.putExtra("isFirstLaunch", false);
+
                 startActivity(menuOptionActivity);
             }
         });
