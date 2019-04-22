@@ -3,11 +3,12 @@ package com.bof.gaze.model;
 import com.bof.gaze.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
  
-public class AnamorphDictionary {
+public abstract class AnamorphDictionary {
 
-	private ArrayList<Anamorphosis> all = new ArrayList<>();
+	private List<Anamorphosis> all;
 
 	private ArrayList<Anamorphosis> easy = new ArrayList<>();
 	private ArrayList<Anamorphosis> medium = new ArrayList<>();
@@ -20,58 +21,7 @@ public class AnamorphDictionary {
 	private Random rng = new Random();
 
 	// Initalisation du dictionnaire d'anamorphose
-	private void loadAnamorphosis()
-    {
-    	// V2 du plateau
-			all.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, Anamorphosis.Difficulty.EASY, "1.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_7_s, R.drawable.anamorphosis_7_l, Anamorphosis.Difficulty.EASY, "3.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_24_s, R.drawable.anamorphosis_24_l, Anamorphosis.Difficulty.EASY, "10.svm", Anamorphosis.HintType.WHITE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, Anamorphosis.Difficulty.EASY, "13.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_26_s, R.drawable.anamorphosis_26_l, Anamorphosis.Difficulty.EASY, "15.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_28_s, R.drawable.anamorphosis_28_l, Anamorphosis.Difficulty.EASY, "17.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_13_s, R.drawable.anamorphosis_13_l, Anamorphosis.Difficulty.EASY, "19.svm", Anamorphosis.HintType.BLUE));
-
-			all.add(new Anamorphosis(R.drawable.anamorphosis_20_s, R.drawable.anamorphosis_20_l, Anamorphosis.Difficulty.MEDIUM, "2.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_15_s, R.drawable.anamorphosis_15_l, Anamorphosis.Difficulty.MEDIUM, "4.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_8_s, R.drawable.anamorphosis_8_l, Anamorphosis.Difficulty.MEDIUM, "5.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_22_s, R.drawable.anamorphosis_22_l, Anamorphosis.Difficulty.MEDIUM, "7.svm", Anamorphosis.HintType.YELLOW_RED));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_18_s, R.drawable.anamorphosis_18_l, Anamorphosis.Difficulty.MEDIUM, "9.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_25_s, R.drawable.anamorphosis_25_l, Anamorphosis.Difficulty.MEDIUM, "14.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_27_s, R.drawable.anamorphosis_27_l, Anamorphosis.Difficulty.MEDIUM, "16.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_29_s, R.drawable.anamorphosis_29_l, Anamorphosis.Difficulty.MEDIUM, "20.svm", Anamorphosis.HintType.GREEN));
-
-			all.add(new Anamorphosis(R.drawable.anamorphosis_21_s, R.drawable.anamorphosis_21_l, Anamorphosis.Difficulty.HARD, "6.svm", Anamorphosis.HintType.GREEN));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_23_s, R.drawable.anamorphosis_23_l, Anamorphosis.Difficulty.HARD, "8.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_12_s, R.drawable.anamorphosis_12_l, Anamorphosis.Difficulty.HARD, "11.svm", Anamorphosis.HintType.YELLOW));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, Anamorphosis.Difficulty.HARD, "12.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_14_s, R.drawable.anamorphosis_14_l, Anamorphosis.Difficulty.HARD, "18.svm", Anamorphosis.HintType.BLUE));
-			all.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, Anamorphosis.Difficulty.HARD, "21.svm", Anamorphosis.HintType.YELLOW_RED));
-
-		// V1 du plateau
-
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_1_s, R.drawable.anamorphosis_1_l, Anamorphosis.Difficulty.EASY, "triangle.svm", Anamorphosis.HintType.BLUE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_3_s, R.drawable.anamorphosis_3_l, Anamorphosis.Difficulty.EASY, "pentagone.svm", Anamorphosis.HintType.WHITE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_15_s, R.drawable.anamorphosis_15_l, Anamorphosis.Difficulty.EASY, "quille.svm", Anamorphosis.HintType.GREEN));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_4_s, R.drawable.anamorphosis_4_l, Anamorphosis.Difficulty.EASY, "sablier2.svm", Anamorphosis.HintType.YELLOW));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_6_s, R.drawable.anamorphosis_6_l, Anamorphosis.Difficulty.EASY, "trefle.svm", Anamorphosis.HintType.GREEN));
-
-
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_9_s, R.drawable.anamorphosis_9_l, Anamorphosis.Difficulty.MEDIUM, "3rond.svm", Anamorphosis.HintType.YELLOW));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_13_s, R.drawable.anamorphosis_13_l, Anamorphosis.Difficulty.MEDIUM, "tripentagone.svm", Anamorphosis.HintType.GREEN_BLUE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_18_s, R.drawable.anamorphosis_18_l, Anamorphosis.Difficulty.MEDIUM, "sablier.svm", Anamorphosis.HintType.YELLOW_RED));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_19_s, R.drawable.anamorphosis_19_l, Anamorphosis.Difficulty.MEDIUM, "bouteille.svm", Anamorphosis.HintType.WHITE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_8_s, R.drawable.anamorphosis_8_l, Anamorphosis.Difficulty.MEDIUM, "rond.svm", Anamorphosis.HintType.YELLOW));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_10_s, R.drawable.anamorphosis_10_l, Anamorphosis.Difficulty.MEDIUM, "nuage.svm", Anamorphosis.HintType.GREEN));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_7_s, R.drawable.anamorphosis_7_l, Anamorphosis.Difficulty.MEDIUM, "lajesaispas.svm", Anamorphosis.HintType.RED));
-
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_16_s, R.drawable.anamorphosis_16_l, Anamorphosis.Difficulty.HARD, "etoile.svm", Anamorphosis.HintType.GREEN_RED));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_2_s, R.drawable.anamorphosis_2_l, Anamorphosis.Difficulty.HARD, "carre.svm", Anamorphosis.HintType.BLUE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_12_s, R.drawable.anamorphosis_12_l, Anamorphosis.Difficulty.HARD, "escalier.svm", Anamorphosis.HintType.BLUE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_17_s, R.drawable.anamorphosis_17_l, Anamorphosis.Difficulty.HARD, "L.svm", Anamorphosis.HintType.WHITE));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_14_s, R.drawable.anamorphosis_14_l, Anamorphosis.Difficulty.HARD, "choufleur.svm", Anamorphosis.HintType.GREEN));
-			//all.add(new Anamorphosis(R.drawable.anamorphosis_5_s, R.drawable.anamorphosis_5_l, Anamorphosis.Difficulty.HARD, "tripik.svm", Anamorphosis.HintType.WHITE));
-
-    }
+	protected abstract List<Anamorphosis> loadAnamorphosis();
 
     private void sortAnamorphosisByDifficulty() {
 		for (Anamorphosis a : all) {
@@ -92,7 +42,7 @@ public class AnamorphDictionary {
 	}
 
     public AnamorphDictionary() {
-		loadAnamorphosis();
+		all = loadAnamorphosis();
 		sortAnamorphosisByDifficulty();
 	}
 
@@ -113,8 +63,8 @@ public class AnamorphDictionary {
 	}
 
 	public Anamorphosis getRandom(Anamorphosis.Difficulty difficulty, boolean notAlreadyValidated) {
-		ArrayList<Anamorphosis> usedList;
-		ArrayList<Anamorphosis> usedAlreadyValidatedList;
+		List<Anamorphosis> usedList;
+		List<Anamorphosis> usedAlreadyValidatedList;
 
 		switch (difficulty) {
 			case EASY:

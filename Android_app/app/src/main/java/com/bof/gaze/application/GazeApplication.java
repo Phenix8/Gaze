@@ -2,6 +2,8 @@ package com.bof.gaze.application;
 
 import android.app.Application;
 
+import com.bof.gaze.model.ChicagoBoardDictionary;
+import com.bof.gaze.model.FirstBoardDictionary;
 import com.bof.gaze.network.server.Server;
 import com.bof.gaze.network.client.Client;
 import com.bof.gaze.network.client.ClientServerSynchronizer;
@@ -20,7 +22,7 @@ public class GazeApplication extends Application {
 
     private Client gameClient = new Client();
     private ServerBase server = null;
-    private AnamorphDictionary anamorphDictionary = new AnamorphDictionary();
+    private AnamorphDictionary anamorphDictionary = new ChicagoBoardDictionary();
 
     public Client getGameClient() {
         return gameClient;
@@ -56,6 +58,10 @@ public class GazeApplication extends Application {
 
     public boolean isHost() {
         return isServerStarted();
+    }
+
+    public void setAnamorphDictionary(AnamorphDictionary dict) {
+        this.anamorphDictionary = dict;
     }
 
     public AnamorphDictionary getAnamorphDictionary() {

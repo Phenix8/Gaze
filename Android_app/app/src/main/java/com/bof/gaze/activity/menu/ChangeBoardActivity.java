@@ -11,7 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.bof.gaze.R;
+import com.bof.gaze.application.GazeApplication;
 import com.bof.gaze.detection.ObjectDetector;
+import com.bof.gaze.model.ChicagoBoardDictionary;
+import com.bof.gaze.model.FirstBoardDictionary;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -57,6 +60,13 @@ public class ChangeBoardActivity extends Activity implements AdapterView.OnItemC
                 adapter.getItem(position)
             )
         );
+
+        if (adapter.getItem(position).equals("default")) {
+            ((GazeApplication) getApplication()).setAnamorphDictionary(new ChicagoBoardDictionary());
+        } else if (adapter.getItem(position).equals("former")) {
+            ((GazeApplication) getApplication()).setAnamorphDictionary(new FirstBoardDictionary());
+        }
+
         finish();
     }
 }
